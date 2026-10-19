@@ -17,8 +17,5 @@ GRANT SELECT ON PCRMSV7.umotif_tfs_association TO 'pcrms_web'@'localhost';
 GRANT SELECT ON PCRMSV7.crms_genes_association TO 'pcrms_web'@'localhost';
 GRANT SELECT ON PCRMSV7.umotif_tfs_association_multiple TO 'pcrms_web'@'localhost';
 
--- Only if PCRMS_ENABLE_VISITOR_TRACKING is turned on:
--- GRANT INSERT ON PCRMSV7.visitors TO 'pcrms_web'@'localhost';
-
 -- Check the result; it should list only the grants above (plus USAGE).
 SHOW GRANTS FOR 'pcrms_web'@'localhost';

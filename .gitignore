@@ -6,9 +6,6 @@
 
 # Release archives (large data files; kept on disk, not in version control)
 /www/data/*.tar.gz
-# MaxMind GeoLite databases (large; licence does not permit redistribution)
-/www/tracker/geo_data/
-/tracker/geo_data/
 
 # Preliminary data handed over for loading (not for version control)
 /data-incoming/

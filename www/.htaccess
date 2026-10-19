@@ -18,3 +18,13 @@ Options -Indexes
     RemoveEncoding .gz
     AddType application/gzip .gz
 </IfModule>
+
+# Under construction: uncomment the four lines below to show
+# under-construction.html for every address while the site is set up.
+# Visitors get status 503 (temporarily unavailable), which tells search
+# engines to come back later. If the site lives in a subfolder, add it to the
+# ErrorDocument path, for example /pcrms/under-construction.html.
+#ErrorDocument 503 /under-construction.html
+#RewriteEngine On
+#RewriteCond %{REQUEST_URI} !/under-construction\.html$
+#RewriteRule ^ - [R=503,L]

@@ -53,9 +53,8 @@ ignored by version control.
 | Motif logo present | Open a human or mouse TFBS result | Uses an existing repository image |
 | Multi-gene CRM | Open CRM `78` (`crm.php?crmId=78&genome_id=1`) | Shows two associated gene symbols |
 
-The fixture contains 5 genomes, 11 genes, 105 CRMs, 115 TFBSs, and 3
-documentation-only visitor records. Importing it prints the numeric IDs of
-the labelled human CRMs.
+The fixture contains 5 genomes, 11 genes, 105 CRMs and 115 TFBSs.
+Importing it prints the numeric IDs of the labelled human CRMs.
 
 ## Real data
 

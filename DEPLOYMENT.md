@@ -9,10 +9,9 @@ PHP file outside the web root.
 ## 1. Files
 
 - The web server's document root must be `www/`.
-- Deploy these folders side by side: `www/`, `includes/`, `config/` and
-  (only if visitor logging is used) `tracker/`.
-- Never deploy `.git/`, `database/`, `design-directions/`, `data-incoming/`
-  or `.mysql-test/`.
+- Deploy these folders side by side: `www/`, `includes/` and `config/`.
+- Never deploy `.git/`, `database/`, `docs/`, `data-incoming/` or
+  `.mysql-test/`.
 - Sync with deletion (for example `rsync -a --delete`) so files removed in the
   redesign also disappear from the server. Before the first deploy, check the
   live site for leftovers of the old version: `*_bak.php`, `exclusive-templates/`,
@@ -76,16 +75,7 @@ server-wide also covers errors that happen before the code runs.
   frame. If the lab site needs to embed it, allow that origin in
   `includes/bootstrap.php`.
 
-## 5. Visitor logging
-
-Leave `PCRMS_ENABLE_VISITOR_TRACKING` unset unless there is a privacy notice
-and a retention policy. It stores visitors' full IP addresses. If it is turned
-on: update the GeoLite2 databases (the bundled ones are from June 2022 and
-MaxMind's licence requires current data), run `composer update` and
-`composer audit` in `tracker/`, and grant `INSERT` on `visitors` (see
-`database/grants.sql`).
-
-## 6. After deploying
+## 5. After deploying
 
 - Open each page and run one search of each kind.
 - Check the response headers include `Content-Security-Policy` and that

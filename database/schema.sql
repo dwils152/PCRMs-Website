@@ -154,17 +154,6 @@ CREATE TABLE crms_genes_association (
         FOREIGN KEY (geneID) REFERENCES genes (geneID)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
 
--- Only used when PCRMS_ENABLE_VISITOR_TRACKING is on.
-CREATE TABLE visitors (
-    visitorID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    IP VARCHAR(45) NOT NULL,
-    Country VARCHAR(100) NOT NULL,
-    City VARCHAR(100) NOT NULL,
-    Visited_At DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    PRIMARY KEY (visitorID),
-    KEY idx_visitors_date (Visited_At)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_bin;
-
 -- TF names per motif, for the CRM page.
 
 CREATE VIEW umotif_tfs_association_multiple AS

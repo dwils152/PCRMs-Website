@@ -3,15 +3,6 @@ require_once dirname(__DIR__) . '/includes/layout.php';
 require_once dirname(__DIR__) . '/includes/releases.php';
 require_once dirname(__DIR__) . '/includes/publications.php';
 
-// Optional visitor logging; off unless the deployment opts in.
-if (filter_var(getenv('PCRMS_ENABLE_VISITOR_TRACKING'), FILTER_VALIDATE_BOOLEAN)) {
-    try {
-        require_once dirname(__DIR__) . '/tracker/track.php';
-    } catch (Throwable $exception) {
-        error_log('PCRMs visitor tracking unavailable: ' . $exception->getMessage());
-    }
-}
-
 $steps = [
     ['A', 'Extend binding peaks', 'Each TF ChIP-seq binding peak in every dataset is extended at both ends to 1,000 bp, so nearby sites of cooperating TFs are included.'],
     ['B', 'Find motifs', 'ProSampler finds the motifs in each dataset; each shape is a different motif.'],

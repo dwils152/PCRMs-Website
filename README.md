@@ -19,8 +19,6 @@ Credentials must not be stored under `www/`. Configure the deployment with eithe
 
 `config/database.php` is excluded from version control. Environment variables take precedence over the optional local config file.
 
-Visitor-location logging is disabled by default. Set `PCRMS_ENABLE_VISITOR_TRACKING=1` only if the deployment has an appropriate privacy notice and retention policy.
-
 ## Database
 
 The tables are defined in [`database/schema.sql`](database/schema.sql). For
@@ -64,7 +62,6 @@ Code that pages include lives outside the web root, so it cannot be requested di
 - `includes/forms.php`, `results.php`, `queries.php` — shared form pieces, results tables and SQL
 - `includes/releases.php`, `publications.php` — download manifest, citation and related papers
 - `includes/svg/` — inline organism silhouettes and pipeline figures
-- `tracker/` — optional visitor logging
 - `database/grants.sql` — read-only grants for the website's database account
 
 Results tables keep their state in the address (`page`, `size`, `sort`, `dir`, `search`), so paging,

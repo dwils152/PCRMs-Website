@@ -21,7 +21,6 @@ TRUNCATE TABLE crms;
 TRUNCATE TABLE chromosomes;
 TRUNCATE TABLE datasets;
 TRUNCATE TABLE genomes;
-TRUNCATE TABLE visitors;
 SET FOREIGN_KEY_CHECKS = 1;
 
 START TRANSACTION;
@@ -271,12 +270,6 @@ INNER JOIN synthetic_crms AS l
 WHERE l.label LIKE '%\_SYN\_CRM\_DOWNSTREAM'
    OR l.label LIKE '%\_SYN\_CRM\_OVERLAP';
 
--- RFC 5737 / RFC 3849 documentation addresses avoid using personal data.
-INSERT INTO visitors (IP, Country, City, Visited_At) VALUES
-    ('192.0.2.10', 'Synthetic Country', 'Test City', '2026-01-15 10:00:00'),
-    ('198.51.100.25', 'Synthetic Country', 'Example Town', '2026-02-20 14:30:00'),
-    ('2001:db8::42', 'Synthetic Country', 'Fixture Village', '2026-03-25 09:15:00');
-
 -- The labelled CRMs the README test cases refer to, with their numeric IDs.
 SELECT l.label, c.crmID
 FROM synthetic_crms AS l
@@ -300,6 +293,4 @@ SELECT 'genes', COUNT(*) FROM genes
 UNION ALL
 SELECT 'crms', COUNT(*) FROM crms
 UNION ALL
-SELECT 'tfbss', COUNT(*) FROM tfbss
-UNION ALL
-SELECT 'visitors', COUNT(*) FROM visitors;
+SELECT 'tfbss', COUNT(*) FROM tfbss;
