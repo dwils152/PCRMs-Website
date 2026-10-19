@@ -5,10 +5,13 @@ require_once __DIR__ . '/bootstrap.php';
 // Genomes, keyed by the database genome ID. 'ucsc' maps each genome to the
 // UCSC Genome Browser assembly PCRMs uses; 'chromosomes' there lists only the
 // names that differ from the PCRMs database (ce10 uses roman numerals and the
-// TAIR10 GenArk assembly uses RefSeq accessions).
+// TAIR10 GenArk assembly uses RefSeq accessions). 'searchable' is false for
+// genomes whose data are not in the database yet; the site shows them as
+// coming soon.
 $PCRMS_GENOMES = [
     1 => [
         'key' => 'hs',
+        'searchable' => true,
         'name' => 'Homo sapiens',
         'short' => 'H. sapiens',
         'common' => 'Human',
@@ -27,6 +30,7 @@ $PCRMS_GENOMES = [
     ],
     2 => [
         'key' => 'mm',
+        'searchable' => true,
         'name' => 'Mus musculus',
         'short' => 'M. musculus',
         'common' => 'Mouse',
@@ -44,6 +48,7 @@ $PCRMS_GENOMES = [
     ],
     3 => [
         'key' => 'ce',
+        'searchable' => false,
         'name' => 'Caenorhabditis elegans',
         'short' => 'C. elegans',
         'common' => 'Worm',
@@ -59,6 +64,7 @@ $PCRMS_GENOMES = [
     ],
     4 => [
         'key' => 'at',
+        'searchable' => false,
         'name' => 'Arabidopsis thaliana',
         'short' => 'A. thaliana',
         'common' => 'Thale cress',
@@ -75,6 +81,7 @@ $PCRMS_GENOMES = [
     ],
     5 => [
         'key' => 'dm',
+        'searchable' => false,
         'name' => 'Drosophila melanogaster',
         'short' => 'D. melanogaster',
         'common' => 'Fruit fly',
@@ -95,16 +102,18 @@ $PCRMS_GENOMES = [
 // Display order used across the site: human, mouse, fly, worm, thale cress.
 $PCRMS_GENOME_ORDER = [1, 2, 5, 3, 4];
 
-$PCRMS_P_VALUES = ['0.05', '0.01', '0.000005', '0.000001'];
+$PCRMS_P_VALUES = ['0.05', '0.01', '0.0005', '0.0001', '0.000005', '0.000001'];
 $PCRMS_P_VALUE_LABELS = [
     '0.05' => '0.05',
     '0.01' => '0.01',
+    '0.0005' => '5 × 10⁻⁴',
+    '0.0001' => '1 × 10⁻⁴',
     '0.000005' => '5 × 10⁻⁶',
     '0.000001' => '1 × 10⁻⁶',
 ];
 $PCRMS_LOCATIONS = ['upstream', 'downstream', 'both'];
 $PCRMS_LOCATION_LABELS = ['upstream' => 'Upstream', 'downstream' => 'Downstream', 'both' => 'Both sides'];
-// Stored distance values are in units of 10 kb, as used by the genes_ranges columns.
+// Window sizes in units of 10 kb (get_crm_in_genes_range.php).
 $PCRMS_DISTANCES = ['50', '100', '200'];
 $PCRMS_DISTANCE_LABELS = ['50' => '0.5 Mb', '100' => '1 Mb', '200' => '2 Mb'];
 
@@ -127,6 +136,10 @@ if (!function_exists('pcrms_validate_genome')) {
         $genomeId = filter_var($value, FILTER_VALIDATE_INT);
         if ($genomeId === false || !isset($PCRMS_GENOMES[$genomeId])) {
             throw new InvalidArgumentException('Select a valid organism.');
+        }
+        if (!$PCRMS_GENOMES[$genomeId]['searchable']) {
+            throw new InvalidArgumentException($PCRMS_GENOMES[$genomeId]['common']
+                . ' CRMs are coming soon. Human and mouse are available now.');
         }
 
         return (int) $genomeId;
@@ -245,6 +258,42 @@ if (!function_exists('pcrms_store_query_state')) {
         }
 
         return $token;
+    }
+}
+
+if (!function_exists('pcrms_saved_counts')) {
+    // The result counts kept with a stored search: ['total' => n,
+    // 'filtered' => [filter text => n]], or an empty array.
+    function pcrms_saved_counts($sessionKey, $token)
+    {
+        $counts = isset($_SESSION[$sessionKey][$token]['counts']) ? $_SESSION[$sessionKey][$token]['counts'] : null;
+        if (!is_array($counts) || !isset($counts['total'], $counts['filtered']) || !is_array($counts['filtered'])) {
+            return [];
+        }
+        return ['total' => (int) $counts['total'], 'filtered' => array_map('intval', $counts['filtered'])];
+    }
+}
+
+if (!function_exists('pcrms_remember_counts')) {
+    // Keeps a search's result counts with it in the session, so paging and
+    // sorting do not count a large result set again. Pages close the session
+    // before querying, so this reopens it briefly.
+    function pcrms_remember_counts($sessionKey, $token, $search, $total, $filtered)
+    {
+        if (headers_sent()) {
+            return;
+        }
+        pcrms_session_start();
+        if (isset($_SESSION[$sessionKey][$token]) && is_array($_SESSION[$sessionKey][$token])) {
+            $counts = pcrms_saved_counts($sessionKey, $token) ?: ['filtered' => []];
+            $counts['total'] = (int) $total;
+            $counts['filtered'][$search] = (int) $filtered;
+            while (count($counts['filtered']) > 20) {
+                array_shift($counts['filtered']);
+            }
+            $_SESSION[$sessionKey][$token]['counts'] = $counts;
+        }
+        session_write_close();
     }
 }
 
@@ -385,6 +434,9 @@ if (!function_exists('pcrms_format_p_value')) {
     function pcrms_format_p_value($value)
     {
         $p = (float) $value;
+        if ($p == 0) {
+            return '0';
+        }
         if ($p >= 0.001) {
             return rtrim(rtrim(number_format($p, 4, '.', ''), '0'), '.');
         }
@@ -423,8 +475,15 @@ if (!function_exists('pcrms_motif_path')) {
             return null;
         }
 
-        $relativePath = 'motifs_version/' . $genomeId . '/' . $motifId . '.png';
-        return is_file(dirname(__DIR__) . '/www/' . $relativePath) ? $relativePath : null;
+        // SVG logos are drawn by database/plot_logos.py; older genomes still
+        // have PNG logos.
+        foreach (['svg', 'png'] as $extension) {
+            $relativePath = 'motifs_version/' . $genomeId . '/' . $motifId . '.' . $extension;
+            if (is_file(dirname(__DIR__) . '/www/' . $relativePath)) {
+                return $relativePath;
+            }
+        }
+        return null;
     }
 }
 

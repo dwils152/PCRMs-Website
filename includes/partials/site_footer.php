@@ -5,6 +5,6 @@
             <span class="site-footer__divider" aria-hidden="true"></span>
             <a href="https://www.charlotte.edu/"><img src="<?php echo pcrms_h(pcrms_url('images/brand/charlotte-white.svg')); ?>" alt="University of North Carolina at Charlotte" width="171" height="40"></a>
         </div>
-        <p>© 2020–<?php echo date('Y'); ?> The Su Lab, University of North Carolina at Charlotte</p>
+        <p>© 2020–<?php echo date('Y'); ?> <a href="https://sulab.charlotte.edu/">The Su Lab</a>, University of North Carolina at Charlotte</p>
     </div>
 </footer>

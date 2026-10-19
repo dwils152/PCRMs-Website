@@ -32,25 +32,26 @@ session_write_close();
 
 try {
     require_once dirname(__DIR__) . '/includes/connection.php';
-    $gene = pcrms_execute_statement(
+    // The gene first (any case, symbol or Ensembl ID), then its CRMs by ID.
+    $geneIds = array_column(pcrms_execute_statement(
         $mysqli,
-        'SELECT geneID FROM genes WHERE Genome = ? AND (geneID = ? OR Symbol = ?) LIMIT 1',
+        'SELECT geneID FROM genes WHERE Genome = ? AND (LOWER(geneID) = LOWER(?) OR LOWER(Symbol) = LOWER(?))',
         'iss',
         [$genomeId, $geneId, $geneId]
-    )->get_result()->fetch_row();
+    )->get_result()->fetch_all(), 0);
+    $gene = (bool) $geneIds;
 
     $rows = [];
     if ($gene) {
+        $placeholders = implode(', ', array_fill(0, count($geneIds), '?'));
         $records = pcrms_execute_statement(
             $mysqli,
-            'SELECT DISTINCT crms.crmID, crms.Chromosome, crms.Start_Pos, crms.End_Pos, crms.Score, crms.P_value
-             FROM crms
-             INNER JOIN genes_crms_association ON crms.crmID = genes_crms_association.crmID
-             INNER JOIN genes ON genes.geneID = genes_crms_association.geneID
-             WHERE (genes.geneID = ? OR genes.Symbol = ?)
-               AND genes.Genome = ? AND crms.Genome = ? AND crms.P_value <= ?',
-            'ssiid',
-            [$geneId, $geneId, $genomeId, $genomeId, (float) $pValue]
+            "SELECT DISTINCT c.crmID, c.Chromosome, c.Start_Pos, c.End_Pos, c.Score, c.P_value
+             FROM crms_genes_association a
+             INNER JOIN crms c ON c.crmID = a.crmID
+             WHERE a.geneID IN ({$placeholders}) AND c.Dataset = ? AND c.P_value <= ?",
+            str_repeat('s', count($geneIds)) . 'id',
+            array_merge($geneIds, [PCRMS_DEPCRM2_DATASET, (float) $pValue])
         )->get_result();
         while ($row = $records->fetch_assoc()) {
             $rows[] = pcrms_crm_row($row, $genomeId);
@@ -75,7 +76,7 @@ $editUrl = 'detailed_search.php?' . http_build_query([
 $headline = number_format($result['total']) . ($result['total'] === 1 ? ' CRM found' : ' CRMs found');
 $empty = $gene
     ? ['No CRMs found', 'No predicted CRMs that pass this cutoff have ' . $geneId . ' as their closest gene. Try a looser cutoff such as 0.05, or search for CRMs around the gene instead.']
-    : ['Gene not found', 'There is no gene called ' . $geneId . ' in the ' . $genome['name'] . ' annotation. Check the spelling; symbols are case-sensitive (' . $genome['gene_example'] . ').'];
+    : ['Gene not found', 'There is no gene called ' . $geneId . ' in the ' . $genome['name'] . ' annotation. Check the spelling (' . $genome['gene_example'] . ').'];
 
 pcrms_page_start([
     'title' => 'CRMs closest to ' . $geneId . ', ' . $genome['short'],

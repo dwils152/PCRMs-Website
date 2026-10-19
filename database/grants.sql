@@ -7,16 +7,14 @@
 --
 --   CREATE USER 'pcrms_web'@'localhost' IDENTIFIED BY '<new password>';
 --
--- The views must keep SQL SECURITY DEFINER with an administrator as definer,
--- so the web account needs no access to the tables behind them.
+-- The view must keep SQL SECURITY DEFINER with an administrator as definer.
 
 GRANT SELECT ON PCRMSV7.crms TO 'pcrms_web'@'localhost';
 GRANT SELECT ON PCRMSV7.genes TO 'pcrms_web'@'localhost';
 GRANT SELECT ON PCRMSV7.tfbss TO 'pcrms_web'@'localhost';
+GRANT SELECT ON PCRMSV7.umotifs TO 'pcrms_web'@'localhost';
 GRANT SELECT ON PCRMSV7.umotif_tfs_association TO 'pcrms_web'@'localhost';
-GRANT SELECT ON PCRMSV7.crms_genes TO 'pcrms_web'@'localhost';
-GRANT SELECT ON PCRMSV7.genes_crms_association TO 'pcrms_web'@'localhost';
-GRANT SELECT ON PCRMSV7.genes_ranges TO 'pcrms_web'@'localhost';
+GRANT SELECT ON PCRMSV7.crms_genes_association TO 'pcrms_web'@'localhost';
 GRANT SELECT ON PCRMSV7.umotif_tfs_association_multiple TO 'pcrms_web'@'localhost';
 
 -- Only if PCRMS_ENABLE_VISITOR_TRACKING is turned on:

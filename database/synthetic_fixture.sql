@@ -1,159 +1,51 @@
 -- PCRMs synthetic development fixture
 --
--- This file is intentionally self-contained and destructive only to the
--- dedicated `pcrms_synthetic` database. Every identifier and coordinate below
--- is synthetic and must not be used for scientific analysis.
-
-CREATE DATABASE IF NOT EXISTS pcrms_synthetic
-    CHARACTER SET utf8mb4
-    COLLATE utf8mb4_unicode_ci;
-
-USE pcrms_synthetic;
+-- Fills a database created with database/schema.sql with deterministic
+-- synthetic records. Every identifier and coordinate below is synthetic and
+-- must not be used for scientific analysis. Rerunning it replaces the data in
+-- that database only:
+--
+--   mysql -e 'CREATE DATABASE pcrms_synthetic CHARACTER SET utf8mb4 COLLATE utf8mb4_bin'
+--   mysql pcrms_synthetic < database/schema.sql
+--   mysql pcrms_synthetic < database/synthetic_fixture.sql
 
 SET NAMES utf8mb4;
+
 SET FOREIGN_KEY_CHECKS = 0;
-
-DROP VIEW IF EXISTS genes_ranges;
-DROP VIEW IF EXISTS crms_genes;
-DROP VIEW IF EXISTS genes_crms_association;
-DROP VIEW IF EXISTS umotif_tfs_association_multiple;
-
-DROP TABLE IF EXISTS tfbss;
-DROP TABLE IF EXISTS umotif_tfs_association;
-DROP TABLE IF EXISTS crms_genes_association;
-DROP TABLE IF EXISTS genes;
-DROP TABLE IF EXISTS crms;
-DROP TABLE IF EXISTS chromosomes;
-DROP TABLE IF EXISTS visitors;
-DROP TABLE IF EXISTS genomes;
-
+TRUNCATE TABLE tfbss;
+TRUNCATE TABLE umotif_tfs_association;
+TRUNCATE TABLE umotifs;
+TRUNCATE TABLE crms_genes_association;
+TRUNCATE TABLE genes;
+TRUNCATE TABLE crms;
+TRUNCATE TABLE chromosomes;
+TRUNCATE TABLE datasets;
+TRUNCATE TABLE genomes;
+TRUNCATE TABLE visitors;
 SET FOREIGN_KEY_CHECKS = 1;
-
-CREATE TABLE genomes (
-    genomeID TINYINT UNSIGNED NOT NULL,
-    genomeName VARCHAR(100) NOT NULL,
-    PRIMARY KEY (genomeID),
-    UNIQUE KEY uq_genomes_name (genomeName)
-) ENGINE = InnoDB;
-
-CREATE TABLE chromosomes (
-    genomeID TINYINT UNSIGNED NOT NULL,
-    chromosomeName VARCHAR(32) NOT NULL,
-    ncbiName VARCHAR(64) NOT NULL,
-    PRIMARY KEY (genomeID, chromosomeName),
-    CONSTRAINT fk_chromosomes_genome
-        FOREIGN KEY (genomeID) REFERENCES genomes (genomeID)
-        ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE = InnoDB;
-
-CREATE TABLE genes (
-    geneID VARCHAR(64) NOT NULL,
-    Symbol VARCHAR(64) NOT NULL,
-    Genome TINYINT UNSIGNED NOT NULL,
-    Chromosome VARCHAR(32) NOT NULL,
-    Start_Pos INT UNSIGNED NOT NULL,
-    End_Pos INT UNSIGNED NOT NULL,
-    Strand ENUM('+', '-') NOT NULL,
-    PRIMARY KEY (geneID),
-    KEY idx_genes_symbol (Genome, Symbol),
-    KEY idx_genes_location (Genome, Chromosome, Start_Pos, End_Pos),
-    CONSTRAINT fk_genes_chromosome
-        FOREIGN KEY (Genome, Chromosome)
-        REFERENCES chromosomes (genomeID, chromosomeName)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT chk_genes_coordinates CHECK (End_Pos >= Start_Pos)
-) ENGINE = InnoDB;
-
-CREATE TABLE crms (
-    crmID VARCHAR(64) NOT NULL,
-    Genome TINYINT UNSIGNED NOT NULL,
-    Chromosome VARCHAR(32) NOT NULL,
-    Start_Pos INT UNSIGNED NOT NULL,
-    End_Pos INT UNSIGNED NOT NULL,
-    Score DECIMAL(10, 4) NOT NULL,
-    P_value DOUBLE NOT NULL,
-    Distance INT NOT NULL DEFAULT 0,
-    PRIMARY KEY (crmID),
-    KEY idx_crms_browser (Genome, Chromosome, P_value),
-    KEY idx_crms_location (Genome, Chromosome, Start_Pos, End_Pos),
-    CONSTRAINT fk_crms_chromosome
-        FOREIGN KEY (Genome, Chromosome)
-        REFERENCES chromosomes (genomeID, chromosomeName)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT chk_crms_coordinates CHECK (End_Pos >= Start_Pos),
-    CONSTRAINT chk_crms_p_value CHECK (P_value >= 0 AND P_value <= 1)
-) ENGINE = InnoDB;
-
-CREATE TABLE crms_genes_association (
-    crmID VARCHAR(64) NOT NULL,
-    geneID VARCHAR(64) NOT NULL,
-    PRIMARY KEY (crmID, geneID),
-    KEY idx_crms_genes_gene (geneID, crmID),
-    CONSTRAINT fk_crms_genes_crm
-        FOREIGN KEY (crmID) REFERENCES crms (crmID)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT fk_crms_genes_gene
-        FOREIGN KEY (geneID) REFERENCES genes (geneID)
-        ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE = InnoDB;
-
-CREATE TABLE umotif_tfs_association (
-    umID VARCHAR(32) NOT NULL,
-    tfID VARCHAR(64) NOT NULL,
-    Genome TINYINT UNSIGNED NOT NULL,
-    PRIMARY KEY (Genome, umID, tfID),
-    KEY idx_umotif_tf_search (Genome, tfID, umID),
-    CONSTRAINT fk_umotif_genome
-        FOREIGN KEY (Genome) REFERENCES genomes (genomeID)
-        ON UPDATE CASCADE ON DELETE CASCADE
-) ENGINE = InnoDB;
-
-CREATE TABLE tfbss (
-    crmID VARCHAR(64) NOT NULL,
-    TFBS_Start INT UNSIGNED NOT NULL,
-    TFBS_End INT UNSIGNED NOT NULL,
-    umID VARCHAR(32) NOT NULL,
-    Binding_Score DECIMAL(10, 4) NOT NULL,
-    PRIMARY KEY (crmID, TFBS_Start, TFBS_End, umID),
-    KEY idx_tfbss_motif (umID, crmID),
-    CONSTRAINT fk_tfbss_crm
-        FOREIGN KEY (crmID) REFERENCES crms (crmID)
-        ON UPDATE CASCADE ON DELETE CASCADE,
-    CONSTRAINT chk_tfbss_coordinates CHECK (TFBS_End >= TFBS_Start)
-) ENGINE = InnoDB;
-
--- Column order is significant because tracker/track.php uses INSERT ... VALUES
--- without a column list.
-CREATE TABLE visitors (
-    visitorID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
-    IP VARCHAR(45) NOT NULL,
-    Country VARCHAR(100) NOT NULL,
-    City VARCHAR(100) NOT NULL,
-    Visited_At DATETIME NOT NULL,
-    PRIMARY KEY (visitorID),
-    KEY idx_visitors_date (Visited_At)
-) ENGINE = InnoDB;
 
 START TRANSACTION;
 
-INSERT INTO genomes (genomeID, genomeName) VALUES
-    (1, 'Homo_sapiens'),
-    (2, 'Mus_musculus'),
-    (3, 'Caenorhabditis_elegans'),
-    (4, 'Arabidopsis_thaliana'),
-    (5, 'Drosophila_melanogaster');
+INSERT INTO genomes (genomeID, genomeName, assembly) VALUES
+    (1, 'Homo sapiens', 'hg38'),
+    (2, 'Mus musculus', 'mm10'),
+    (3, 'Caenorhabditis elegans', 'ce10'),
+    (4, 'Arabidopsis thaliana', 'TAIR10'),
+    (5, 'Drosophila melanogaster', 'dm3');
 
-INSERT INTO chromosomes (genomeID, chromosomeName, ncbiName) VALUES
-    (1, 'chr1',  'NC_000001.11'),
-    (1, 'chr2',  'NC_000002.12'),
-    (2, 'chr1',  'NC_000067.6'),
-    (2, 'chr2',  'NC_000068.7'),
-    (3, 'chr1',  'NC_003279.8'),
-    (3, 'chr2',  'NC_003280.10'),
-    (4, 'chr1',  'NC_003070.9'),
-    (4, 'chr2',  'NC_003071.7'),
-    (5, 'chr2L', 'NT_033779.5'),
-    (5, 'chr2R', 'NT_033778.4');
+INSERT INTO datasets (genomeID, datasetNo, method, releaseVersion) VALUES
+    (1, 1, 'dePCRM2', 2),
+    (2, 1, 'dePCRM2', 2),
+    (3, 1, 'dePCRM2', 1),
+    (4, 1, 'dePCRM2', 1),
+    (5, 1, 'dePCRM2', 1);
+
+INSERT INTO chromosomes (genomeID, chromosomeName) VALUES
+    (1, 'chr1'), (1, 'chr2'),
+    (2, 'chr1'), (2, 'chr2'),
+    (3, 'chr1'), (3, 'chr2'),
+    (4, 'chr1'), (4, 'chr2'),
+    (5, 'chr2L'), (5, 'chr2R');
 
 CREATE TEMPORARY TABLE synthetic_species (
     genomeID TINYINT UNSIGNED NOT NULL,
@@ -206,48 +98,54 @@ VALUES
     ('HS_SYN_GENE_NEIGHBOR', 'SYNTH_HS_NEIGHBOR', 1, 'chr1',
      2030000, 2042000, '+');
 
--- Six deliberately positioned CRMs per organism cover:
+-- CRMs are staged with readable labels, then numbered in genomic order like
+-- the real data. Six deliberately positioned CRMs per organism cover:
 --   * all four supported P-value thresholds;
 --   * upstream/downstream queries on both strands; and
 --   * an overlapping CRM.
-INSERT INTO crms
-    (crmID, Genome, Chromosome, Start_Pos, End_Pos, Score, P_value, Distance)
+CREATE TEMPORARY TABLE synthetic_crms (
+    label VARCHAR(64) NOT NULL,
+    Genome TINYINT UNSIGNED NOT NULL,
+    Chromosome VARCHAR(32) NOT NULL,
+    Start_Pos INT UNSIGNED NOT NULL,
+    End_Pos INT UNSIGNED NOT NULL,
+    Score DOUBLE NOT NULL,
+    P_value DOUBLE NOT NULL,
+    PRIMARY KEY (label)
+);
+
+INSERT INTO synthetic_crms
 SELECT CONCAT(code, '_SYN_CRM_UPSTREAM'), genomeID, primaryChromosome,
-       1800000, 1800249, 9.8000, 0.0000005, -199751
+       1800000, 1800249, 9.8, 0.0000005
 FROM synthetic_species;
 
-INSERT INTO crms
-    (crmID, Genome, Chromosome, Start_Pos, End_Pos, Score, P_value, Distance)
+INSERT INTO synthetic_crms
 SELECT CONCAT(code, '_SYN_CRM_DOWNSTREAM'), genomeID, primaryChromosome,
-       2100000, 2100299, 8.7000, 0.000003, 90000
+       2100000, 2100299, 8.7, 0.000003
 FROM synthetic_species;
 
-INSERT INTO crms
-    (crmID, Genome, Chromosome, Start_Pos, End_Pos, Score, P_value, Distance)
+INSERT INTO synthetic_crms
 SELECT CONCAT(code, '_SYN_CRM_OVERLAP'), genomeID, primaryChromosome,
-       2003000, 2003299, 7.6000, 0.005, 0
+       2003000, 2003299, 7.6, 0.005
 FROM synthetic_species;
 
-INSERT INTO crms
-    (crmID, Genome, Chromosome, Start_Pos, End_Pos, Score, P_value, Distance)
+INSERT INTO synthetic_crms
 SELECT CONCAT(code, '_SYN_CRM_FAR'), genomeID, primaryChromosome,
-       1200000, 1200249, 6.5000, 0.03, -799751
+       1200000, 1200249, 6.5, 0.03
 FROM synthetic_species;
 
-INSERT INTO crms
-    (crmID, Genome, Chromosome, Start_Pos, End_Pos, Score, P_value, Distance)
+INSERT INTO synthetic_crms
 SELECT CONCAT(code, '_SYN_CRM_MINUS_UPSTREAM'), genomeID, secondaryChromosome,
-       4100000, 4100249, 9.1000, 0.0000005, 90000
+       4100000, 4100249, 9.1, 0.0000005
 FROM synthetic_species;
 
-INSERT INTO crms
-    (crmID, Genome, Chromosome, Start_Pos, End_Pos, Score, P_value, Distance)
+INSERT INTO synthetic_crms
 SELECT CONCAT(code, '_SYN_CRM_MINUS_DOWNSTREAM'), genomeID, secondaryChromosome,
-       3900000, 3900249, 7.2000, 0.005, -100000
+       3900000, 3900249, 7.2, 0.005
 FROM synthetic_species;
 
 -- Seventy-five additional human records make both CRM and TF server-side
--- tables cross the default 50-row page boundary.
+-- tables cross several 25-row pages.
 CREATE TEMPORARY TABLE synthetic_numbers (
     n TINYINT UNSIGNED NOT NULL,
     PRIMARY KEY (n)
@@ -267,23 +165,27 @@ CROSS JOIN (
 ) AS tens
 WHERE ones.n + (10 * tens.n) < 75;
 
-INSERT INTO crms
-    (crmID, Genome, Chromosome, Start_Pos, End_Pos, Score, P_value, Distance)
+INSERT INTO synthetic_crms
 SELECT
     CONCAT('HS_SYN_CRM_PAGE_', LPAD(n, 3, '0')),
     1,
     'chr1',
     1250000 + (n * 7000),
     1250299 + (n * 7000),
-    6.0000 + (n / 100),
+    6.0 + (n / 100),
     CASE MOD(n, 4)
         WHEN 0 THEN 0.0000005
         WHEN 1 THEN 0.000003
         WHEN 2 THEN 0.005
         ELSE 0.03
-    END,
-    -750000 + (CAST(n AS SIGNED) * 7000)
+    END
 FROM synthetic_numbers;
+
+INSERT INTO crms (crmID, Genome, Dataset, Chromosome, Start_Pos, End_Pos, Score, P_value)
+SELECT
+    ROW_NUMBER() OVER (ORDER BY Genome, Chromosome, Start_Pos),
+    Genome, 1, Chromosome, Start_Pos, End_Pos, Score, P_value
+FROM synthetic_crms;
 
 -- Associate primary-chromosome CRMs with the positive-strand gene and
 -- secondary-chromosome CRMs with the negative-strand gene.
@@ -301,63 +203,73 @@ INNER JOIN synthetic_species AS s
     ON s.genomeID = c.Genome
    AND s.secondaryChromosome = c.Chromosome;
 
-INSERT INTO crms_genes_association (crmID, geneID) VALUES
-    ('HS_SYN_CRM_OVERLAP', 'HS_SYN_GENE_NEIGHBOR');
+INSERT INTO crms_genes_association (crmID, geneID)
+SELECT c.crmID, 'HS_SYN_GENE_NEIGHBOR'
+FROM crms AS c
+INNER JOIN synthetic_crms AS l
+    ON l.Genome = c.Genome AND l.Chromosome = c.Chromosome
+   AND l.Start_Pos = c.Start_Pos AND l.End_Pos = c.End_Pos
+WHERE l.label = 'HS_SYN_CRM_OVERLAP';
 
+-- Two motifs per organism, motif IDs 2g-1 and 2g for genome g. Numbers
+-- 88/162 and 8/9 have repository motif images for genomes 1-3; 501/502 and
+-- 601/602 intentionally have none, exercising the "No logo" state.
 CREATE TEMPORARY TABLE synthetic_motifs (
     genomeID TINYINT UNSIGNED NOT NULL,
-    primaryUmID VARCHAR(32) NOT NULL,
-    secondaryUmID VARCHAR(32) NOT NULL,
+    primaryUmID SMALLINT UNSIGNED NOT NULL,
+    secondaryUmID SMALLINT UNSIGNED NOT NULL,
     PRIMARY KEY (genomeID)
 );
 
--- IDs 88/162 and 8/9 have repository motif images for genomes 1-3.
--- IDs 501/502 and 601/602 intentionally have no image, exercising the
--- "Logo unavailable" state for genomes 4-5.
 INSERT INTO synthetic_motifs (genomeID, primaryUmID, secondaryUmID) VALUES
-    (1, '88',  '162'),
-    (2, '88',  '162'),
-    (3, '8',   '9'),
-    (4, '501', '502'),
-    (5, '601', '602');
+    (1, 88,  162),
+    (2, 88,  162),
+    (3, 8,   9),
+    (4, 501, 502),
+    (5, 601, 602);
 
-INSERT INTO umotif_tfs_association (umID, tfID, Genome)
-SELECT primaryUmID, 'TF_ALPHA', genomeID FROM synthetic_motifs;
+INSERT INTO umotifs (motifID, Genome, Dataset, umID, Width, Motif_Score)
+SELECT genomeID * 2 - 1, genomeID, 1, primaryUmID, 19, 5.0 FROM synthetic_motifs;
 
-INSERT INTO umotif_tfs_association (umID, tfID, Genome)
-SELECT primaryUmID, 'TF_SHARED', genomeID FROM synthetic_motifs;
+INSERT INTO umotifs (motifID, Genome, Dataset, umID, Width, Motif_Score)
+SELECT genomeID * 2, genomeID, 1, secondaryUmID, 19, 4.0 FROM synthetic_motifs;
 
-INSERT INTO umotif_tfs_association (umID, tfID, Genome)
-SELECT secondaryUmID, 'TF_BETA', genomeID FROM synthetic_motifs;
+INSERT INTO umotif_tfs_association (motifID, tfID)
+SELECT genomeID * 2 - 1, 'TF_ALPHA' FROM synthetic_motifs;
 
-INSERT INTO umotif_tfs_association (umID, tfID, Genome)
-SELECT secondaryUmID, 'TF_SHARED', genomeID FROM synthetic_motifs;
+INSERT INTO umotif_tfs_association (motifID, tfID)
+SELECT genomeID * 2 - 1, 'TF_SHARED' FROM synthetic_motifs;
+
+INSERT INTO umotif_tfs_association (motifID, tfID)
+SELECT genomeID * 2, 'TF_BETA' FROM synthetic_motifs;
+
+INSERT INTO umotif_tfs_association (motifID, tfID)
+SELECT genomeID * 2, 'TF_SHARED' FROM synthetic_motifs;
 
 -- Every CRM receives one TF_ALPHA/TF_SHARED site. The downstream and overlap
 -- records also receive TF_BETA sites for multi-row detail-page testing.
-INSERT INTO tfbss
-    (crmID, TFBS_Start, TFBS_End, umID, Binding_Score)
+INSERT INTO tfbss (crmID, TFBS_Start, motifID, TFBS_End, Binding_Score)
 SELECT
-    c.crmID,
-    c.Start_Pos + 20,
-    c.Start_Pos + 39,
-    m.primaryUmID,
-    7.1000 + (MOD(c.End_Pos, 100) / 1000)
-FROM crms AS c
-INNER JOIN synthetic_motifs AS m ON m.genomeID = c.Genome;
+    crmID,
+    Start_Pos + 20,
+    Genome * 2 - 1,
+    Start_Pos + 39,
+    7.1 + (MOD(End_Pos, 100) / 1000)
+FROM crms;
 
-INSERT INTO tfbss
-    (crmID, TFBS_Start, TFBS_End, umID, Binding_Score)
+INSERT INTO tfbss (crmID, TFBS_Start, motifID, TFBS_End, Binding_Score)
 SELECT
     c.crmID,
     c.Start_Pos + 60,
+    c.Genome * 2,
     c.Start_Pos + 79,
-    m.secondaryUmID,
-    8.2000 + (MOD(c.End_Pos, 100) / 1000)
+    8.2 + (MOD(c.End_Pos, 100) / 1000)
 FROM crms AS c
-INNER JOIN synthetic_motifs AS m ON m.genomeID = c.Genome
-WHERE c.crmID LIKE '%_SYN_CRM_DOWNSTREAM'
-   OR c.crmID LIKE '%_SYN_CRM_OVERLAP';
+INNER JOIN synthetic_crms AS l
+    ON l.Genome = c.Genome AND l.Chromosome = c.Chromosome
+   AND l.Start_Pos = c.Start_Pos AND l.End_Pos = c.End_Pos
+WHERE l.label LIKE '%\_SYN\_CRM\_DOWNSTREAM'
+   OR l.label LIKE '%\_SYN\_CRM\_OVERLAP';
 
 -- RFC 5737 / RFC 3849 documentation addresses avoid using personal data.
 INSERT INTO visitors (IP, Country, City, Visited_At) VALUES
@@ -365,65 +277,21 @@ INSERT INTO visitors (IP, Country, City, Visited_At) VALUES
     ('198.51.100.25', 'Synthetic Country', 'Example Town', '2026-02-20 14:30:00'),
     ('2001:db8::42', 'Synthetic Country', 'Fixture Village', '2026-03-25 09:15:00');
 
+-- The labelled CRMs the README test cases refer to, with their numeric IDs.
+SELECT l.label, c.crmID
+FROM synthetic_crms AS l
+INNER JOIN crms AS c
+    ON c.Genome = l.Genome AND c.Chromosome = l.Chromosome
+   AND c.Start_Pos = l.Start_Pos AND c.End_Pos = l.End_Pos
+WHERE l.label LIKE 'HS\_SYN\_CRM\_%' AND l.label NOT LIKE 'HS\_SYN\_CRM\_PAGE\_%'
+ORDER BY c.crmID;
+
 DROP TEMPORARY TABLE synthetic_motifs;
 DROP TEMPORARY TABLE synthetic_numbers;
+DROP TEMPORARY TABLE synthetic_crms;
 DROP TEMPORARY TABLE synthetic_species;
 
 COMMIT;
-
--- The application uses both association names. Keeping one canonical table
--- and exposing the reverse spelling as a view prevents fixture drift.
-CREATE VIEW genes_crms_association AS
-SELECT geneID, crmID
-FROM crms_genes_association;
-
-CREATE VIEW crms_genes AS
-SELECT
-    c.crmID,
-    c.Genome,
-    c.Chromosome,
-    c.Start_Pos,
-    c.End_Pos,
-    COALESCE(
-        GROUP_CONCAT(DISTINCT g.Symbol ORDER BY g.Symbol SEPARATOR ', '),
-        'Unassigned'
-    ) AS Genes_Symbol,
-    c.Score,
-    c.P_value
-FROM crms AS c
-LEFT JOIN crms_genes_association AS a ON a.crmID = c.crmID
-LEFT JOIN genes AS g ON g.geneID = a.geneID
-GROUP BY
-    c.crmID, c.Genome, c.Chromosome, c.Start_Pos, c.End_Pos,
-    c.Score, c.P_value;
-
-CREATE VIEW genes_ranges AS
-SELECT
-    g.geneID,
-    g.Symbol,
-    g.Genome,
-    g.Chromosome,
-    g.Start_Pos,
-    g.End_Pos,
-    g.Strand,
-    CASE WHEN g.Start_Pos > 500000
-        THEN g.Start_Pos - 500000 ELSE 0 END AS Start_Pos_50,
-    g.End_Pos + 500000 AS End_Pos_50,
-    CASE WHEN g.Start_Pos > 1000000
-        THEN g.Start_Pos - 1000000 ELSE 0 END AS Start_Pos_100,
-    g.End_Pos + 1000000 AS End_Pos_100,
-    CASE WHEN g.Start_Pos > 2000000
-        THEN g.Start_Pos - 2000000 ELSE 0 END AS Start_Pos_200,
-    g.End_Pos + 2000000 AS End_Pos_200
-FROM genes AS g;
-
-CREATE VIEW umotif_tfs_association_multiple AS
-SELECT
-    umID,
-    Genome,
-    GROUP_CONCAT(DISTINCT tfID ORDER BY tfID SEPARATOR ', ') AS tfNames
-FROM umotif_tfs_association
-GROUP BY umID, Genome;
 
 -- Importing the fixture prints a small sanity summary.
 SELECT 'genomes' AS fixture_object, COUNT(*) AS row_count FROM genomes

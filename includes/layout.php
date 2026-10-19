@@ -49,7 +49,7 @@ if (!function_exists('pcrms_page_start')) {
             : 'PCRMs — Predicted cis-Regulatory Modules';
         $description = isset($page['description'])
             ? $page['description']
-            : 'PCRMs is a database of predicted cis-regulatory modules and their transcription factor binding sites in five genomes.';
+            : 'PCRMs is a database of predicted cis-regulatory modules and their transcription factor binding sites in the human and mouse genomes.';
         $activePage = isset($page['active']) ? $page['active'] : '';
         ?>
 <!DOCTYPE html>

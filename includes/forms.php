@@ -24,12 +24,16 @@ if (!function_exists('pcrms_genome_options')) {
             ?>
             <label class="option">
                 <input type="radio" name="genome_id" value="<?php echo $id; ?>" data-name="<?php echo pcrms_h($genome['name']); ?>"
-                    data-gene-example="<?php echo pcrms_h($genome['gene_example']); ?>" data-tf-example="<?php echo pcrms_h($genome['tf_example']); ?>"<?php echo $id === $selectedId ? ' checked' : ''; ?> required>
+                    data-gene-example="<?php echo pcrms_h($genome['gene_example']); ?>" data-tf-example="<?php echo pcrms_h($genome['tf_example']); ?>"<?php echo $genome['searchable'] ? ($id === $selectedId ? ' checked' : '') : ' disabled'; ?> required>
                 <span class="genome-card">
                     <span class="genome-card__icon"><?php echo pcrms_svg('organisms/' . $genome['key']); ?></span>
                     <span class="genome-card__name"><?php echo pcrms_h($genome['common']); ?>
                         <span class="genome-card__latin"><?php echo pcrms_h($genome['name']); ?></span></span>
-                    <span class="genome-card__meta"><?php echo pcrms_h($genome['assembly_short']); ?> · v<?php echo (int) $genome['version']; ?></span>
+                    <?php if ($genome['searchable']): ?>
+                        <span class="genome-card__meta"><?php echo pcrms_h($genome['assembly_short']); ?> · v<?php echo (int) $genome['version']; ?></span>
+                    <?php else: ?>
+                        <span class="genome-card__meta">Coming soon</span>
+                    <?php endif; ?>
                 </span>
             </label>
             <?php
@@ -53,6 +57,9 @@ if (!function_exists('pcrms_chromosome_options')) {
         <?php
         foreach ($PCRMS_GENOME_ORDER as $id) {
             $genome = $PCRMS_GENOMES[$id];
+            if (!$genome['searchable']) {
+                continue;
+            }
             ?>
             <div class="chrom-group<?php echo $id === $selectedId ? ' is-current' : ''; ?>" data-genome="<?php echo $id; ?>">
                 <p class="chrom-group__title"><?php echo pcrms_h($genome['common']); ?> (<?php echo pcrms_h($genome['assembly_short']); ?>)</p>

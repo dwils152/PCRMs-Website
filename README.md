@@ -21,16 +21,16 @@ Credentials must not be stored under `www/`. Configure the deployment with eithe
 
 Visitor-location logging is disabled by default. Set `PCRMS_ENABLE_VISITOR_TRACKING=1` only if the deployment has an appropriate privacy notice and retention policy.
 
-## Synthetic test database
+## Database
 
-A self-contained development schema and deterministic fixture are available at
-[`database/synthetic_fixture.sql`](database/synthetic_fixture.sql). It creates
-only the dedicated `pcrms_synthetic` database and includes enough records to
-exercise pagination, every search workflow, detail pages, both gene strands,
-all P-value thresholds, and present/missing motif-logo states.
+The tables are defined in [`database/schema.sql`](database/schema.sql). For
+development, [`database/synthetic_fixture.sql`](database/synthetic_fixture.sql)
+fills them with a small synthetic data set that exercises pagination, every
+search workflow, detail pages, both gene strands, all P-value thresholds, and
+present/missing motif-logo states.
 
-See [`database/README.md`](database/README.md) for loading instructions and a
-test-case matrix.
+See [`database/README.md`](database/README.md) for loading the synthetic set
+or the real data, and a test-case matrix.
 
 ## Run locally
 

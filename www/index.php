@@ -26,7 +26,7 @@ $stepsWithArrow = ['A', 'B', 'C', 'E', 'F', 'G'];
 
 pcrms_page_start([
     'title' => null,
-    'description' => 'PCRMs is a database of cis-regulatory modules and transcription factor binding sites predicted from TF ChIP-seq data for human, mouse, fruit fly, worm and thale cress.',
+    'description' => 'PCRMs is a database of cis-regulatory modules and transcription factor binding sites predicted from TF ChIP-seq data for human and mouse, with fruit fly, worm and thale cress coming soon.',
     'active' => 'home',
 ]);
 ?>
@@ -34,7 +34,7 @@ pcrms_page_start([
     <section class="band home-band" aria-labelledby="page-title">
         <div class="band__inner shell">
             <h1 id="page-title">Predicted cis-regulatory modules and their binding sites</h1>
-            <p class="band__lede">CRMs and transcription factor binding sites predicted from public TF ChIP-seq data for human, mouse, fruit fly, worm and thale cress.</p>
+            <p class="band__lede">CRMs and transcription factor binding sites predicted from public TF ChIP-seq data for human and mouse. Fruit fly, worm and thale cress are coming soon.</p>
             <ul class="genome-stats" aria-label="Predicted CRMs per genome">
                 <?php foreach ($PCRMS_RELEASES as $release): ?>
                     <?php $genome = $PCRMS_GENOMES[$release['genome_id']]; ?>
@@ -42,7 +42,9 @@ pcrms_page_start([
                         <span class="genome-stat__icon"><?php echo pcrms_svg('organisms/' . $genome['key']); ?></span>
                         <span>
                             <span class="genome-stat__label"><?php echo $genome['version'] === 2 ? pcrms_h($genome['common']) : '<em>' . pcrms_h($genome['short']) . '</em>'; ?> CRMs (v<?php echo (int) $release['version']; ?>)</span>
-                            <?php if ($release['crm_count'] !== null): ?>
+                            <?php if (!$genome['searchable']): ?>
+                                <span class="genome-stat__value genome-stat__value--soft">Coming soon</span>
+                            <?php elseif ($release['crm_count'] !== null): ?>
                                 <span class="genome-stat__value"><?php echo number_format($release['crm_count']); ?></span>
                             <?php else: ?>
                                 <span class="genome-stat__value genome-stat__value--soft"><?php echo pcrms_h($genome['assembly_short']); ?> map</span>
@@ -69,7 +71,7 @@ pcrms_page_start([
 
             <ol class="flow">
                 <?php foreach ($steps as $step): ?>
-                    <li class="flow-step">
+                    <li class="flow-step" id="step-<?php echo strtolower($step[0]); ?>">
                         <div class="flow-step__head">
                             <span class="flow-step__letter" aria-hidden="true"><?php echo $step[0]; ?></span>
                             <h3><span class="sr-only">Step <?php echo $step[0]; ?>: </span><?php echo pcrms_h($step[1]); ?></h3>

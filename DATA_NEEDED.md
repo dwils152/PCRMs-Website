@@ -2,27 +2,23 @@
 
 ## Required for database validation
 
-- The production MySQL schema, including views, indexes, and table definitions,
-  is still needed to confirm that it matches the query-compatible development
-  schema in `database/synthetic_fixture.sql`.
-- A deterministic local fixture is now available in
-  `database/synthetic_fixture.sql`. A small anonymized production fixture or
-  database access path is still needed for production-data validation.
+- The schema is `database/schema.sql`; the human and mouse CRM files load
+  into it with `database/split_crm_files.py` and `database/load.sql`.
+- The gene annotation and each CRM's closest gene come from GENCODE (v50 for
+  hg38, vM25 for mm10) through `database/build_genes.py`, and the motif–TF
+  names from `database/match_motifs.py`.
 - Confirmation of the supported PHP/MySQL versions in production.
-- Confirmation that the server-side result queries have supporting indexes, especially `Genome`/`Chromosome`/`P_value`, CRM IDs, motif IDs, and TF IDs.
 
 Do not place credentials in chat or under `www/`. Use deployment environment variables or `config/database.php`.
 
-## Missing release archives
+## Download files
 
-The original download page references these files, but they are not present in `www/data/`:
-
-- `Human_CRMCs_TFBSs_v2_hg38.bed.tar.gz`
-- `Human_CRMCs_TFBSs_v1_hg38.bed.tar.gz`
-- `Mouse_CRMCs_TFBSs_v2_mm10.bed.tar.gz`
-- `Mouse_CRMCs_TFBSs_v1_mm10.bed.tar.gz`
-
-Large archives can instead be supplied as durable object-storage or institutional-repository URLs.
+The download page offers gzip-compressed BED files for human and mouse
+version 2 instead of tar archives (`includes/releases.php`). They are built
+locally in `www/data/` (about 6.4 GB) and must be copied to the server; they
+are not in git. The version 1 files, the mouse mm39 liftover and the fly, worm
+and thale cress files are held back in `data-incoming/downloads-on-hold/` until those releases are
+offered again.
 
 ## Metadata that needs confirmation
 

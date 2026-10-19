@@ -350,6 +350,10 @@ h3 {
     font-size: 14px;
 }
 
+.site-footer p a {
+    color: inherit;
+}
+
 @media (max-width: 620px) {
     .site-footer__divider {
         display: none;
@@ -434,6 +438,16 @@ h3 {
     background: var(--surface);
     border: 1px solid var(--line);
     border-radius: var(--radius);
+}
+
+.card__title {
+    margin: 0;
+    font-size: 20px;
+}
+
+.card__title + p {
+    max-width: 68ch;
+    margin: 8px 0 18px;
 }
 
 .button-row {
@@ -717,8 +731,24 @@ fieldset.step > .step__tools {
     outline-offset: 2px;
 }
 
-.option input:hover:not(:checked) + .genome-card {
+.option input:hover:not(:checked):not(:disabled) + .genome-card {
     border-color: var(--line-strong);
+}
+
+.option input:disabled {
+    cursor: not-allowed;
+}
+
+.option input:disabled + .genome-card,
+.genome-card--soon {
+    border-style: dashed;
+    background: transparent;
+    color: var(--muted);
+}
+
+.option input:disabled + .genome-card .genome-card__icon,
+.genome-card--soon .genome-card__icon {
+    opacity: 0.5;
 }
 
 .chip-grid,
@@ -899,6 +929,10 @@ html:not(.js) .js-only {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 12px;
+}
+
+.tool-tabs--two {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 @media (max-width: 760px) {
@@ -1216,8 +1250,9 @@ html:not(.js) .js-only {
 
 .motif-logo {
     display: block;
-    width: 150px;
-    height: 30px;
+    width: auto;
+    max-width: 200px;
+    height: 44px;
 }
 
 .motif-missing {
@@ -1462,6 +1497,7 @@ html:not(.js) .js-only {
     position: relative;
     display: flex;
     flex-direction: column;
+    scroll-margin-top: 20px;
     gap: 12px;
     padding: 18px;
     border-radius: 12px;
@@ -1806,6 +1842,17 @@ html:not(.js) .js-only {
     font-size: 13px;
 }
 
+.fact-note {
+    margin-left: 1px;
+    color: var(--pine);
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.fact-note:hover {
+    text-decoration: underline;
+}
+
 .facts dd {
     margin: 0;
     font-size: 20px;
@@ -1890,6 +1937,25 @@ html:not(.js) .js-only {
     font-size: 19px;
 }
 
+.format-list {
+    margin: 4px 0 0;
+}
+
+.format-list div {
+    padding: 10px 0;
+    border-top: 1px solid var(--line);
+}
+
+.format-list dt {
+    font-weight: 700;
+}
+
+.format-list dd {
+    margin: 3px 0 0;
+    color: var(--ink-2);
+    font-size: 15px;
+}
+
 .using pre {
     margin: 0 0 12px;
     padding: 12px 14px;
@@ -1948,4 +2014,52 @@ html:not(.js) .js-only {
 .message-panel p {
     margin: 0 0 20px;
     color: var(--ink-2);
+}
+
+/* Tools --------------------------------------------------------------- */
+
+.tool-card__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.tool-card__sub {
+    margin: 2px 0 0;
+    color: var(--muted);
+    font-size: 14.5px;
+}
+
+.tool-card__text {
+    max-width: 68ch;
+    margin: 16px 0 0;
+}
+
+.tool-io {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 18px 0;
+}
+
+.tool-io div {
+    padding: 14px 16px;
+    border-radius: 10px;
+    background: var(--tint);
+}
+
+.tool-io dt {
+    color: var(--pine);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.tool-io dd {
+    margin: 4px 0 0;
+}
+
+@media (max-width: 620px) {
+    .tool-io {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }

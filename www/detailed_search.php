@@ -126,7 +126,7 @@ pcrms_page_start([
                 <fieldset class="card step">
                     <?php pcrms_step_legend(2, 'Enter a gene', 3); ?>
                     <?php pcrms_identifier_field('closest-gene', 'gene_id', 'Gene symbol or stable ID', $s['gene_id'],
-                        $PCRMS_GENOMES[$s['genome_id']]['gene_example'], 'Use one exact symbol or ID; matching may be case-sensitive.'); ?>
+                        $PCRMS_GENOMES[$s['genome_id']]['gene_example'], 'Use one gene symbol or Ensembl ID.'); ?>
                 </fieldset>
                 <fieldset class="card step">
                     <?php pcrms_step_legend(3, 'Set the p-value cutoff', 3); ?>
@@ -148,7 +148,7 @@ pcrms_page_start([
                 <fieldset class="card step">
                     <?php pcrms_step_legend(2, 'Enter a gene', 3); ?>
                     <?php pcrms_identifier_field('range-gene', 'gene_id', 'Gene symbol or stable ID', $s['gene_id'],
-                        $PCRMS_GENOMES[$s['genome_id']]['gene_example'], 'Use one exact symbol or ID; matching may be case-sensitive.'); ?>
+                        $PCRMS_GENOMES[$s['genome_id']]['gene_example'], 'Use one gene symbol or Ensembl ID.'); ?>
                 </fieldset>
                 <fieldset class="card step">
                     <?php pcrms_step_legend(3, 'Choose the window', 3); ?>

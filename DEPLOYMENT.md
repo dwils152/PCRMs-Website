@@ -18,21 +18,30 @@ PHP file outside the web root.
   live site for leftovers of the old version: `*_bak.php`, `exclusive-templates/`,
   `www/tracker/` (including the GeoLite databases), old copies of
   `connection.php` that contain passwords, and the Bootstrap/MDB folders.
-- Put the release archives in `www/data/`.
+- Copy the download files (`*.bed.gz`, about 6.4 GB) into `www/data/`; they
+  are not in git. Remove the old `*.tar.gz` archives from the server.
 
 ## 2. Database
 
 - Rotate the passwords of both database accounts that appeared in earlier
   versions of the source code, even if they are no longer used.
 - Create a separate account for the website and give it only the grants in
-  [`database/grants.sql`](database/grants.sql) (read-only on eight tables and
-  views). The views must stay `SQL SECURITY DEFINER` with an administrator as
+  [`database/grants.sql`](database/grants.sql) (read-only on six tables and one
+  view). The view must stay `SQL SECURITY DEFINER` with an administrator as
   definer.
 - Store the credentials in `config/database.php` (copied from
   `config/database.example.php`, readable only by the web server user, for
   example mode 640) or in the `PCRMS_DB_*` environment variables.
-- Add the indexes and table changes from the performance review (to be
-  written once the real data is loaded and timed).
+- Create the tables with [`database/schema.sql`](database/schema.sql) and load
+  the data as described in [`database/README.md`](database/README.md). The
+  binding-site table holds about 290 million rows for human and mouse: the
+  database takes about 16 GB, plus 11 GB for the split files during the load,
+  which took about 30 minutes on a laptop.
+- Give MySQL enough memory for the indexes the searches use, ideally
+  `innodb_buffer_pool_size = 8G` or more (the binding-site index alone is about
+  5 GB). With less, searches that read millions of binding sites slow down.
+  For the one-time load, a larger `innodb_redo_log_capacity` (for example 8G)
+  also helps; set it back afterwards if needed.
 
 ## 3. PHP (php.ini)
 

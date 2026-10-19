@@ -11,3 +11,10 @@ Options -Indexes
 <FilesMatch "^\.">
     Require all denied
 </FilesMatch>
+
+# Downloads are gzip files, not compressed pages: serve them as they are, so
+# browsers save the .gz file instead of unpacking it.
+<IfModule mod_mime.c>
+    RemoveEncoding .gz
+    AddType application/gzip .gz
+</IfModule>

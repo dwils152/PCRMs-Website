@@ -45,6 +45,9 @@
     // Matches pcrms_format_p_value(): 0.05, 0.0012, 3.0 × 10⁻⁶.
     function formatP(value) {
         var p = Number(value);
+        if (p === 0) {
+            return '0';
+        }
         if (p >= 0.001) {
             return String(Number(p.toFixed(4)));
         }

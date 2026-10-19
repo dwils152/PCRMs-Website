@@ -13,6 +13,10 @@ require_once __DIR__ . '/queries.php';
 
 const PCRMS_PAGE_SIZES = [25, 50, 100];
 
+// Tables with more rows than this page from the server instead of sending
+// every row with the page.
+const PCRMS_LOCAL_ROWS_MAX = 1000;
+
 // Column types: ucsc (row ID linking to UCSC), site (location linking to
 // UCSC), location, record (link to the CRM page), details (a "Details" link to
 // the CRM page), text, score, p and logo. The first column is the row header.

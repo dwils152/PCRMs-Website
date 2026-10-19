@@ -1,7 +1,6 @@
 <?php
 require_once dirname(__DIR__) . '/includes/layout.php';
 require_once dirname(__DIR__) . '/includes/releases.php';
-require_once dirname(__DIR__) . '/includes/publications.php';
 
 if (!function_exists('pcrms_file_size')) {
     function pcrms_file_size($bytes)
@@ -17,9 +16,16 @@ if (!function_exists('pcrms_file_size')) {
     }
 }
 
-// Archives live in www/data; anything missing is listed as not available yet.
+// Only releases with files are listed.
+$PCRMS_RELEASES = array_values(array_filter($PCRMS_RELEASES, function ($release) {
+    return (bool) $release['files'];
+}));
+
+// Files live in www/data; anything missing is listed as not available yet.
+// The example command uses the first binding-site file on the server.
 $missing = 0;
-$example = null;
+$example = 'Human_TFBSs_v2_hg38.bed.gz';
+$exampleFound = false;
 foreach ($PCRMS_RELEASES as $r => $release) {
     foreach ($release['files'] as $f => $file) {
         $path = __DIR__ . '/data/' . $file['name'];
@@ -27,8 +33,9 @@ foreach ($PCRMS_RELEASES as $r => $release) {
         $PCRMS_RELEASES[$r]['files'][$f]['size'] = $available ? pcrms_file_size(filesize($path)) : null;
         if (!$available) {
             $missing++;
-        } elseif ($example === null) {
+        } elseif (!$exampleFound && $file['kind'] === 'sites') {
             $example = $file['name'];
+            $exampleFound = true;
         }
     }
 }
@@ -43,7 +50,7 @@ pcrms_page_start([
     <section class="band" aria-labelledby="page-title">
         <div class="band__inner shell">
             <h1 id="page-title">Download the data</h1>
-            <p class="band__lede">Genome-wide predicted CRMs and their transcription factor binding sites, as BED files packed in .tar.gz archives, one or more per genome.</p>
+            <p class="band__lede">Genome-wide predicted CRMs and their transcription factor binding sites for human and mouse, as gzip-compressed BED files: CRMs with their binding sites, and the binding sites and CRMs on their own. Fruit fly, worm and thale cress are coming soon.</p>
         </div>
     </section>
 
@@ -72,13 +79,16 @@ pcrms_page_start([
                         <span class="genome-section__icon"><?php echo pcrms_svg('organisms/' . $genome['key']); ?></span>
                         <div>
                             <h2 id="<?php echo pcrms_h($genome['key']); ?>-title"><?php echo pcrms_h($genome['common']); ?> <em><?php echo pcrms_h($genome['name']); ?></em></h2>
-                            <p class="genome-section__sub"><?php echo pcrms_h($genome['assembly']); ?> · Version <?php echo (int) $release['version']; ?></p>
+                            <p class="genome-section__sub"><?php echo pcrms_h($genome['assembly']); ?> · Version <?php echo (int) $release['version']; ?><?php if (!$genome['searchable']): ?><span class="badge">Search coming soon</span><?php endif; ?></p>
                         </div>
                     </div>
                     <?php if ($release['facts']): ?>
                         <dl class="facts">
                             <?php foreach ($release['facts'] as $fact): ?>
-                                <div><dt><?php echo pcrms_h($fact[1]); ?></dt><dd><?php echo pcrms_h($fact[0]); ?></dd></div>
+                                <div>
+                                    <dt><?php echo pcrms_h($fact[1]); ?><?php if (isset($fact[2])): ?><a class="fact-note" href="<?php echo pcrms_h($fact[2]); ?>" title="How the predictions are made">*<span class="sr-only"> (how the predictions are made)</span></a><?php endif; ?></dt>
+                                    <dd><?php echo pcrms_h($fact[0]); ?></dd>
+                                </div>
                             <?php endforeach; ?>
                         </dl>
                     <?php endif; ?>
@@ -92,9 +102,9 @@ pcrms_page_start([
                             </div>
                             <span class="file-row__size">
                                 <?php if ($file['size'] !== null): ?>
-                                    <?php echo pcrms_h($file['size']); ?> · .tar.gz
+                                    <?php echo pcrms_h($file['size']); ?> · .bed.gz
                                 <?php elseif (isset($file['expected'])): ?>
-                                    About <?php echo pcrms_h($file['expected']); ?> · .tar.gz
+                                    About <?php echo pcrms_h($file['expected']); ?> · .bed.gz
                                 <?php endif; ?>
                             </span>
                             <span class="file-row__action">
@@ -114,13 +124,13 @@ pcrms_page_start([
         <section class="using card" aria-labelledby="using-title">
             <div>
                 <h2 id="using-title">Using the files</h2>
-                <p>Unpack an archive, then open the BED files in a genome browser or with tools such as bedtools.</p>
-                <pre><code>tar -xzf <?php echo pcrms_h($example !== null ? $example : 'Human_CRMCs_TFBSs_v2_hg38.bed.tar.gz'); ?></code></pre>
-            </div>
-            <div>
-                <h2>Using PCRMs data?</h2>
-                <p>Please cite: <?php echo pcrms_h($PCRMS_CITATION['text']); ?> <em><?php echo pcrms_h($PCRMS_CITATION['venue']); ?></em> <?php echo pcrms_h($PCRMS_CITATION['details']); ?></p>
-                <a href="https://doi.org/<?php echo pcrms_h($PCRMS_CITATION['doi']); ?>">doi:<?php echo pcrms_h($PCRMS_CITATION['doi']); ?></a>
+                <p>Each file is tab-separated text compressed with gzip. bedtools and most genome tools read it as it is; to look inside:</p>
+                <pre><code>gzip -dc <?php echo pcrms_h($example); ?> | head</code></pre>
+                <dl class="format-list">
+                    <div><dt>CRMs and their binding sites</dt><dd>One CRM per line: chromosome, start, end, its binding sites, CRM score and P-value. The binding sites are comma-separated, each written <code>motif|start:end+binding score+motif score</code>.</dd></div>
+                    <div><dt>Binding sites</dt><dd>One binding site per line, in genomic order: <code>chrom start end motif binding_score crm_id</code>. <code>motif</code> is the motif number shown with its logo on CRM pages; <code>crm_id</code> is the CRM’s ID on this site.</dd></div>
+                    <div><dt>CRMs only</dt><dd>One CRM per line, in genomic order: <code>chrom start end crm_id score p_value</code>.</dd></div>
+                </dl>
             </div>
         </section>
     </div>

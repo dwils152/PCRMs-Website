@@ -3,27 +3,33 @@
 // Release metadata for the home and download pages, in display order.
 // Counts reflect the published version 2 maps (Database, 2022). The version 1
 // genomes have no published counts yet: set 'crm_count' once they are confirmed.
-// 'expected' sizes are shown for archives that are not on this server.
+// Files are gzip-compressed text in www/data; 'kind' picks the format note on
+// the download page, and 'expected' sizes are shown for files not on the
+// server. database/make_downloads.py writes the per-site and CRM-only files.
+// Releases without files (fly, worm, thale cress for now) appear on the home
+// page but not on the download page. A fact's optional third item links an
+// asterisk to where the home page explains it.
 $PCRMS_RELEASES = [
     [
         'genome_id' => 1,
         'version' => 2,
         'crm_count' => 1426947,
-        'facts' => [['1,426,947', 'CRMs'], ['95,717,222', 'TFBSs'], ['11,348', 'ChIP-seq datasets'], ['85.5%', 'of the genome']],
+        'facts' => [['1,426,947', 'CRMs'], ['95,717,222', 'TFBSs'], ['11,348', 'ChIP-seq datasets'], ['85.5%', 'Genome covered by extended peaks', 'index.php#step-a']],
         'files' => [
-            ['name' => 'Human_CRMCs_TFBSs_v2_hg38.bed.tar.gz', 'label' => 'Version 2 · CRMs and TFBSs · hg38', 'expected' => '1.4 GB'],
-            ['name' => 'Human_CRMCs_TFBSs_v1_hg38.bed.tar.gz', 'label' => 'Version 1 · CRMs and TFBSs · hg38 (earlier release)', 'expected' => '1.4 GB'],
+            ['name' => 'Human_CRMs_TFBSs_v2_hg38.bed.gz', 'kind' => 'combined', 'label' => 'CRMs and their binding sites · one CRM per line', 'expected' => '1.4 GB'],
+            ['name' => 'Human_TFBSs_v2_hg38.bed.gz', 'kind' => 'sites', 'label' => 'Binding sites · one site per line', 'expected' => '1.3 GB'],
+            ['name' => 'Human_CRMs_v2_hg38.bed.gz', 'kind' => 'crms', 'label' => 'CRMs only · one CRM per line', 'expected' => '28 MB'],
         ],
     ],
     [
         'genome_id' => 2,
         'version' => 2,
         'crm_count' => 912197,
-        'facts' => [['912,197', 'CRMs'], ['125,113,756', 'TFBSs'], ['9,060', 'ChIP-seq datasets'], ['77.9%', 'of the genome']],
+        'facts' => [['912,197', 'CRMs'], ['125,113,756', 'TFBSs'], ['9,060', 'ChIP-seq datasets'], ['77.9%', 'Genome covered by extended peaks', 'index.php#step-a']],
         'files' => [
-            ['name' => 'Mouse_CRMCs_TFBSs_v2_mm10.bed.tar.gz', 'label' => 'Version 2 · CRMs and TFBSs · mm10', 'expected' => '1.9 GB'],
-            ['name' => 'Mouse_CRMCs_v2_mm39.bed.tar.gz', 'label' => 'Version 2 · CRMs only, lifted over to mm39'],
-            ['name' => 'Mouse_CRMCs_TFBSs_v1_mm10.bed.tar.gz', 'label' => 'Version 1 · CRMs and TFBSs · mm10 (earlier release)', 'expected' => '1.6 GB'],
+            ['name' => 'Mouse_CRMs_TFBSs_v2_mm10.bed.gz', 'kind' => 'combined', 'label' => 'CRMs and their binding sites · one CRM per line', 'expected' => '1.9 GB'],
+            ['name' => 'Mouse_TFBSs_v2_mm10.bed.gz', 'kind' => 'sites', 'label' => 'Binding sites · one site per line', 'expected' => '1.7 GB'],
+            ['name' => 'Mouse_CRMs_v2_mm10.bed.gz', 'kind' => 'crms', 'label' => 'CRMs only · one CRM per line', 'expected' => '18 MB'],
         ],
     ],
     [
@@ -32,7 +38,6 @@ $PCRMS_RELEASES = [
         'crm_count' => null,
         'facts' => [],
         'files' => [
-            ['name' => 'dm3_v1.tar.gz', 'label' => 'Version 1 · complete release · dm3'],
         ],
     ],
     [
@@ -41,7 +46,6 @@ $PCRMS_RELEASES = [
         'crm_count' => null,
         'facts' => [],
         'files' => [
-            ['name' => 'ce10_v1.tar.gz', 'label' => 'Version 1 · complete release · ce10'],
         ],
     ],
     [
@@ -50,7 +54,6 @@ $PCRMS_RELEASES = [
         'crm_count' => null,
         'facts' => [],
         'files' => [
-            ['name' => 'tair10_v1.tar.gz', 'label' => 'Version 1 · complete release · TAIR10'],
         ],
     ],
 ];

@@ -33,44 +33,53 @@ try {
 }
 session_write_close();
 
-// Window bounds follow the gene's strand: upstream of a + strand gene lies
-// before its start, upstream of a − strand gene lies after its end.
-$windows = [
-    'upstream' => "IF(r.Strand = '+',
-        crms.Start_Pos >= r.Start_Pos_{$distance} AND crms.Start_Pos <= r.Start_Pos,
-        crms.End_Pos >= r.End_Pos AND crms.End_Pos <= r.End_Pos_{$distance})",
-    'downstream' => "IF(r.Strand = '+',
-        crms.Start_Pos >= r.End_Pos AND crms.Start_Pos <= r.End_Pos_{$distance},
-        crms.End_Pos >= r.Start_Pos_{$distance} AND crms.End_Pos <= r.Start_Pos)",
-    'both' => "crms.Start_Pos >= r.Start_Pos_{$distance} AND crms.End_Pos <= r.End_Pos_{$distance}",
-];
-
 try {
     require_once dirname(__DIR__) . '/includes/connection.php';
-    $gene = pcrms_execute_statement(
+    // A symbol can name more than one gene; search around each of them.
+    $genes = pcrms_execute_statement(
         $mysqli,
-        'SELECT geneID FROM genes WHERE Genome = ? AND (geneID = ? OR Symbol = ?) LIMIT 1',
+        'SELECT Chromosome, Start_Pos, End_Pos, Strand FROM genes
+         WHERE Genome = ? AND (LOWER(geneID) = LOWER(?) OR LOWER(Symbol) = LOWER(?)) LIMIT 20',
         'iss',
         [$genomeId, $geneId, $geneId]
-    )->get_result()->fetch_row();
+    )->get_result()->fetch_all(MYSQLI_ASSOC);
+    $gene = (bool) $genes;
 
+    // Window bounds follow the gene's strand: upstream of a + strand gene lies
+    // before its start, upstream of a − strand gene lies after its end. The
+    // stored distance values are in units of 10 kb.
+    $span = (int) $distance * 10000;
     $rows = [];
-    if ($gene) {
+    foreach ($genes as $g) {
+        $before = max(0, $g['Start_Pos'] - $span);
+        $after = $g['End_Pos'] + $span;
+        $plus = $g['Strand'] === '+';
+        $windows = [
+            'upstream' => $plus ? ['Start_Pos', $before, $g['Start_Pos']] : ['End_Pos', $g['End_Pos'], $after],
+            'downstream' => $plus ? ['Start_Pos', $g['End_Pos'], $after] : ['End_Pos', $before, $g['Start_Pos']],
+        ];
+        if ($location === 'both') {
+            $condition = 'Start_Pos >= ? AND End_Pos <= ? AND Start_Pos <= ?';
+            $bounds = [$before, $after, $after];
+        } else {
+            list($column, $low, $high) = $windows[$location];
+            // Start_Pos <= high keeps the search on the location index.
+            $condition = "{$column} BETWEEN ? AND ? AND Start_Pos <= ?";
+            $bounds = [$low, $high, $high];
+        }
         $records = pcrms_execute_statement(
             $mysqli,
-            "SELECT DISTINCT crms.crmID, crms.Chromosome, crms.Start_Pos, crms.End_Pos, crms.Score, crms.P_value
-             FROM crms
-             INNER JOIN genes_ranges r ON r.Genome = crms.Genome AND r.Chromosome = crms.Chromosome
-             WHERE (r.Symbol = ? OR r.geneID = ?) AND r.Genome = ?
-               AND ({$windows[$location]})
-               AND crms.P_value <= ?",
-            'ssid',
-            [$geneId, $geneId, $genomeId, (float) $pValue]
+            "SELECT crmID, Chromosome, Start_Pos, End_Pos, Score, P_value FROM crms
+             WHERE Genome = ? AND Dataset = ? AND Chromosome = ? AND {$condition} AND P_value <= ?",
+            'iisiiid',
+            array_merge([$genomeId, PCRMS_DEPCRM2_DATASET, $g['Chromosome']], $bounds, [(float) $pValue])
         )->get_result();
         while ($row = $records->fetch_assoc()) {
-            $rows[] = pcrms_crm_row($row, $genomeId);
+            $rows[$row['crmID']] = pcrms_crm_row($row, $genomeId);
         }
     }
+    ksort($rows);
+    $rows = array_values($rows);
 } catch (Throwable $exception) {
     pcrms_service_unavailable($exception);
 }
@@ -93,7 +102,7 @@ $editUrl = 'detailed_search.php?' . http_build_query([
 $headline = number_format($result['total']) . ($result['total'] === 1 ? ' CRM found' : ' CRMs found');
 $empty = $gene
     ? ['No CRMs found', 'No predicted CRMs pass this cutoff within ' . $window . '. Try a wider window or a looser cutoff such as 0.05.']
-    : ['Gene not found', 'There is no gene called ' . $geneId . ' in the ' . $genome['name'] . ' annotation. Check the spelling; symbols are case-sensitive (' . $genome['gene_example'] . ').'];
+    : ['Gene not found', 'There is no gene called ' . $geneId . ' in the ' . $genome['name'] . ' annotation. Check the spelling (' . $genome['gene_example'] . ').'];
 
 pcrms_page_start([
     'title' => 'CRMs around ' . $geneId . ', ' . $genome['short'],

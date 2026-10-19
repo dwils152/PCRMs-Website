@@ -24,17 +24,19 @@ try {
     pcrms_statement_timeout($mysqli, 120);
 
     if ($type === 'browse') {
-        list($where, $types, $values) = pcrms_browse_where($query, $search);
-        $countSql = "SELECT COUNT(*) FROM crms_genes WHERE {$where}";
-        $dataSql = "SELECT crmID, Chromosome, Start_Pos, End_Pos, Genes_Symbol, Score, P_value
-                    FROM crms_genes WHERE {$where} ORDER BY " . pcrms_browse_order(1, 'ASC');
+        list($from, $types, $values) = pcrms_browse_from($query, $search);
+        $countSql = "SELECT COUNT(*) FROM {$from}";
+        $dataSql = "SELECT c.crmID, c.Chromosome, c.Start_Pos, c.End_Pos, " . sprintf(PCRMS_GENES_SQL, 'c.crmID') . ", c.Score, c.P_value
+                    FROM {$from} ORDER BY " . pcrms_browse_order('location', 'ASC');
         $header = ['crm_id', 'chromosome', 'start', 'end', 'closest_genes', 'score', 'p_value'];
         $textColumns = [0, 1, 4];
     } else {
-        list($from, $types, $values) = pcrms_tf_from($query, $search);
-        $countSql = "SELECT COUNT(*) {$from}";
-        $dataSql = "SELECT c.crmID, c.Chromosome, t.TFBS_Start, t.TFBS_End, t.umID, u.tfID, t.Binding_Score
-                    {$from} ORDER BY " . pcrms_tf_order(1, 'ASC');
+        $ranges = pcrms_crm_ranges($mysqli, $query);
+        list($motifs, $query['tf_id']) = pcrms_tf_motifs($mysqli, $query);
+        list($where, $types, $values) = pcrms_tf_where($query, $motifs, $ranges, $search);
+        $countSql = "SELECT COUNT(*) FROM tfbss t WHERE {$where}";
+        $dataSql = "SELECT t.crmID, t.TFBS_Start, t.TFBS_End, t.motifID, t.Binding_Score
+                    FROM tfbss t WHERE {$where} ORDER BY t.crmID, t.TFBS_Start, t.motifID";
         $header = ['crm_id', 'chromosome', 'tfbs_start', 'tfbs_end', 'motif_id', 'tf', 'binding_score'];
         $textColumns = [0, 1, 4, 5];
     }
@@ -48,7 +50,7 @@ try {
     }
 
     $statement = pcrms_execute_statement($mysqli, $dataSql, $types, $values);
-    $row = array_fill(0, count($header), null);
+    $row = array_fill(0, $type === 'browse' ? count($header) : 5, null);
     $refs = [];
     foreach ($row as $index => $unused) {
         $refs[$index] = &$row[$index];
@@ -69,8 +71,16 @@ header('X-Content-Type-Options: nosniff');
 
 echo implode(',', $header) . "\n";
 while ($statement->fetch()) {
+    $line = $row;
+    if ($type === 'tf') {
+        // Binding-site rows carry only IDs; add the chromosome, motif number and TF.
+        $site = pcrms_tf_site(['crmID' => $row[0], 'TFBS_Start' => $row[1], 'TFBS_End' => $row[2],
+            'motifID' => $row[3], 'Binding_Score' => $row[4]], $query, $motifs, $ranges);
+        $line = [$site['crmID'], $site['Chromosome'], $site['TFBS_Start'], $site['TFBS_End'],
+            $site['umID'], $site['tfID'], $site['Binding_Score']];
+    }
     $cells = [];
-    foreach ($row as $index => $value) {
+    foreach ($line as $index => $value) {
         $cells[] = pcrms_csv_cell($value, in_array($index, $textColumns, true));
     }
     echo implode(',', $cells) . "\n";

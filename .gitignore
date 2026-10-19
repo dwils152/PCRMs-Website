@@ -12,3 +12,6 @@
 
 # Preliminary data handed over for loading (not for version control)
 /data-incoming/
+/.venv/
+# Download files (large; copied to the server separately)
+/www/data/*.gz
