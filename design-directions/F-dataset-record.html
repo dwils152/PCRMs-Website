@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCRMs — Dataset record direction</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;family=DM+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F6F6F8}
+*{box-sizing:border-box}
+a{color:#6B2C5F}a:hover{color:#4A1D41}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #F6F6F8; color: #1D1B20; font-family: 'Public Sans', system-ui, sans-serif; font-size: 16px; line-height: 1.55">
+
+  <header style="background: #FFFFFF; border-bottom: 1px solid #DDDBE2">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 32px">
+      <a href="#top" style="padding: 14px 0; font-size: 22px; font-weight: 700; color: #1D1B20; text-decoration: none">PCRMs</a>
+      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 0 24px; font-size: 15px; font-weight: 500">
+        <a href="#files" style="padding: 14px 0; color: #1D1B20; text-decoration: none">Browse online</a>
+        <a href="#files" style="padding: 14px 0; color: #1D1B20; text-decoration: none">Analysis tools</a>
+        <a href="#files" aria-current="page" style="padding: 14px 0 11px; color: #1D1B20; text-decoration: none; border-bottom: 3px solid {{accent}}">Data</a>
+        <a href="#cite" style="padding: 14px 0; color: #1D1B20; text-decoration: none">Cite</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="top" style="max-width: 1200px; margin: 0 auto; padding: 32px clamp(16px, 3vw, 32px) 64px; display: flex; flex-wrap: wrap; gap: 24px">
+
+    <main style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+      <article style="background: #FFFFFF; border: 1px solid #DDDBE2; border-radius: 6px; padding: clamp(20px, 3vw, 36px); display: flex; flex-direction: column; gap: 16px">
+        <p style="margin: 0; font-size: 14px; color: #5D5966">Dataset · Version 2 (human, mouse) · Published 3 June 2022</p>
+        <h1 style="margin: 0; font-size: clamp(26px, 3vw, 34px); font-weight: 700; line-height: 1.2; letter-spacing: -0.01em">PCRMs: predicted cis-regulatory modules and transcription factor binding sites</h1>
+        <p style="margin: 0; font-size: 16px"><strong style="font-weight: 600">Pengyu Ni, Zhengchang Su</strong><span style="color: #5D5966"> · University of North Carolina at Charlotte</span></p>
+        <dl style="margin: 0; display: flex; flex-wrap: wrap; gap: 6px 28px; font-size: 14px">
+          <div style="display: flex; gap: 8px"><dt style="color: #5D5966">Paper</dt><dd style="margin: 0; font-family: 'DM Mono', monospace"><a href="https://doi.org/10.1093/database/baac024">10.1093/database/baac024</a></dd></div>
+          <div style="display: flex; gap: 8px"><dt style="color: #5D5966">Method</dt><dd style="margin: 0; font-family: 'DM Mono', monospace"><a href="https://doi.org/10.1093/nargab/lqab052">10.1093/nargab/lqab052</a></dd></div>
+        </dl>
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; padding-top: 4px">
+          <a href="#files" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border-radius: 4px; background: {{accent}}; color: #FFFFFF; font-weight: 600; text-decoration: none">Browse online</a>
+          <a href="#cite" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 20px; border: 1px solid #B9B5C2; border-radius: 4px; color: #1D1B20; font-weight: 600; text-decoration: none">Cite this dataset</a>
+        </div>
+        <h2 style="margin: 12px 0 0; font-size: 18px; font-weight: 600">Description</h2>
+        <p style="margin: 0; color: #2E2B33">Cis-regulatory modules (CRMs) and their constituent transcription factor binding sites (TFBSs), predicted de novo by integrating public TF ChIP-seq datasets across cell and tissue types. Version 2 covers 85.5% of the human genome (1,426,947 CRMs, 95,717,222 TFBSs, 11,348 datasets) and 77.9% of the mouse genome (912,197 CRMs, 125,113,756 TFBSs, 9,060 datasets). Version 1 maps are included for <em>C. elegans</em>, <em>A. thaliana</em> and <em>D. melanogaster</em>.</p>
+      </article>
+
+      <section id="files" aria-labelledby="f-files" style="background: #FFFFFF; border: 1px solid #DDDBE2; border-radius: 6px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 18px clamp(16px, 3vw, 28px); border-bottom: 1px solid #DDDBE2">
+          <h2 id="f-files" style="margin: 0; font-size: 18px; font-weight: 600">Files <span style="font-weight: 400; color: #5D5966">({{fileCount}})</span></h2>
+          <div role="radiogroup" aria-label="Filter by organism" style="display: flex; flex-wrap: wrap; gap: 6px">
+            <sc-for list="{{filters}}" as="f" hint-placeholder-count="6">
+              <button type="button" role="radio" aria-checked="{{f.checked}}" onClick="{{f.pick}}" style="min-height: 36px; padding: 0 12px; border: 1px solid {{f.border}}; border-radius: 4px; background: {{f.bg}}; color: {{f.fg}}; font: inherit; font-size: 14px; cursor: pointer">{{f.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+        <ul style="margin: 0; padding: 0; list-style: none">
+          <sc-for list="{{files}}" as="file" hint-placeholder-count="8">
+            <li style="display: flex; flex-wrap: wrap; align-items: center; gap: 8px 20px; padding: 14px clamp(16px, 3vw, 28px); border-bottom: 1px solid #ECEAF0">
+              <div style="flex: 1 1 360px; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-family: 'DM Mono', monospace; font-size: 14px; overflow-wrap: anywhere">{{file.name}}</span>
+                <span style="font-size: 14px; color: #5D5966">{{file.organism}} · {{file.assembly}} · {{file.contents}}</span>
+              </div>
+              <span style="width: 84px; font-family: 'DM Mono', monospace; font-size: 14px; color: #3B3842; text-align: right">{{file.size}}</span>
+              <a href="#files" aria-label="Download {{file.name}}" style="display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 14px; border: 1px solid #B9B5C2; border-radius: 4px; color: #1D1B20; font-size: 14px; font-weight: 600; text-decoration: none"><svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path d="M10 3v9m-3-3 3 3 3-3M4 15h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path></svg>Download</a>
+            </li>
+          </sc-for>
+        </ul>
+        <p style="margin: 0; padding: 12px clamp(16px, 3vw, 28px) 16px; font-size: 14px; color: #5D5966">BED coordinates in tar.gz archives. Column definitions: [DATA DICTIONARY LINK].</p>
+      </section>
+
+      <section id="cite" aria-labelledby="f-cite" style="background: #FFFFFF; border: 1px solid #DDDBE2; border-radius: 6px">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; padding: 18px clamp(16px, 3vw, 28px) 0">
+          <h2 id="f-cite" style="margin: 0; font-size: 18px; font-weight: 600">Cite as</h2>
+          <div role="tablist" aria-label="Citation format" style="display: flex; gap: 4px">
+            <sc-for list="{{formats}}" as="t" hint-placeholder-count="3">
+              <button type="button" role="tab" aria-selected="{{t.selected}}" onClick="{{t.pick}}" style="min-height: 36px; padding: 0 12px; border: 1px solid {{t.border}}; border-radius: 4px; background: {{t.bg}}; color: {{t.fg}}; font: inherit; font-size: 14px; cursor: pointer">{{t.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+        <pre style="margin: 16px clamp(16px, 3vw, 28px) 0; padding: 16px; background: #F6F6F8; border: 1px solid #ECEAF0; border-radius: 4px; font-family: 'DM Mono', monospace; font-size: 13px; line-height: 1.6; white-space: pre-wrap; overflow-wrap: anywhere; color: #1D1B20">{{citation}}</pre>
+        <div style="padding: 12px clamp(16px, 3vw, 28px) 20px">
+          <button type="button" style="min-height: 40px; padding: 0 16px; border: 1px solid #B9B5C2; border-radius: 4px; background: #FFFFFF; color: #1D1B20; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">Copy citation</button>
+        </div>
+      </section>
+    </main>
+
+    <aside style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 16px; font-size: 15px">
+      <section aria-labelledby="f-versions" style="background: #FFFFFF; border: 1px solid #DDDBE2; border-radius: 6px; padding: 18px 20px">
+        <h2 id="f-versions" style="margin: 0 0 10px; font-size: 16px; font-weight: 600">Versions</h2>
+        <ol style="margin: 0; padding: 0; list-style: none">
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid #ECEAF0">
+            <span><strong style="font-weight: 600">Version 2</strong><span style="display: block; font-size: 14px; color: #5D5966">Human, mouse</span></span>
+            <span style="text-align: right; font-size: 14px"><span style="display: block; font-family: 'DM Mono', monospace">2022-06-03</span><span style="display: block; color: {{accent}}; font-weight: 600">Current</span></span>
+          </li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 10px 0">
+            <span><strong style="font-weight: 600">Version 1</strong><span style="display: block; font-size: 14px; color: #5D5966">All five genomes</span></span>
+            <span style="text-align: right; font-size: 14px; font-family: 'DM Mono', monospace; color: #5D5966">[DATE]</span>
+          </li>
+        </ol>
+      </section>
+
+      <section aria-labelledby="f-genomes" style="background: #FFFFFF; border: 1px solid #DDDBE2; border-radius: 6px; padding: 18px 20px">
+        <h2 id="f-genomes" style="margin: 0 0 10px; font-size: 16px; font-weight: 600">Genomes</h2>
+        <ul style="margin: 0; padding: 0; list-style: none">
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 6px 0"><em>Homo sapiens</em><span style="font-family: 'DM Mono', monospace; font-size: 14px">hg38</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 6px 0"><em>Mus musculus</em><span style="font-family: 'DM Mono', monospace; font-size: 14px">mm10, mm39</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 6px 0"><em>Caenorhabditis elegans</em><span style="font-family: 'DM Mono', monospace; font-size: 14px">ce10</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 6px 0"><em>Arabidopsis thaliana</em><span style="font-family: 'DM Mono', monospace; font-size: 14px">TAIR10</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 6px 0"><em>Drosophila melanogaster</em><span style="font-family: 'DM Mono', monospace; font-size: 14px">dm3</span></li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="f-terms" style="background: #FFFFFF; border: 1px solid #DDDBE2; border-radius: 6px; padding: 18px 20px">
+        <h2 id="f-terms" style="margin: 0 0 10px; font-size: 16px; font-weight: 600">Terms and contact</h2>
+        <dl style="margin: 0; display: flex; flex-direction: column; gap: 8px">
+          <div><dt style="font-size: 14px; color: #5D5966">License</dt><dd style="margin: 0">[DATA LICENSE]</dd></div>
+          <div><dt style="font-size: 14px; color: #5D5966">Contact</dt><dd style="margin: 0">[SUPPORT EMAIL]</dd></div>
+          <div><dt style="font-size: 14px; color: #5D5966">Lab</dt><dd style="margin: 0"><a href="https://sulab.charlotte.edu/">Su Lab, UNC Charlotte</a></dd></div>
+        </dl>
+      </section>
+    </aside>
+  </div>
+
+  <footer style="border-top: 1px solid #DDDBE2; background: #FFFFFF">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 18px clamp(16px, 3vw, 32px) 28px; font-size: 14px; color: #5D5966">© 2020–2026 The Su Lab, University of North Carolina at Charlotte</div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#6B2C5F","options":["#6B2C5F","#1F4E8C","#0B6E4F","#1D1B20"]},"$preview":{"width":1440,"height":2150}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#6B2C5F';
+    const st = this.state || {};
+    const filter = st.filter || 'all';
+    const format = st.format || 'text';
+    const allFiles = [
+      { key: 'hs', name: 'Human_CRMCs_TFBSs_v2_hg38.bed.tar.gz', organism: 'Homo sapiens', assembly: 'hg38', contents: 'v2 CRMs + TFBSs', size: '1.4 GB' },
+      { key: 'hs', name: 'Human_CRMCs_TFBSs_v1_hg38.bed.tar.gz', organism: 'Homo sapiens', assembly: 'hg38', contents: 'v1 CRMs + TFBSs', size: '1.4 GB' },
+      { key: 'mm', name: 'Mouse_CRMCs_TFBSs_v2_mm10.bed.tar.gz', organism: 'Mus musculus', assembly: 'mm10', contents: 'v2 CRMs + TFBSs', size: '1.9 GB' },
+      { key: 'mm', name: 'Mouse_CRMCs_v2_mm39.bed.tar.gz', organism: 'Mus musculus', assembly: 'mm39', contents: 'v2 CRMs, lifted over', size: '13.4 MB' },
+      { key: 'mm', name: 'Mouse_CRMCs_TFBSs_v1_mm10.bed.tar.gz', organism: 'Mus musculus', assembly: 'mm10', contents: 'v1 CRMs + TFBSs', size: '1.6 GB' },
+      { key: 'ce', name: 'ce10_v1.tar.gz', organism: 'C. elegans', assembly: 'ce10', contents: 'v1 release', size: '40.5 MB' },
+      { key: 'at', name: 'tair10_v1.tar.gz', organism: 'A. thaliana', assembly: 'TAIR10', contents: 'v1 release', size: '122.9 MB' },
+      { key: 'dm', name: 'dm3_v1.tar.gz', organism: 'D. melanogaster', assembly: 'dm3', contents: 'v1 release', size: '33.3 MB' },
+    ];
+    const files = filter === 'all' ? allFiles : allFiles.filter((f) => f.key === filter);
+    const filters = [['all', 'All'], ['hs', 'Human'], ['mm', 'Mouse'], ['ce', 'Worm'], ['at', 'Cress'], ['dm', 'Fly']].map((pair) => {
+      const on = pair[0] === filter;
+      return {
+        label: pair[1],
+        checked: on ? 'true' : 'false',
+        bg: on ? accent : '#FFFFFF',
+        fg: on ? '#FFFFFF' : '#1D1B20',
+        border: on ? accent : '#B9B5C2',
+        pick: () => this.setState({ filter: pair[0] }),
+      };
+    });
+    const citations = {
+      text: 'Ni P, Su Z. PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes. Database (Oxford). 2022;2022:baac024. doi:10.1093/database/baac024',
+      bibtex: '@article{ni2022pcrms,\n  author  = {Ni, Pengyu and Su, Zhengchang},\n  title   = {{PCRMS}: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes},\n  journal = {Database},\n  year    = {2022},\n  volume  = {2022},\n  pages   = {baac024},\n  doi     = {10.1093/database/baac024}\n}',
+      ris: 'TY  - JOUR\nAU  - Ni, Pengyu\nAU  - Su, Zhengchang\nTI  - PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes\nT2  - Database\nPY  - 2022\nVL  - 2022\nSP  - baac024\nDO  - 10.1093/database/baac024\nER  - ',
+    };
+    const formats = [['text', 'Text'], ['bibtex', 'BibTeX'], ['ris', 'RIS']].map((pair) => {
+      const on = pair[0] === format;
+      return {
+        label: pair[1],
+        selected: on ? 'true' : 'false',
+        bg: on ? '#1D1B20' : '#FFFFFF',
+        fg: on ? '#FFFFFF' : '#1D1B20',
+        border: on ? '#1D1B20' : '#B9B5C2',
+        pick: () => this.setState({ format: pair[0] }),
+      };
+    });
+    return {
+      accent: accent,
+      files: files,
+      fileCount: files.length,
+      filters: filters,
+      formats: formats,
+      citation: citations[format],
+    };
+  }
+}
+</script>
+</body>
+</html>

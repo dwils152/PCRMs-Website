@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCRMs — Plain HTML direction</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#FFFFFF}
+*{box-sizing:border-box}
+a{color:#0000EE}a:hover{color:#551A8B}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #FFFFFF; color: #000000; font-family: Georgia, 'Times New Roman', serif; font-size: 17px; line-height: 1.5">
+  <div style="max-width: 960px; padding: 20px clamp(16px, 3vw, 28px) 40px">
+
+    <h1 style="margin: 0 0 6px; font-size: 32px; font-weight: 700">PCRMs: Predicted cis-Regulatory Modules</h1>
+    <p style="margin: 0 0 10px; font-style: italic">A database of predicted cis-regulatory modules and their constituent transcription factor binding sites.</p>
+    <nav aria-label="Primary" style="font-size: 16px">
+      <a href="#top" style="color: {{link}}">Home</a> |
+      <a href="#browse" style="color: {{link}}">Browse</a> |
+      <a href="#search" style="color: {{link}}">Closest CRMs</a> |
+      <a href="#search" style="color: {{link}}">CRMs around a gene</a> |
+      <a href="#search" style="color: {{link}}">TF binding sites</a> |
+      <a href="#genomes" style="color: {{link}}">Downloads</a> |
+      <a href="#cite" style="color: {{link}}">Cite</a> |
+      <a href="https://sulab.charlotte.edu/" style="color: {{link}}">Su Lab</a>
+    </nav>
+    <hr style="margin: 14px 0 18px; border: 0; border-top: 1px solid #000000">
+
+    <p id="top" style="margin: 0 0 14px">PCRMs holds CRMs and transcription factor binding sites (TFBSs) predicted de novo from public TF ChIP-seq data. The version 2 human map has 1,426,947 CRMs and 95,717,222 TFBSs (85.5% of the genome); the version 2 mouse map has 912,197 CRMs and 125,113,756 TFBSs (77.9% of the genome). Version 1 maps are available for <i>C. elegans</i>, <i>A. thaliana</i> and <i>D. melanogaster</i>.</p>
+
+    <h2 id="browse" style="margin: 28px 0 10px; font-size: 22px">Browse CRMs</h2>
+    <form>
+      <table style="border-collapse: collapse; font-size: 16px">
+        <tbody>
+          <tr>
+            <th scope="row" style="text-align: left; vertical-align: top; padding: 6px 16px 6px 0; font-weight: 700"><label for="h-org">Organism:</label></th>
+            <td style="padding: 6px 0">
+              <select id="h-org" style="font: inherit; font-size: 16px; min-height: 32px">
+                <option>Homo sapiens (hg38)</option>
+                <option>Mus musculus (mm10)</option>
+                <option>Caenorhabditis elegans (ce10)</option>
+                <option>Arabidopsis thaliana (TAIR10)</option>
+                <option>Drosophila melanogaster (dm3)</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align: left; vertical-align: top; padding: 6px 16px 6px 0; font-weight: 700"><label for="h-chr">Chromosomes:</label></th>
+            <td style="padding: 6px 0">
+              <select id="h-chr" multiple size="6" style="font: inherit; font-size: 16px; min-width: 140px">
+                <option selected>chr1</option>
+                <option>chr2</option>
+                <option>chr3</option>
+                <option>chr4</option>
+                <option>chr5</option>
+                <option>chr6</option>
+                <option>chr7</option>
+                <option>chr8</option>
+                <option>chr9</option>
+                <option>chr10</option>
+                <option>chr11</option>
+                <option>chr12</option>
+                <option>chr13</option>
+                <option>chr14</option>
+                <option>chr15</option>
+                <option>chr16</option>
+                <option>chr17</option>
+                <option>chr18</option>
+                <option>chr19</option>
+                <option>chr20</option>
+                <option>chr21</option>
+                <option>chr22</option>
+                <option>chrX</option>
+                <option>chrY</option>
+              </select>
+              <br><small>Hold Ctrl (Windows) or Command (Mac) to select several.</small>
+            </td>
+          </tr>
+          <tr>
+            <th scope="row" style="text-align: left; vertical-align: top; padding: 6px 16px 6px 0; font-weight: 700"><label for="h-p">P value at most:</label></th>
+            <td style="padding: 6px 0">
+              <select id="h-p" style="font: inherit; font-size: 16px; min-height: 32px">
+                <option>0.05</option>
+                <option>0.01</option>
+                <option>0.000005</option>
+                <option>0.000001</option>
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td></td>
+            <td style="padding: 10px 0 0"><button type="button" style="font: inherit; font-size: 16px; min-height: 36px; padding: 0 14px">Search</button> <button type="button" style="font: inherit; font-size: 16px; min-height: 36px; padding: 0 14px">Reset</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </form>
+
+    <h2 id="search" style="margin: 28px 0 10px; font-size: 22px">Other searches</h2>
+    <ul style="margin: 0; padding-left: 1.4em">
+      <li><a href="#search" style="color: {{link}}">Closest CRMs to a gene</a> — CRMs whose closest gene matches a symbol or ID (e.g. RUNX1, ENSG00000159216).</li>
+      <li><a href="#search" style="color: {{link}}">CRMs around a gene</a> — upstream, downstream or both sides, within 0.5, 1 or 2 Mb.</li>
+      <li><a href="#search" style="color: {{link}}">TF binding sites</a> — predicted sites for a TF symbol on chosen chromosomes.</li>
+    </ul>
+
+    <h2 id="genomes" style="margin: 28px 0 10px; font-size: 22px">Genomes and downloads</h2>
+    <div style="overflow-x: auto">
+      <table style="border-collapse: collapse; font-size: 16px">
+        <thead>
+          <tr>
+            <th scope="col" style="border: 1px solid #000000; padding: 4px 10px; text-align: left; background: #EEEEEE">Organism</th>
+            <th scope="col" style="border: 1px solid #000000; padding: 4px 10px; text-align: left; background: #EEEEEE">Assembly</th>
+            <th scope="col" style="border: 1px solid #000000; padding: 4px 10px; text-align: left; background: #EEEEEE">Release</th>
+            <th scope="col" style="border: 1px solid #000000; padding: 4px 10px; text-align: right; background: #EEEEEE">CRMs</th>
+            <th scope="col" style="border: 1px solid #000000; padding: 4px 10px; text-align: right; background: #EEEEEE">TFBSs</th>
+            <th scope="col" style="border: 1px solid #000000; padding: 4px 10px; text-align: left; background: #EEEEEE">Download</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><i>Homo sapiens</i></td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">hg38</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">2</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">1,426,947</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">95,717,222</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><a href="#genomes" style="color: {{link}}">v2</a> (1.4 GB), <a href="#genomes" style="color: {{link}}">v1</a> (1.4 GB)</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><i>Mus musculus</i></td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">mm10</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">2</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">912,197</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">125,113,756</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><a href="#genomes" style="color: {{link}}">v2</a> (1.9 GB), <a href="#genomes" style="color: {{link}}">v2 mm39</a> (13.4 MB), <a href="#genomes" style="color: {{link}}">v1</a> (1.6 GB)</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><i>Caenorhabditis elegans</i></td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">ce10</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">1</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">—</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">—</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><a href="#genomes" style="color: {{link}}">v1</a> (40.5 MB)</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><i>Arabidopsis thaliana</i></td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">TAIR10</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">1</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">—</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">—</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><a href="#genomes" style="color: {{link}}">v1</a> (122.9 MB)</td>
+          </tr>
+          <tr>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><i>Drosophila melanogaster</i></td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">dm3</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px">1</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">—</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px; text-align: right">—</td>
+            <td style="border: 1px solid #000000; padding: 4px 10px"><a href="#genomes" style="color: {{link}}">v1</a> (33.3 MB)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 style="margin: 28px 0 10px; font-size: 22px">What's new</h2>
+    <ul style="margin: 0; padding-left: 1.4em">
+      <li><b>3 June 2022.</b> Version 2 human and mouse maps released. Mouse CRMs are also lifted over to GRCm39/mm39.</li>
+      <li><b>30 May 2022.</b> Expanded version 2 mouse CRM map submitted.</li>
+      <li><b>22 April 2022.</b> PCRMs database paper published in <i>Database</i>.</li>
+    </ul>
+
+    <h2 id="cite" style="margin: 28px 0 10px; font-size: 22px">Citation</h2>
+    <p style="margin: 0">Ni P, Su Z. PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes. <i>Database</i> 2022; baac024. <a href="https://doi.org/10.1093/database/baac024" style="color: {{link}}">doi:10.1093/database/baac024</a></p>
+    <p style="margin: 8px 0 0">Prediction method: dePCRM2. <a href="https://doi.org/10.1093/nargab/lqab052" style="color: {{link}}">doi:10.1093/nargab/lqab052</a></p>
+
+    <hr style="margin: 28px 0 10px; border: 0; border-top: 1px solid #000000">
+    <p style="margin: 0; font-size: 14px">© 2020–2026 The Su Lab, University of North Carolina at Charlotte. Latest release: 3 June 2022.</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"link":{"editor":"color","default":"#0000EE","options":["#0000EE","#1A0DAB","#8C1C2B","#000000"]},"$preview":{"width":1440,"height":1750}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { link: this.props.link ?? '#0000EE' };
+  }
+}
+</script>
+</body>
+</html>

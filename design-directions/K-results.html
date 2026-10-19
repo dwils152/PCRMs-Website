@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CRM results — PCRMs</title>
+<link rel="icon" href="logo/final/favicon.svg" type="image/svg+xml">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#17694B}
+*{box-sizing:border-box}
+a{color:#17694B}a:hover{color:#0F4A35}
+@media (max-width: 1100px){.k-flow{grid-template-columns:repeat(2,minmax(0,1fr)) !important}.k-flow-arrow{display:none !important}.k-step-head{min-height:30px !important}}
+@media (max-width: 620px){.k-flow{grid-template-columns:minmax(0,1fr) !important}.k-foot-divider{display:none !important}}
+@media (max-width: 1180px){.k-nav{gap:0 22px !important}}
+@media (max-width: 1060px){.k-nav{gap:0 18px !important;font-size:16.5px !important}.k-brand img{height:54px !important}}
+@media (max-width: 1000px){.k-nav{gap:0 18px !important;font-size:16px !important}.k-nav a{padding:10px 0 7px !important}.k-brand{padding:12px 0 4px !important}.k-brand img{height:48px !important}}
+.k-sort{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:0;border:0;background:none;color:inherit;font:inherit;font-weight:700;cursor:pointer;white-space:nowrap}.k-sort:hover span:first-child{text-decoration:underline}.k-row:hover>[role]{background:#F6FAF7}.k-tbtn:focus-visible,.k-sort:focus-visible,.k-filter:focus-visible{outline:2px solid #17694B;outline-offset:2px}.k-filter::placeholder{color:#7C8A82}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #17694B; color: #17221D; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 16px; line-height: 1.55">
+  <div style="background: #F3F6F4">
+
+    <header style="background: #FFFFFF; border-bottom: 1px solid #DCE5DF">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 32px">
+        <div class="k-brand" style="display: flex; align-items: center; gap: 20px; padding: 16px 0">
+          <a href="K-green.html" style="display: flex"><img src="logo/final/pcrms-logo.svg" alt="PCRMs, Predicted cis-Regulatory Modules" style="height: 60px; width: auto"></a>
+        </div>
+        <nav aria-label="Primary" class="k-nav" style="display: flex; flex-wrap: wrap; gap: 0 34px; font-size: 18px; font-weight: 600">
+          <a href="K-green.html" style="display: inline-flex; align-items: center; gap: 9px; padding: 32px 0; color: #17221D; text-decoration: none"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#5E8C17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"></path></svg>Home</a>
+          <a href="K-browse.html" style="display: inline-flex; align-items: center; gap: 9px; padding: 32px 0 29px; color: #17221D; text-decoration: none; border-bottom: 3px solid #5E8C17"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#5E8C17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"></path></svg>Browse</a>
+          <a href="K-analysis.html" style="display: inline-flex; align-items: center; gap: 9px; padding: 32px 0; color: #17221D; text-decoration: none"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#5E8C17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Functional analysis</a>
+          <a href="K-download.html" style="display: inline-flex; align-items: center; gap: 9px; padding: 32px 0; color: #17221D; text-decoration: none"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#5E8C17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 21h16"></path></svg>Download</a>
+          <a href="https://sulab.charlotte.edu/" style="display: inline-flex; align-items: center; gap: 9px; padding: 32px 0; color: #17221D; text-decoration: none"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="#5E8C17" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"></path></svg>The Su Lab</a>
+        </nav>
+      </div>
+    </header>
+
+    <section aria-labelledby="k-title" style="background: #17694B; color: #FFFFFF">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 34px clamp(16px, 3vw, 32px) 36px; display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 18px 32px">
+        <div style="min-width: 0">
+          <p style="margin: 0 0 6px; font-size: 14px; font-weight: 600; color: #CFE6D9"><a href="K-browse.html" style="color: #CFE6D9">Browse</a> <span aria-hidden="true">/</span> Results</p>
+          <h1 id="k-title" style="margin: 0 0 12px; font-size: clamp(28px, 3vw, 36px); font-weight: 700; line-height: 1.15">{{headline}}</h1>
+          <ul aria-label="Search" style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 8px">
+            <li style="padding: 4px 12px; border-radius: 999px; background: rgba(255, 255, 255, .12); font-size: 14.5px"><em>{{genomeName}}</em> · {{assembly}}</li>
+            <li style="padding: 4px 12px; border-radius: 999px; background: rgba(255, 255, 255, .12); font-size: 14.5px">{{chrText}}</li>
+            <li style="padding: 4px 12px; border-radius: 999px; background: rgba(255, 255, 255, .12); font-size: 14.5px">p ≤ {{pLabel}}</li>
+          </ul>
+        </div>
+        <a href="{{editUrl}}" style="display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 18px; border: 1.5px solid rgba(255, 255, 255, .7); border-radius: 8px; color: #FFFFFF; font-weight: 700; text-decoration: none">
+          <svg width="16" height="16" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 14.5V17h2.5l8-8L11 6.5zM12.5 5l2.5 2.5 1.6-1.6a1 1 0 0 0 0-1.4l-1.1-1.1a1 1 0 0 0-1.4 0z" fill="currentColor"/></svg>Edit search</a>
+      </div>
+    </section>
+
+    <main style="max-width: 1200px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 32px) 64px">
+      <section aria-label="Results" style="background: #FFFFFF; border: 1px solid #DCE5DF; border-radius: 10px; overflow: hidden">
+        <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 16px 18px; border-bottom: 1px solid #DCE5DF">
+          <div style="flex: 1 1 280px; max-width: 420px; position: relative">
+            <label for="k-filter" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Filter results by CRM ID or gene</label>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" style="position: absolute; left: 12px; top: 13px; color: #66746C"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="2"/><path d="m20 20-3.5-3.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <input id="k-filter" class="k-filter" type="search" value="{{filter}}" onInput="{{onFilter}}" placeholder="Filter by CRM ID or gene" autocomplete="off" style="width: 100%; height: 44px; padding: 0 12px 0 38px; border: 1px solid #B9C7BF; border-radius: 8px; font: inherit; font-size: 15px; color: #17221D; background: #FFFFFF">
+          </div>
+          <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px">
+            <div role="group" aria-label="Rows per page" style="display: flex; align-items: center; gap: 6px; font-size: 14px; color: #46534C">
+              <span aria-hidden="true">Rows</span>
+              <sc-for list="{{sizes}}" as="z" hint-placeholder-count="3">
+                <button type="button" id="{{z.id}}" class="k-tbtn" aria-pressed="{{z.pressed}}" aria-label="{{z.aria}}" onClick="{{z.pick}}" style="min-width: 44px; height: 36px; padding: 0 8px; border: 1.5px solid {{z.border}}; border-radius: 6px; background: {{z.bg}}; color: {{z.fg}}; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">{{z.label}}</button>
+              </sc-for>
+            </div>
+            <button type="button" id="k-download" class="k-tbtn" onClick="{{downloadCsv}}" style="display: inline-flex; align-items: center; gap: 8px; height: 40px; padding: 0 14px; border: 1.5px solid #17694B; border-radius: 8px; background: #FFFFFF; color: #17694B; font: inherit; font-size: 14.5px; font-weight: 700; cursor: pointer">
+              <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 21h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download CSV</button>
+          </div>
+        </div>
+        <sc-if value="{{hasRows}}" hint-placeholder-val="{{ true }}">
+          <div style="overflow-x: auto">
+            <div role="table" aria-label="Predicted CRMs matching the search" aria-rowcount="{{rowCount}}" style="display: table; width: 100%; min-width: 860px; border-collapse: collapse; font-size: 15px">
+              <div role="rowgroup" style="display: table-header-group">
+                <div role="row" style="display: table-row">
+                  <sc-for list="{{cols}}" as="col" hint-placeholder-count="6">
+                    <div role="columnheader" aria-sort="{{col.sort}}" style="display: table-cell; text-align: {{col.align}}; padding: 12px 14px; font-size: 13.5px; color: #46534C; background: #F6F9F7; border-bottom: 1px solid #DCE5DF; vertical-align: middle">
+                      <button type="button" id="{{col.id}}" class="k-sort" onClick="{{col.toggle}}" style="justify-content: {{col.justify}}; width: 100%"><span>{{col.label}}</span><span aria-hidden="true" style="color: {{col.arrowColor}}; font-size: 12px">{{col.arrow}}</span></button>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div role="rowgroup" style="display: table-row-group">
+                <sc-for list="{{rows}}" as="r" hint-placeholder-count="10">
+                  <div role="row" class="k-row" style="display: table-row">
+                    <div role="rowheader" style="display: table-cell; padding: 11px 14px; border-bottom: 1px solid #E5ECE7; vertical-align: top; font-weight: 600; white-space: nowrap"><a href="{{r.url}}" target="_blank" rel="noopener noreferrer" aria-label="{{r.aria}}" title="Open in the UCSC Genome Browser" style="display: inline-flex; align-items: center; gap: 6px; color: #17694B">{{r.id}}<svg width="13" height="13" viewBox="0 0 20 20" aria-hidden="true" style="flex: none"><path d="M11 3h6v6M17 3l-8 8M14 12v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></a></div>
+                    <div role="cell" style="display: table-cell; padding: 11px 14px; border-bottom: 1px solid #E5ECE7; vertical-align: top; white-space: nowrap; font-variant-numeric: tabular-nums">{{r.location}}</div>
+                    <div role="cell" style="display: table-cell; padding: 11px 14px; border-bottom: 1px solid #E5ECE7; vertical-align: top">{{r.genes}}</div>
+                    <div role="cell" style="display: table-cell; padding: 11px 14px; border-bottom: 1px solid #E5ECE7; vertical-align: top; text-align: right; font-variant-numeric: tabular-nums">{{r.tfbs}}</div>
+                    <div role="cell" style="display: table-cell; padding: 11px 14px; border-bottom: 1px solid #E5ECE7; vertical-align: top; text-align: right; font-variant-numeric: tabular-nums">{{r.score}}</div>
+                    <div role="cell" style="display: table-cell; padding: 11px 14px; border-bottom: 1px solid #E5ECE7; vertical-align: top; text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums">{{r.p}}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+          <nav aria-label="Results pages" style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 20px; padding: 14px 18px">
+            <p aria-live="polite" style="margin: 0; font-size: 14.5px; color: #46534C">{{showing}}</p>
+            <div style="display: flex; flex-wrap: wrap; align-items: center; gap: 6px">
+              <button type="button" id="k-prev" class="k-tbtn" onClick="{{prev}}" aria-label="Previous page" style="height: 36px; padding: 0 12px; border: 1.5px solid #B9C7BF; border-radius: 6px; background: #FFFFFF; color: {{prevColor}}; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">‹ Prev</button>
+              <sc-for list="{{pageButtons}}" as="pg" hint-placeholder-count="3">
+                <button type="button" id="{{pg.id}}" class="k-tbtn" aria-current="{{pg.current}}" aria-label="Page {{pg.n}}" onClick="{{pg.go}}" style="min-width: 36px; height: 36px; padding: 0 8px; border: 1.5px solid {{pg.border}}; border-radius: 6px; background: {{pg.bg}}; color: {{pg.fg}}; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">{{pg.n}}</button>
+              </sc-for>
+              <button type="button" id="k-next" class="k-tbtn" onClick="{{next}}" aria-label="Next page" style="height: 36px; padding: 0 12px; border: 1.5px solid #B9C7BF; border-radius: 6px; background: #FFFFFF; color: {{nextColor}}; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer">Next ›</button>
+            </div>
+          </nav>
+        </sc-if>
+        <sc-if value="{{noRows}}" hint-placeholder-val="{{ false }}">
+          <div role="status" style="display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 56px 20px; text-align: center">
+            <svg width="44" height="44" viewBox="0 0 24 24" aria-hidden="true" style="color: #B9C7BF"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="m20 20-3.5-3.5M8.5 11h5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+            <h2 style="margin: 0; font-size: 19px; font-weight: 700">{{emptyTitle}}</h2>
+            <p style="max-width: 460px; margin: 0; color: #46534C">{{emptyText}}</p>
+            <a href="{{editUrl}}" style="margin-top: 6px; font-weight: 700">Edit search →</a>
+          </div>
+        </sc-if>
+      </section>
+      <p style="margin: 14px 2px 0; font-size: 13.5px; color: #66746C">Synthetic preview data from <code>database/synthetic_fixture.sql</code>; IDs, coordinates and scores are not real predictions.</p>
+    </main>
+  </div>
+
+  <footer style="color: #FFFFFF">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 36px clamp(16px, 3vw, 32px) 40px; display: flex; flex-direction: column; align-items: center; gap: 18px; text-align: center">
+      <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 16px 36px">
+        <img src="logo/final/pcrms-logo-reversed.svg" alt="PCRMs, Predicted cis-Regulatory Modules" style="height: 42px; width: auto">
+        <span class="k-foot-divider" aria-hidden="true" style="width: 1px; height: 36px; background: rgba(255, 255, 255, .35)"></span>
+        <img src="brand/charlotte/Horizontal_logo_white.svg" alt="University of North Carolina at Charlotte" style="height: 40px; width: auto">
+      </div>
+      <p style="margin: 0; font-size: 14px; color: #E2F0E8">© 2020–2026 The Su Lab, University of North Carolina at Charlotte</p>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const PINE = '#17694B';
+    const DATA = [["hs","HS_SYN_CRM_FAR","chr1",1200000,1200249,"SYNTH_HS_PLUS",6.5,0.03,1],["hs","HS_SYN_CRM_PAGE_001","chr1",1257000,1257299,"SYNTH_HS_PLUS",6.01,3e-06,1],["hs","HS_SYN_CRM_PAGE_002","chr1",1264000,1264299,"SYNTH_HS_PLUS",6.02,0.005,1],["hs","HS_SYN_CRM_PAGE_003","chr1",1271000,1271299,"SYNTH_HS_PLUS",6.03,0.03,1],["hs","HS_SYN_CRM_PAGE_004","chr1",1278000,1278299,"SYNTH_HS_PLUS",6.04,5e-07,1],["hs","HS_SYN_CRM_PAGE_005","chr1",1285000,1285299,"SYNTH_HS_PLUS",6.05,3e-06,1],["hs","HS_SYN_CRM_PAGE_006","chr1",1292000,1292299,"SYNTH_HS_PLUS",6.06,0.005,1],["hs","HS_SYN_CRM_PAGE_007","chr1",1299000,1299299,"SYNTH_HS_PLUS",6.07,0.03,1],["hs","HS_SYN_CRM_PAGE_008","chr1",1306000,1306299,"SYNTH_HS_PLUS",6.08,5e-07,1],["hs","HS_SYN_CRM_PAGE_009","chr1",1313000,1313299,"SYNTH_HS_PLUS",6.09,3e-06,1],["hs","HS_SYN_CRM_PAGE_010","chr1",1320000,1320299,"SYNTH_HS_PLUS",6.1,0.005,1],["hs","HS_SYN_CRM_PAGE_011","chr1",1327000,1327299,"SYNTH_HS_PLUS",6.11,0.03,1],["hs","HS_SYN_CRM_PAGE_012","chr1",1334000,1334299,"SYNTH_HS_PLUS",6.12,5e-07,1],["hs","HS_SYN_CRM_PAGE_013","chr1",1341000,1341299,"SYNTH_HS_PLUS",6.13,3e-06,1],["hs","HS_SYN_CRM_PAGE_014","chr1",1348000,1348299,"SYNTH_HS_PLUS",6.14,0.005,1],["hs","HS_SYN_CRM_PAGE_015","chr1",1355000,1355299,"SYNTH_HS_PLUS",6.15,0.03,1],["hs","HS_SYN_CRM_PAGE_016","chr1",1362000,1362299,"SYNTH_HS_PLUS",6.16,5e-07,1],["hs","HS_SYN_CRM_PAGE_017","chr1",1369000,1369299,"SYNTH_HS_PLUS",6.17,3e-06,1],["hs","HS_SYN_CRM_PAGE_018","chr1",1376000,1376299,"SYNTH_HS_PLUS",6.18,0.005,1],["hs","HS_SYN_CRM_PAGE_019","chr1",1383000,1383299,"SYNTH_HS_PLUS",6.19,0.03,1],["hs","HS_SYN_CRM_PAGE_020","chr1",1390000,1390299,"SYNTH_HS_PLUS",6.2,5e-07,1],["hs","HS_SYN_CRM_PAGE_021","chr1",1397000,1397299,"SYNTH_HS_PLUS",6.21,3e-06,1],["hs","HS_SYN_CRM_PAGE_022","chr1",1404000,1404299,"SYNTH_HS_PLUS",6.22,0.005,1],["hs","HS_SYN_CRM_PAGE_023","chr1",1411000,1411299,"SYNTH_HS_PLUS",6.23,0.03,1],["hs","HS_SYN_CRM_PAGE_024","chr1",1418000,1418299,"SYNTH_HS_PLUS",6.24,5e-07,1],["hs","HS_SYN_CRM_PAGE_025","chr1",1425000,1425299,"SYNTH_HS_PLUS",6.25,3e-06,1],["hs","HS_SYN_CRM_PAGE_026","chr1",1432000,1432299,"SYNTH_HS_PLUS",6.26,0.005,1],["hs","HS_SYN_CRM_PAGE_027","chr1",1439000,1439299,"SYNTH_HS_PLUS",6.27,0.03,1],["hs","HS_SYN_CRM_PAGE_028","chr1",1446000,1446299,"SYNTH_HS_PLUS",6.28,5e-07,1],["hs","HS_SYN_CRM_PAGE_029","chr1",1453000,1453299,"SYNTH_HS_PLUS",6.29,3e-06,1],["hs","HS_SYN_CRM_PAGE_030","chr1",1460000,1460299,"SYNTH_HS_PLUS",6.3,0.005,1],["hs","HS_SYN_CRM_PAGE_031","chr1",1467000,1467299,"SYNTH_HS_PLUS",6.31,0.03,1],["hs","HS_SYN_CRM_PAGE_032","chr1",1474000,1474299,"SYNTH_HS_PLUS",6.32,5e-07,1],["hs","HS_SYN_CRM_PAGE_033","chr1",1481000,1481299,"SYNTH_HS_PLUS",6.33,3e-06,1],["hs","HS_SYN_CRM_PAGE_034","chr1",1488000,1488299,"SYNTH_HS_PLUS",6.34,0.005,1],["hs","HS_SYN_CRM_PAGE_035","chr1",1495000,1495299,"SYNTH_HS_PLUS",6.35,0.03,1],["hs","HS_SYN_CRM_PAGE_036","chr1",1502000,1502299,"SYNTH_HS_PLUS",6.36,5e-07,1],["hs","HS_SYN_CRM_PAGE_037","chr1",1509000,1509299,"SYNTH_HS_PLUS",6.37,3e-06,1],["hs","HS_SYN_CRM_PAGE_038","chr1",1516000,1516299,"SYNTH_HS_PLUS",6.38,0.005,1],["hs","HS_SYN_CRM_PAGE_039","chr1",1523000,1523299,"SYNTH_HS_PLUS",6.39,0.03,1],["hs","HS_SYN_CRM_PAGE_040","chr1",1530000,1530299,"SYNTH_HS_PLUS",6.4,5e-07,1],["hs","HS_SYN_CRM_PAGE_041","chr1",1537000,1537299,"SYNTH_HS_PLUS",6.41,3e-06,1],["hs","HS_SYN_CRM_PAGE_042","chr1",1544000,1544299,"SYNTH_HS_PLUS",6.42,0.005,1],["hs","HS_SYN_CRM_PAGE_043","chr1",1551000,1551299,"SYNTH_HS_PLUS",6.43,0.03,1],["hs","HS_SYN_CRM_PAGE_044","chr1",1558000,1558299,"SYNTH_HS_PLUS",6.44,5e-07,1],["hs","HS_SYN_CRM_PAGE_045","chr1",1565000,1565299,"SYNTH_HS_PLUS",6.45,3e-06,1],["hs","HS_SYN_CRM_PAGE_046","chr1",1572000,1572299,"SYNTH_HS_PLUS",6.46,0.005,1],["hs","HS_SYN_CRM_PAGE_047","chr1",1579000,1579299,"SYNTH_HS_PLUS",6.47,0.03,1],["hs","HS_SYN_CRM_PAGE_048","chr1",1586000,1586299,"SYNTH_HS_PLUS",6.48,5e-07,1],["hs","HS_SYN_CRM_PAGE_049","chr1",1593000,1593299,"SYNTH_HS_PLUS",6.49,3e-06,1],["hs","HS_SYN_CRM_PAGE_050","chr1",1600000,1600299,"SYNTH_HS_PLUS",6.5,0.005,1],["hs","HS_SYN_CRM_PAGE_051","chr1",1607000,1607299,"SYNTH_HS_PLUS",6.51,0.03,1],["hs","HS_SYN_CRM_PAGE_052","chr1",1614000,1614299,"SYNTH_HS_PLUS",6.52,5e-07,1],["hs","HS_SYN_CRM_PAGE_053","chr1",1621000,1621299,"SYNTH_HS_PLUS",6.53,3e-06,1],["hs","HS_SYN_CRM_PAGE_054","chr1",1628000,1628299,"SYNTH_HS_PLUS",6.54,0.005,1],["hs","HS_SYN_CRM_PAGE_055","chr1",1635000,1635299,"SYNTH_HS_PLUS",6.55,0.03,1],["hs","HS_SYN_CRM_PAGE_056","chr1",1642000,1642299,"SYNTH_HS_PLUS",6.56,5e-07,1],["hs","HS_SYN_CRM_PAGE_057","chr1",1649000,1649299,"SYNTH_HS_PLUS",6.57,3e-06,1],["hs","HS_SYN_CRM_PAGE_058","chr1",1656000,1656299,"SYNTH_HS_PLUS",6.58,0.005,1],["hs","HS_SYN_CRM_PAGE_059","chr1",1663000,1663299,"SYNTH_HS_PLUS",6.59,0.03,1],["hs","HS_SYN_CRM_PAGE_060","chr1",1670000,1670299,"SYNTH_HS_PLUS",6.6,5e-07,1],["hs","HS_SYN_CRM_PAGE_061","chr1",1677000,1677299,"SYNTH_HS_PLUS",6.61,3e-06,1],["hs","HS_SYN_CRM_PAGE_062","chr1",1684000,1684299,"SYNTH_HS_PLUS",6.62,0.005,1],["hs","HS_SYN_CRM_PAGE_063","chr1",1691000,1691299,"SYNTH_HS_PLUS",6.63,0.03,1],["hs","HS_SYN_CRM_PAGE_064","chr1",1698000,1698299,"SYNTH_HS_PLUS",6.64,5e-07,1],["hs","HS_SYN_CRM_PAGE_065","chr1",1705000,1705299,"SYNTH_HS_PLUS",6.65,3e-06,1],["hs","HS_SYN_CRM_PAGE_066","chr1",1712000,1712299,"SYNTH_HS_PLUS",6.66,0.005,1],["hs","HS_SYN_CRM_PAGE_067","chr1",1719000,1719299,"SYNTH_HS_PLUS",6.67,0.03,1],["hs","HS_SYN_CRM_PAGE_068","chr1",1726000,1726299,"SYNTH_HS_PLUS",6.68,5e-07,1],["hs","HS_SYN_CRM_PAGE_069","chr1",1733000,1733299,"SYNTH_HS_PLUS",6.69,3e-06,1],["hs","HS_SYN_CRM_PAGE_070","chr1",1740000,1740299,"SYNTH_HS_PLUS",6.7,0.005,1],["hs","HS_SYN_CRM_PAGE_071","chr1",1747000,1747299,"SYNTH_HS_PLUS",6.71,0.03,1],["hs","HS_SYN_CRM_PAGE_072","chr1",1754000,1754299,"SYNTH_HS_PLUS",6.72,5e-07,1],["hs","HS_SYN_CRM_PAGE_073","chr1",1761000,1761299,"SYNTH_HS_PLUS",6.73,3e-06,1],["hs","HS_SYN_CRM_PAGE_074","chr1",1768000,1768299,"SYNTH_HS_PLUS",6.74,0.005,1],["hs","HS_SYN_CRM_PAGE_075","chr1",1775000,1775299,"SYNTH_HS_PLUS",6.75,0.03,1],["hs","HS_SYN_CRM_UPSTREAM","chr1",1800000,1800249,"SYNTH_HS_PLUS",9.8,5e-07,1],["hs","HS_SYN_CRM_OVERLAP","chr1",2003000,2003299,"SYNTH_HS_NEIGHBOR, SYNTH_HS_PLUS",7.6,0.005,2],["hs","HS_SYN_CRM_DOWNSTREAM","chr1",2100000,2100299,"SYNTH_HS_PLUS",8.7,3e-06,2],["hs","HS_SYN_CRM_MINUS_DOWNSTREAM","chr2",3900000,3900249,"SYNTH_HS_MINUS",7.2,0.005,1],["hs","HS_SYN_CRM_MINUS_UPSTREAM","chr2",4100000,4100249,"SYNTH_HS_MINUS",9.1,5e-07,1],["mm","MM_SYN_CRM_FAR","chr1",1200000,1200249,"SYNTH_MM_PLUS",6.5,0.03,1],["mm","MM_SYN_CRM_UPSTREAM","chr1",1800000,1800249,"SYNTH_MM_PLUS",9.8,5e-07,1],["mm","MM_SYN_CRM_OVERLAP","chr1",2003000,2003299,"SYNTH_MM_PLUS",7.6,0.005,2],["mm","MM_SYN_CRM_DOWNSTREAM","chr1",2100000,2100299,"SYNTH_MM_PLUS",8.7,3e-06,2],["mm","MM_SYN_CRM_MINUS_DOWNSTREAM","chr2",3900000,3900249,"SYNTH_MM_MINUS",7.2,0.005,1],["mm","MM_SYN_CRM_MINUS_UPSTREAM","chr2",4100000,4100249,"SYNTH_MM_MINUS",9.1,5e-07,1],["ce","CE_SYN_CRM_FAR","chr1",1200000,1200249,"SYNTH_CE_PLUS",6.5,0.03,1],["ce","CE_SYN_CRM_UPSTREAM","chr1",1800000,1800249,"SYNTH_CE_PLUS",9.8,5e-07,1],["ce","CE_SYN_CRM_OVERLAP","chr1",2003000,2003299,"SYNTH_CE_PLUS",7.6,0.005,2],["ce","CE_SYN_CRM_DOWNSTREAM","chr1",2100000,2100299,"SYNTH_CE_PLUS",8.7,3e-06,2],["ce","CE_SYN_CRM_MINUS_DOWNSTREAM","chr2",3900000,3900249,"SYNTH_CE_MINUS",7.2,0.005,1],["ce","CE_SYN_CRM_MINUS_UPSTREAM","chr2",4100000,4100249,"SYNTH_CE_MINUS",9.1,5e-07,1],["at","AT_SYN_CRM_FAR","chr1",1200000,1200249,"SYNTH_AT_PLUS",6.5,0.03,1],["at","AT_SYN_CRM_UPSTREAM","chr1",1800000,1800249,"SYNTH_AT_PLUS",9.8,5e-07,1],["at","AT_SYN_CRM_OVERLAP","chr1",2003000,2003299,"SYNTH_AT_PLUS",7.6,0.005,2],["at","AT_SYN_CRM_DOWNSTREAM","chr1",2100000,2100299,"SYNTH_AT_PLUS",8.7,3e-06,2],["at","AT_SYN_CRM_MINUS_DOWNSTREAM","chr2",3900000,3900249,"SYNTH_AT_MINUS",7.2,0.005,1],["at","AT_SYN_CRM_MINUS_UPSTREAM","chr2",4100000,4100249,"SYNTH_AT_MINUS",9.1,5e-07,1],["dm","DM_SYN_CRM_FAR","chr2L",1200000,1200249,"SYNTH_DM_PLUS",6.5,0.03,1],["dm","DM_SYN_CRM_UPSTREAM","chr2L",1800000,1800249,"SYNTH_DM_PLUS",9.8,5e-07,1],["dm","DM_SYN_CRM_OVERLAP","chr2L",2003000,2003299,"SYNTH_DM_PLUS",7.6,0.005,2],["dm","DM_SYN_CRM_DOWNSTREAM","chr2L",2100000,2100299,"SYNTH_DM_PLUS",8.7,3e-06,2],["dm","DM_SYN_CRM_MINUS_DOWNSTREAM","chr2R",3900000,3900249,"SYNTH_DM_MINUS",7.2,0.005,1],["dm","DM_SYN_CRM_MINUS_UPSTREAM","chr2R",4100000,4100249,"SYNTH_DM_MINUS",9.1,5e-07,1]];
+    const GENOMES = {
+      hs: { name: 'Homo sapiens', assembly: 'hg38' }, mm: { name: 'Mus musculus', assembly: 'mm10' },
+      dm: { name: 'Drosophila melanogaster', assembly: 'dm3' }, ce: { name: 'Caenorhabditis elegans', assembly: 'ce10' },
+      at: { name: 'Arabidopsis thaliana', assembly: 'TAIR10' },
+    };
+    const P_LABELS = { '0.05': '0.05', '0.01': '0.01', '0.000005': '5 × 10⁻⁶', '0.000001': '1 × 10⁻⁶' };
+    const q = new URLSearchParams(window.location.search);
+    const org = GENOMES[q.get('org')] ? q.get('org') : 'hs';
+    const chrs = (q.get('chr') || '1').split(',').map((c) => c.trim()).filter(Boolean);
+    const pKey = P_LABELS[q.get('p')] ? q.get('p') : '0.05';
+    const pMax = parseFloat(pKey);
+    const st = this.state || {};
+    const filter = st.filter || '';
+    const size = st.size || 25;
+    const sortKey = st.sortKey || 'location';
+    const sortDir = st.sortDir || 'asc';
+
+    const SUP = { '-': '⁻', '0': '⁰', '1': '¹', '2': '²', '3': '³', '4': '⁴', '5': '⁵', '6': '⁶', '7': '⁷', '8': '⁸', '9': '⁹' };
+    const fmtP = (p) => {
+      if (p >= 0.001) return String(Number(p.toPrecision(3)));
+      const [m, e] = p.toExponential(1).split('e');
+      return m + ' × 10' + String(parseInt(e, 10)).split('').map((ch) => SUP[ch] || ch).join('');
+    };
+    const commas = (n) => n.toLocaleString('en-US');
+
+    const base = DATA.filter((d) => d[0] === org && chrs.indexOf(d[2].replace(/^chr/, '')) !== -1 && d[7] <= pMax + 1e-12);
+    const needle = filter.trim().toLowerCase();
+    const filtered = needle ? base.filter((d) => d[1].toLowerCase().includes(needle) || d[5].toLowerCase().includes(needle)) : base;
+    const chrOrder = (c) => { const s = c.replace(/^chr/, ''); const n = parseInt(s, 10); return isNaN(n) ? 1000 + s.charCodeAt(0) : n; };
+    const cmp = {
+      id: (a, b) => a[1].localeCompare(b[1]),
+      location: (a, b) => chrOrder(a[2]) - chrOrder(b[2]) || a[3] - b[3],
+      genes: (a, b) => a[5].localeCompare(b[5]),
+      tfbs: (a, b) => a[8] - b[8],
+      score: (a, b) => a[6] - b[6],
+      p: (a, b) => a[7] - b[7],
+    };
+    const sorted = filtered.slice().sort((a, b) => (sortDir === 'asc' ? 1 : -1) * cmp[sortKey](a, b) || cmp.location(a, b));
+    const pages = Math.max(1, Math.ceil(sorted.length / size));
+    const page = Math.min(st.page || 1, pages);
+    const slice = sorted.slice((page - 1) * size, page * size);
+
+    const COLS = [['id', 'CRM ID', 'left'], ['location', 'Location', 'left'], ['genes', 'Closest gene(s)', 'left'],
+                  ['tfbs', 'Binding sites', 'right'], ['score', 'Score', 'right'], ['p', 'p-value', 'right']];
+    const cols = COLS.map(([key, label, align]) => {
+      const on = key === sortKey;
+      return {
+        id: 'sort-' + key, label: label, align: align, justify: align === 'right' ? 'flex-end' : 'flex-start',
+        sort: on ? (sortDir === 'asc' ? 'ascending' : 'descending') : 'none',
+        arrow: on ? (sortDir === 'asc' ? '▲' : '▼') : '↕', arrowColor: on ? PINE : '#9AA79F',
+        toggle: () => this.setState({ sortKey: key, sortDir: on && sortDir === 'asc' ? 'desc' : 'asc', page: 1 }),
+      };
+    });
+    const UCSC = {
+      hs: { db: 'hg38' }, mm: { db: 'mm10' }, dm: { db: 'dm3' },
+      ce: { db: 'ce10', chrom: { chr1: 'chrI', chr2: 'chrII', chr3: 'chrIII', chr4: 'chrIV', chr5: 'chrV' } },
+      at: { db: 'GCF_000001735.3', chrom: { chr1: 'NC_003070.9', chr2: 'NC_003071.7', chr3: 'NC_003074.8', chr4: 'NC_003075.7', chr5: 'NC_003076.8', chrM: 'NC_001284.2', chrC: 'NC_000932.1' } },
+    };
+    const ucscUrl = (d) => {
+      const cfg = UCSC[d[0]];
+      const chrom = (cfg.chrom && cfg.chrom[d[2]]) || d[2];
+      const pad = Math.max(2000, d[4] - d[3]);
+      const view = chrom + ':' + Math.max(1, d[3] - pad) + '-' + (d[4] + pad);
+      const mark = cfg.db + '.' + chrom + ':' + d[3] + '-' + d[4] + '#B6DB4C';
+      return 'https://genome.ucsc.edu/cgi-bin/hgTracks?db=' + encodeURIComponent(cfg.db) + '&position=' + encodeURIComponent(view) + '&highlight=' + encodeURIComponent(mark);
+    };
+    const rows = slice.map((d) => ({
+      url: ucscUrl(d), aria: 'Open ' + d[1] + ' in the UCSC Genome Browser (opens in a new tab)',
+      id: d[1], location: d[2] + ':' + commas(d[3]) + '–' + commas(d[4]),
+      genes: d[5].split(',').map((g) => g.trim()).join(', '), tfbs: d[8], score: d[6].toFixed(2), p: fmtP(d[7]),
+    }));
+    const sizes = [25, 50, 100].map((n) => ({
+      id: 'size-' + n, label: String(n), aria: n + ' rows per page', pressed: n === size ? 'true' : 'false',
+      bg: n === size ? PINE : '#FFFFFF', fg: n === size ? '#FFFFFF' : '#17221D', border: n === size ? PINE : '#B9C7BF',
+      pick: () => this.setState({ size: n, page: 1 }),
+    }));
+    const pageButtons = [];
+    for (let n = 1; n <= pages; n++) {
+      const on = n === page;
+      pageButtons.push({ id: 'page-' + n, n: n, current: on ? 'page' : 'false', bg: on ? PINE : '#FFFFFF', fg: on ? '#FFFFFF' : '#17221D',
+                         border: on ? PINE : '#B9C7BF', go: () => this.setState({ page: n }) });
+    }
+    const first = sorted.length ? (page - 1) * size + 1 : 0;
+    const last = Math.min(page * size, sorted.length);
+    const ordered = chrs.slice().sort((a, b) => chrOrder(a) - chrOrder(b));
+    const chrText = ordered.length > 6 ? ordered.length + ' chromosomes' : ordered.map((c) => 'chr' + c).join(', ');
+    const editUrl = 'K-browse.html?org=' + org + '&chr=' + encodeURIComponent(chrs.join(',')) + '&p=' + pKey;
+    const downloadCsv = () => {
+      const esc = (v) => /[",\n]/.test(String(v)) ? '"' + String(v).replace(/"/g, '""') + '"' : String(v);
+      const lines = [['crm_id', 'chromosome', 'start', 'end', 'closest_genes', 'binding_sites', 'score', 'p_value'].join(',')];
+      sorted.forEach((d) => lines.push([d[1], d[2], d[3], d[4], d[5], d[8], d[6], d[7]].map(esc).join(',')));
+      const blob = new Blob([lines.join('\n') + '\n'], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'pcrms_' + org + '_' + ordered.map((c) => 'chr' + c).join('-') + '_p' + pKey + '.csv';
+      document.body.appendChild(a);
+      a.click();
+      setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+    };
+
+    return {
+      headline: commas(base.length) + (base.length === 1 ? ' CRM found' : ' CRMs found'),
+      genomeName: GENOMES[org].name, assembly: GENOMES[org].assembly, chrText: chrText, pLabel: P_LABELS[pKey], editUrl: editUrl,
+      filter: filter, onFilter: (event) => this.setState({ filter: event.target.value, page: 1 }),
+      sizes: sizes, downloadCsv: downloadCsv,
+      cols: cols, rows: rows, rowCount: sorted.length + 1, hasRows: sorted.length > 0, noRows: sorted.length === 0,
+      page: page, pages: pages, pageButtons: pageButtons,
+      showing: sorted.length ? 'Showing ' + commas(first) + '–' + commas(last) + ' of ' + commas(sorted.length) + (needle ? ' matching “' + filter.trim() + '”' : '') : '',
+      prev: () => this.setState({ page: Math.max(1, page - 1) }), next: () => this.setState({ page: Math.min(pages, page + 1) }),
+      prevColor: page > 1 ? '#17221D' : '#9AA79F', nextColor: page < pages ? '#17221D' : '#9AA79F',
+      emptyTitle: needle ? 'No CRMs match “' + filter.trim() + '”' : 'No CRMs found',
+      emptyText: needle ? 'Try a different CRM ID or gene name, or clear the filter.' : 'No predicted CRMs pass this p-value cutoff on the chosen chromosomes. Try a looser cutoff such as 0.05, or add more chromosomes.',
+    };
+  }
+}
+</script>
+</body>
+</html>

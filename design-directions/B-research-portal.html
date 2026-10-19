@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCRMs — Research portal direction</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;600;700&amp;family=Source+Code+Pro:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#FFFFFF}
+*{box-sizing:border-box}
+a{color:#1A56B0}a:hover{color:#0F3C80}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #FFFFFF; color: #1B1F24; font-family: 'Source Sans 3', system-ui, sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="background: {{accent}}; color: #FFFFFF">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 14px clamp(16px, 3vw, 32px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 32px">
+      <a href="#top" style="display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; color: #FFFFFF; text-decoration: none">
+        <span style="font-size: 28px; font-weight: 700; letter-spacing: 0.01em">PCRMs</span>
+        <span style="font-size: 15px; color: #D5DEEA">Predicted cis-Regulatory Modules database</span>
+      </a>
+      <form role="search" style="display: flex; flex: 0 1 420px; min-width: 260px">
+        <label for="b-quick" style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Search PCRMs</label>
+        <input id="b-quick" type="search" placeholder="Gene, TF or CRM ID" style="flex: 1; min-width: 0; height: 44px; padding: 0 12px; border: 1px solid #FFFFFF; border-radius: 3px 0 0 3px; font: inherit; color: #1B1F24; background: #FFFFFF">
+        <button type="button" style="height: 44px; padding: 0 18px; border: 1px solid #FFFFFF; border-radius: 0 3px 3px 0; background: #E9EDF2; color: #1B1F24; font: inherit; font-weight: 600; cursor: pointer">Go</button>
+      </form>
+    </div>
+  </header>
+
+  <nav aria-label="Primary" style="background: #E9EDF2; border-bottom: 1px solid #C5CDD8">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); display: flex; flex-wrap: wrap; font-size: 15px">
+      <a href="#top" aria-current="page" style="padding: 12px 14px; color: #1B1F24; font-weight: 600; text-decoration: none; background: #FFFFFF; border-left: 1px solid #C5CDD8; border-right: 1px solid #C5CDD8; margin-bottom: -1px">Home</a>
+      <a href="#search" style="padding: 12px 14px; color: #1A56B0">Browse</a>
+      <a href="#search" style="padding: 12px 14px; color: #1A56B0">Closest CRMs</a>
+      <a href="#search" style="padding: 12px 14px; color: #1A56B0">CRMs around a gene</a>
+      <a href="#search" style="padding: 12px 14px; color: #1A56B0">TF binding sites</a>
+      <a href="#genomes" style="padding: 12px 14px; color: #1A56B0">Downloads</a>
+      <a href="https://sulab.charlotte.edu/" style="padding: 12px 14px; color: #1A56B0">Su Lab</a>
+    </div>
+  </nav>
+
+  <div id="top" style="max-width: 1240px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 32px) 56px; display: flex; flex-wrap: wrap; gap: 32px">
+
+    <main style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 32px">
+      <div>
+        <h1 style="margin: 0 0 8px; font-size: 28px; font-weight: 600; line-height: 1.25">Predicted cis-regulatory modules and transcription factor binding sites</h1>
+        <p style="margin: 0; max-width: 52em; color: #333B45">PCRMs holds CRMs and their constituent TFBSs predicted de novo from public TF ChIP-seq data. Version 2 maps cover 85.5% of the human genome and 77.9% of the mouse genome; version 1 maps are available for <em>C. elegans</em>, <em>A. thaliana</em> and <em>D. melanogaster</em>.</p>
+      </div>
+
+      <section id="search" aria-labelledby="b-search-title" style="border: 1px solid #C5CDD8; border-radius: 3px">
+        <h2 id="b-search-title" style="margin: 0; padding: 10px 14px; background: #F2F4F7; border-bottom: 1px solid #C5CDD8; font-size: 17px; font-weight: 600">Search the database</h2>
+        <div role="tablist" aria-label="Search type" style="display: flex; flex-wrap: wrap; gap: 4px; padding: 12px 14px 0; border-bottom: 1px solid #C5CDD8">
+          <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+            <button type="button" role="tab" aria-selected="{{t.selected}}" onClick="{{t.pick}}" style="min-height: 44px; margin-bottom: -1px; padding: 0 16px; border: 1px solid #C5CDD8; border-bottom-color: {{t.bb}}; border-radius: 3px 3px 0 0; background: {{t.bg}}; color: {{t.color}}; font: inherit; font-size: 15px; font-weight: {{t.fw}}; cursor: pointer">{{t.label}}</button>
+          </sc-for>
+        </div>
+
+        <form role="tabpanel" style="padding: 18px 14px 20px; display: flex; flex-direction: column; gap: 14px; font-size: 15px">
+          <div style="display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center">
+            <label for="b-org" style="width: 160px; font-weight: 600">Organism</label>
+            <select id="b-org" style="flex: 0 1 360px; min-width: 0; height: 44px; padding: 0 8px; border: 1px solid #8F99A6; border-radius: 3px; font: inherit; background: #FFFFFF; color: #1B1F24">
+              <option>Homo sapiens (GRCh38/hg38)</option>
+              <option>Mus musculus (GRCm38/mm10)</option>
+              <option>Caenorhabditis elegans (ce10)</option>
+              <option>Arabidopsis thaliana (TAIR10)</option>
+              <option>Drosophila melanogaster (dm3)</option>
+            </select>
+          </div>
+
+          <sc-if value="{{showGene}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center">
+              <label for="b-gene" style="width: 160px; font-weight: 600">Gene symbol or ID</label>
+              <input id="b-gene" type="text" placeholder="e.g. RUNX1 or ENSG00000159216" style="flex: 0 1 360px; min-width: 0; height: 44px; padding: 0 10px; border: 1px solid #8F99A6; border-radius: 3px; font: inherit; color: #1B1F24">
+            </div>
+          </sc-if>
+
+          <sc-if value="{{isTf}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center">
+              <label for="b-tf" style="width: 160px; font-weight: 600">TF symbol</label>
+              <input id="b-tf" type="text" placeholder="e.g. RUNX1 or AP1" style="flex: 0 1 360px; min-width: 0; height: 44px; padding: 0 10px; border: 1px solid #8F99A6; border-radius: 3px; font: inherit; color: #1B1F24">
+            </div>
+          </sc-if>
+
+          <sc-if value="{{showChroms}}" hint-placeholder-val="{{ true }}">
+            <div role="group" aria-labelledby="b-chr-label" style="display: flex; flex-wrap: wrap; gap: 6px 16px">
+              <div style="width: 160px; padding-top: 10px">
+                <span id="b-chr-label" style="display: block; font-weight: 600">Chromosomes</span>
+                <span style="display: block; font-size: 14px; color: #4F5864">{{selectedCount}} selected</span>
+              </div>
+              <div style="flex: 1 1 360px; min-width: 0; display: flex; flex-wrap: wrap">
+                <sc-for list="{{chroms}}" as="c" hint-placeholder-count="24">
+                  <label style="width: 70px; min-height: 44px; display: flex; align-items: center; gap: 6px; font-family: 'Source Code Pro', monospace; font-size: 14px; cursor: pointer"><input type="checkbox" checked="{{c.on}}" onChange="{{c.toggle}}" style="width: 16px; height: 16px; margin: 0">{{c.name}}</label>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{isRange}}" hint-placeholder-val="{{ false }}">
+            <div style="display: flex; flex-direction: column; gap: 4px">
+              <div role="radiogroup" aria-labelledby="b-loc-label" style="display: flex; flex-wrap: wrap; gap: 0 16px; align-items: center">
+                <span id="b-loc-label" style="width: 160px; font-weight: 600">Location</span>
+                <sc-for list="{{locs}}" as="l" hint-placeholder-count="3">
+                  <label style="min-height: 44px; display: flex; align-items: center; gap: 6px; margin-right: 10px; cursor: pointer"><input type="radio" name="b-loc" checked="{{l.on}}" onChange="{{l.pick}}" style="margin: 0">{{l.label}}</label>
+                </sc-for>
+              </div>
+              <div role="radiogroup" aria-labelledby="b-dist-label" style="display: flex; flex-wrap: wrap; gap: 0 16px; align-items: center">
+                <span id="b-dist-label" style="width: 160px; font-weight: 600">Maximum distance</span>
+                <sc-for list="{{dists}}" as="d" hint-placeholder-count="3">
+                  <label style="min-height: 44px; display: flex; align-items: center; gap: 6px; margin-right: 10px; cursor: pointer"><input type="radio" name="b-dist" checked="{{d.on}}" onChange="{{d.pick}}" style="margin: 0">{{d.label}}</label>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{showP}}" hint-placeholder-val="{{ true }}">
+            <div style="display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center">
+              <label for="b-p" style="width: 160px; font-weight: 600">CRM P value ≤</label>
+              <select id="b-p" style="flex: 0 1 200px; height: 44px; padding: 0 8px; border: 1px solid #8F99A6; border-radius: 3px; font: inherit; background: #FFFFFF; color: #1B1F24">
+                <option>0.05</option>
+                <option>0.01</option>
+                <option>5 × 10⁻⁶</option>
+                <option>1 × 10⁻⁶</option>
+              </select>
+            </div>
+          </sc-if>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 10px; padding-top: 6px">
+            <button type="button" style="height: 44px; padding: 0 24px; border: 1px solid {{accent}}; border-radius: 3px; background: {{accent}}; color: #FFFFFF; font: inherit; font-weight: 600; cursor: pointer">Search</button>
+            <button type="button" style="height: 44px; padding: 0 18px; border: 1px solid #8F99A6; border-radius: 3px; background: #FFFFFF; color: #1B1F24; font: inherit; cursor: pointer">Reset</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="genomes" aria-labelledby="b-genomes-title">
+        <h2 id="b-genomes-title" style="margin: 0 0 10px; font-size: 20px; font-weight: 600">Genomes in PCRMs</h2>
+        <div style="overflow-x: auto; border: 1px solid #C5CDD8; border-radius: 3px">
+          <table style="width: 100%; min-width: 720px; border-collapse: collapse; font-size: 15px">
+            <thead>
+              <tr style="background: #F2F4F7; border-bottom: 1px solid #C5CDD8">
+                <th scope="col" style="text-align: left; padding: 9px 12px; font-weight: 600">Organism</th>
+                <th scope="col" style="text-align: left; padding: 9px 12px; font-weight: 600">Assembly</th>
+                <th scope="col" style="text-align: left; padding: 9px 12px; font-weight: 600">Release</th>
+                <th scope="col" style="text-align: right; padding: 9px 12px; font-weight: 600">CRMs</th>
+                <th scope="col" style="text-align: right; padding: 9px 12px; font-weight: 600">TFBSs</th>
+                <th scope="col" style="text-align: right; padding: 9px 12px; font-weight: 600">ChIP-seq</th>
+                <th scope="col" style="text-align: left; padding: 9px 12px; font-weight: 600">Data</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom: 1px solid #E1E6EC">
+                <th scope="row" style="text-align: left; padding: 9px 12px; font-weight: 400"><em>Homo sapiens</em></th>
+                <td style="padding: 9px 12px">GRCh38/hg38</td>
+                <td style="padding: 9px 12px">v2</td>
+                <td style="padding: 9px 12px; text-align: right; font-family: 'Source Code Pro', monospace; font-size: 14px">1,426,947</td>
+                <td style="padding: 9px 12px; text-align: right; font-family: 'Source Code Pro', monospace; font-size: 14px">95,717,222</td>
+                <td style="padding: 9px 12px; text-align: right; font-family: 'Source Code Pro', monospace; font-size: 14px">11,348</td>
+                <td style="padding: 9px 12px"><a href="#search">Browse</a> · <a href="#downloads">Download</a></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #E1E6EC; background: #F8F9FB">
+                <th scope="row" style="text-align: left; padding: 9px 12px; font-weight: 400"><em>Mus musculus</em></th>
+                <td style="padding: 9px 12px">GRCm38/mm10</td>
+                <td style="padding: 9px 12px">v2</td>
+                <td style="padding: 9px 12px; text-align: right; font-family: 'Source Code Pro', monospace; font-size: 14px">912,197</td>
+                <td style="padding: 9px 12px; text-align: right; font-family: 'Source Code Pro', monospace; font-size: 14px">125,113,756</td>
+                <td style="padding: 9px 12px; text-align: right; font-family: 'Source Code Pro', monospace; font-size: 14px">9,060</td>
+                <td style="padding: 9px 12px"><a href="#search">Browse</a> · <a href="#downloads">Download</a></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #E1E6EC">
+                <th scope="row" style="text-align: left; padding: 9px 12px; font-weight: 400"><em>Caenorhabditis elegans</em></th>
+                <td style="padding: 9px 12px">ce10</td>
+                <td style="padding: 9px 12px">v1</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px"><a href="#search">Browse</a> · <a href="#downloads">Download</a></td>
+              </tr>
+              <tr style="border-bottom: 1px solid #E1E6EC; background: #F8F9FB">
+                <th scope="row" style="text-align: left; padding: 9px 12px; font-weight: 400"><em>Arabidopsis thaliana</em></th>
+                <td style="padding: 9px 12px">TAIR10</td>
+                <td style="padding: 9px 12px">v1</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px"><a href="#search">Browse</a> · <a href="#downloads">Download</a></td>
+              </tr>
+              <tr>
+                <th scope="row" style="text-align: left; padding: 9px 12px; font-weight: 400"><em>Drosophila melanogaster</em></th>
+                <td style="padding: 9px 12px">dm3</td>
+                <td style="padding: 9px 12px">v1</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px; text-align: right; color: #4F5864">—</td>
+                <td style="padding: 9px 12px"><a href="#search">Browse</a> · <a href="#downloads">Download</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="margin: 8px 0 0; font-size: 14px; color: #4F5864">Counts are shown for the version 2 releases.</p>
+      </section>
+
+      <section aria-labelledby="b-tools-title">
+        <h2 id="b-tools-title" style="margin: 0 0 10px; font-size: 20px; font-weight: 600">Analysis tools</h2>
+        <dl style="margin: 0; border-top: 1px solid #E1E6EC">
+          <div style="display: flex; flex-wrap: wrap; gap: 2px 20px; padding: 10px 0; border-bottom: 1px solid #E1E6EC">
+            <dt style="width: 220px"><a href="#search" style="font-weight: 600">Closest CRMs to a gene</a></dt>
+            <dd style="margin: 0; flex: 1 1 320px; color: #333B45">CRMs whose closest gene matches a symbol or stable ID, filtered by P value.</dd>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 2px 20px; padding: 10px 0; border-bottom: 1px solid #E1E6EC">
+            <dt style="width: 220px"><a href="#search" style="font-weight: 600">CRMs around a gene</a></dt>
+            <dd style="margin: 0; flex: 1 1 320px; color: #333B45">Strand-aware search upstream, downstream or on both sides within 0.5, 1 or 2 Mb.</dd>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 2px 20px; padding: 10px 0; border-bottom: 1px solid #E1E6EC">
+            <dt style="width: 220px"><a href="#search" style="font-weight: 600">TF binding sites</a></dt>
+            <dd style="margin: 0; flex: 1 1 320px; color: #333B45">Predicted sites for a TF on selected chromosomes, with motif IDs, logos and parent CRMs.</dd>
+          </div>
+        </dl>
+      </section>
+    </main>
+
+    <aside style="flex: 1 1 280px; min-width: 0; display: flex; flex-direction: column; gap: 20px; font-size: 15px">
+      <section aria-labelledby="b-release-title" style="border: 1px solid #C5CDD8; border-radius: 3px">
+        <h2 id="b-release-title" style="margin: 0; padding: 9px 12px; background: #F2F4F7; border-bottom: 1px solid #C5CDD8; font-size: 16px; font-weight: 600">Latest release</h2>
+        <div style="padding: 12px">
+          <p style="margin: 0 0 4px; font-family: 'Source Code Pro', monospace; font-size: 14px; color: #4F5864">3 June 2022</p>
+          <p style="margin: 0 0 10px">Version 2 human and mouse maps: 1,426,947 human CRMs and 912,197 mouse CRMs. Mouse coordinates are also lifted to GRCm39/mm39.</p>
+          <a href="#downloads">Release history</a>
+        </div>
+      </section>
+
+      <section id="downloads" aria-labelledby="b-dl-title" style="border: 1px solid #C5CDD8; border-radius: 3px">
+        <h2 id="b-dl-title" style="margin: 0; padding: 9px 12px; background: #F2F4F7; border-bottom: 1px solid #C5CDD8; font-size: 16px; font-weight: 600">Downloads (BED, tar.gz)</h2>
+        <ul style="margin: 0; padding: 4px 12px; list-style: none">
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #E1E6EC"><a href="#downloads">Human v2 · hg38</a><span style="color: #4F5864">1.4 GB</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #E1E6EC"><a href="#downloads">Mouse v2 · mm10</a><span style="color: #4F5864">1.9 GB</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #E1E6EC"><a href="#downloads">Mouse v2 CRMs · mm39</a><span style="color: #4F5864">13.4 MB</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #E1E6EC"><a href="#downloads"><em>C. elegans</em> v1 · ce10</a><span style="color: #4F5864">40.5 MB</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #E1E6EC"><a href="#downloads"><em>A. thaliana</em> v1 · TAIR10</a><span style="color: #4F5864">122.9 MB</span></li>
+          <li style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 0"><a href="#downloads"><em>D. melanogaster</em> v1 · dm3</a><span style="color: #4F5864">33.3 MB</span></li>
+        </ul>
+      </section>
+
+      <section aria-labelledby="b-cite-title" style="border: 1px solid #C5CDD8; border-radius: 3px">
+        <h2 id="b-cite-title" style="margin: 0; padding: 9px 12px; background: #F2F4F7; border-bottom: 1px solid #C5CDD8; font-size: 16px; font-weight: 600">Cite PCRMs</h2>
+        <div style="padding: 12px; display: flex; flex-direction: column; gap: 8px">
+          <p style="margin: 0">Ni P, Su Z. PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes. <em>Database</em> 2022; baac024.</p>
+          <a href="https://doi.org/10.1093/database/baac024">doi:10.1093/database/baac024</a>
+          <p style="margin: 4px 0 0; color: #333B45">Method: dePCRM2, <a href="https://doi.org/10.1093/nargab/lqab052"><em>NAR Genom Bioinform</em> lqab052</a></p>
+        </div>
+      </section>
+    </aside>
+  </div>
+
+  <footer style="background: #F2F4F7; border-top: 1px solid #C5CDD8">
+    <div style="max-width: 1240px; margin: 0 auto; padding: 16px clamp(16px, 3vw, 32px) 28px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 14px; color: #4F5864">
+      <span>© 2020–2026 The Su Lab, University of North Carolina at Charlotte</span>
+      <span><a href="https://sulab.charlotte.edu/">Su Lab</a> · <a href="https://doi.org/10.1093/database/baac024">Database paper</a> · <a href="https://doi.org/10.1093/nargab/lqab052">Method paper</a></span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#1E3554","options":["#1E3554","#2B4A2F","#5A1E2E","#33363B"]},"$preview":{"width":1440,"height":1650}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#1E3554';
+    const st = this.state || {};
+    const tab = st.tab || 'browse';
+    const sel = st.sel || ['chr1'];
+    const loc = st.loc || 'both';
+    const dist = st.dist || '100';
+    const names = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY'];
+    const tabDefs = [['browse', 'Browse by chromosome'], ['closest', 'Closest CRMs to a gene'], ['range', 'CRMs around a gene'], ['tf', 'TF binding sites']];
+    const tabs = tabDefs.map((d) => {
+      const on = tab === d[0];
+      return {
+        label: d[1],
+        selected: on ? 'true' : 'false',
+        bg: on ? '#FFFFFF' : '#F2F4F7',
+        bb: on ? '#FFFFFF' : '#C5CDD8',
+        fw: on ? '600' : '400',
+        color: on ? '#1B1F24' : '#1A56B0',
+        pick: () => this.setState({ tab: d[0] }),
+      };
+    });
+    const chroms = names.map((name) => ({
+      name: name,
+      on: sel.indexOf(name) !== -1,
+      toggle: () => this.setState({ sel: sel.indexOf(name) !== -1 ? sel.filter((x) => x !== name) : sel.concat([name]) }),
+    }));
+    const locs = [['upstream', 'Upstream'], ['downstream', 'Downstream'], ['both', 'Both sides']].map((pair) => ({
+      label: pair[1], on: loc === pair[0], pick: () => this.setState({ loc: pair[0] }),
+    }));
+    const dists = [['50', '0.5 Mb'], ['100', '1 Mb'], ['200', '2 Mb']].map((pair) => ({
+      label: pair[1], on: dist === pair[0], pick: () => this.setState({ dist: pair[0] }),
+    }));
+    return {
+      accent: accent,
+      tabs: tabs,
+      chroms: chroms,
+      locs: locs,
+      dists: dists,
+      selectedCount: sel.length,
+      showGene: tab === 'closest' || tab === 'range',
+      isTf: tab === 'tf',
+      isRange: tab === 'range',
+      showChroms: tab === 'browse' || tab === 'tf',
+      showP: tab !== 'tf',
+    };
+  }
+}
+</script>
+</body>
+</html>

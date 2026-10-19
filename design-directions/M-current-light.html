@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCRMs — Current palette, light</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#0B2528}
+*{box-sizing:border-box}
+a{color:#00644F}a:hover{color:#004B3E}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #0B2528; color: #0B2528; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif; font-size: 16px; line-height: 1.6">
+
+  <header style="background: #0B2528; color: #FFFFFF">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 4px 32px">
+      <a href="#top" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; color: #FFFFFF; text-decoration: none">
+        <svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true" style="color: {{lime}}"><path d="M12 7c12 0 12 10 24 10M12 31c12 0 12 10 24 10M12 7c0 17 24 17 24 34M36 7c0 17-24 17-24 34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path><path d="M15 15h18M15 33h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".55"></path></svg>
+        <strong style="font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif; font-size: 23px; font-weight: 600">PCRMs</strong>
+      </a>
+      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 0 24px; font-size: 15px; font-weight: 600">
+        <a href="#top" aria-current="page" style="padding: 16px 0 13px; color: #FFFFFF; text-decoration: none; border-bottom: 3px solid {{lime}}">Search</a>
+        <a href="#top" style="padding: 16px 0; color: #C9D8D6; text-decoration: none">Browse</a>
+        <a href="#glance" style="padding: 16px 0; color: #C9D8D6; text-decoration: none">Downloads</a>
+        <a href="#cite" style="padding: 16px 0; color: #C9D8D6; text-decoration: none">Cite</a>
+        <a href="https://sulab.charlotte.edu/" style="padding: 16px 0; color: #C9D8D6; text-decoration: none">Su Lab</a>
+      </nav>
+    </div>
+  </header>
+
+  <div style="background: #F5F8F5">
+    <main id="top" style="max-width: 1180px; margin: 0 auto; padding: 44px clamp(16px, 3vw, 32px) 56px; display: flex; flex-direction: column; gap: 28px">
+      <div style="max-width: 760px">
+        <h1 style="margin: 0 0 8px; font-family: 'Iowan Old Style', 'Palatino Linotype', Palatino, Georgia, serif; font-size: clamp(32px, 3.6vw, 44px); font-weight: 500; line-height: 1.12">Predicted cis-regulatory modules and transcription factor binding sites</h1>
+        <p style="margin: 0; font-size: 17px; color: #315153">Search by chromosome, gene or transcription factor across five genomes.</p>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 24px">
+        <section aria-label="Search" style="flex: 3 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #D7E2DA; border-radius: 10px">
+          <div role="tablist" aria-label="Search type" style="display: flex; flex-wrap: wrap; gap: 0 26px; padding: 0 24px; border-bottom: 1px solid #D7E2DA">
+            <sc-for list="{{tabs}}" as="t" hint-placeholder-count="4">
+              <button type="button" role="tab" aria-selected="{{t.selected}}" onClick="{{t.pick}}" style="min-height: 52px; padding: 0; border: 0; border-bottom: 3px solid {{t.underline}}; background: none; color: {{t.color}}; font: inherit; font-size: 15px; font-weight: {{t.weight}}; cursor: pointer">{{t.label}}</button>
+            </sc-for>
+          </div>
+
+          <form role="tabpanel" style="padding: 24px; display: flex; flex-direction: column; gap: 18px">
+            <div style="display: flex; flex-wrap: wrap; gap: 14px">
+              <div style="flex: 1 1 240px; display: flex; flex-direction: column; gap: 6px">
+                <label for="m-org" style="font-size: 14px; font-weight: 700">Organism</label>
+                <select id="m-org" style="height: 46px; padding: 0 12px; border: 1px solid #B9CABF; border-radius: 6px; font: inherit; background: #FFFFFF; color: #0B2528">
+                  <option>Homo sapiens · hg38</option>
+                  <option>Mus musculus · mm10</option>
+                  <option>Caenorhabditis elegans · ce10</option>
+                  <option>Arabidopsis thaliana · TAIR10</option>
+                  <option>Drosophila melanogaster · dm3</option>
+                </select>
+              </div>
+              <sc-if value="{{showGene}}" hint-placeholder-val="{{ false }}">
+                <div style="flex: 2 1 280px; display: flex; flex-direction: column; gap: 6px">
+                  <label for="m-gene" style="font-size: 14px; font-weight: 700">Gene symbol or stable ID</label>
+                  <input id="m-gene" type="text" placeholder="e.g. RUNX1 or ENSG00000159216" style="height: 46px; padding: 0 12px; border: 1px solid #B9CABF; border-radius: 6px; font: inherit; color: #0B2528">
+                </div>
+              </sc-if>
+              <sc-if value="{{isTf}}" hint-placeholder-val="{{ false }}">
+                <div style="flex: 2 1 280px; display: flex; flex-direction: column; gap: 6px">
+                  <label for="m-tf" style="font-size: 14px; font-weight: 700">TF symbol</label>
+                  <input id="m-tf" type="text" placeholder="e.g. RUNX1 or AP1" style="height: 46px; padding: 0 12px; border: 1px solid #B9CABF; border-radius: 6px; font: inherit; color: #0B2528">
+                </div>
+              </sc-if>
+            </div>
+
+            <sc-if value="{{showChroms}}" hint-placeholder-val="{{ true }}">
+              <div role="group" aria-labelledby="m-chr-label" style="display: flex; flex-direction: column; gap: 8px">
+                <span id="m-chr-label" style="font-size: 14px; font-weight: 700">Chromosomes · {{selectedCount}} selected</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 5px">
+                  <sc-for list="{{chroms}}" as="c" hint-placeholder-count="24">
+                    <button type="button" aria-pressed="{{c.pressed}}" aria-label="{{c.name}}" onClick="{{c.toggle}}" style="min-width: 44px; height: 40px; padding: 0 6px; border: 1px solid {{c.border}}; border-radius: 6px; background: {{c.bg}}; color: {{c.fg}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">{{c.label}}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{isRange}}" hint-placeholder-val="{{ false }}">
+              <div style="display: flex; flex-wrap: wrap; gap: 18px 32px">
+                <div role="radiogroup" aria-labelledby="m-loc-label" style="display: flex; flex-direction: column; gap: 8px">
+                  <span id="m-loc-label" style="font-size: 14px; font-weight: 700">Location</span>
+                  <div style="display: flex; flex-wrap: wrap; gap: 5px">
+                    <sc-for list="{{locs}}" as="l" hint-placeholder-count="3">
+                      <button type="button" role="radio" aria-checked="{{l.checked}}" onClick="{{l.pick}}" style="height: 40px; padding: 0 14px; border: 1px solid {{l.border}}; border-radius: 6px; background: {{l.bg}}; color: {{l.fg}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">{{l.label}}</button>
+                    </sc-for>
+                  </div>
+                </div>
+                <div role="radiogroup" aria-labelledby="m-dist-label" style="display: flex; flex-direction: column; gap: 8px">
+                  <span id="m-dist-label" style="font-size: 14px; font-weight: 700">Maximum distance</span>
+                  <div style="display: flex; flex-wrap: wrap; gap: 5px">
+                    <sc-for list="{{dists}}" as="d" hint-placeholder-count="3">
+                      <button type="button" role="radio" aria-checked="{{d.checked}}" onClick="{{d.pick}}" style="height: 40px; padding: 0 14px; border: 1px solid {{d.border}}; border-radius: 6px; background: {{d.bg}}; color: {{d.fg}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">{{d.label}}</button>
+                    </sc-for>
+                  </div>
+                </div>
+              </div>
+            </sc-if>
+
+            <sc-if value="{{showP}}" hint-placeholder-val="{{ true }}">
+              <div role="radiogroup" aria-labelledby="m-p-label" style="display: flex; flex-direction: column; gap: 8px">
+                <span id="m-p-label" style="font-size: 14px; font-weight: 700">CRM P value ≤</span>
+                <div style="display: flex; flex-wrap: wrap; gap: 5px">
+                  <sc-for list="{{pvals}}" as="p" hint-placeholder-count="4">
+                    <button type="button" role="radio" aria-checked="{{p.checked}}" onClick="{{p.pick}}" style="min-width: 88px; height: 40px; padding: 0 12px; border: 1px solid {{p.border}}; border-radius: 6px; background: {{p.bg}}; color: {{p.fg}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">{{p.label}}</button>
+                  </sc-for>
+                </div>
+              </div>
+            </sc-if>
+
+            <div><button type="button" style="min-height: 48px; padding: 0 26px; border: 0; border-radius: 6px; background: #00644F; color: #FFFFFF; font: inherit; font-weight: 700; cursor: pointer">{{submitLabel}}</button></div>
+          </form>
+        </section>
+
+        <aside id="glance" aria-labelledby="m-glance" style="flex: 2 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 18px; padding: 24px; background: #0B2528; color: #FFFFFF; border-radius: 10px">
+          <h2 id="m-glance" style="margin: 0; font-size: 15px; font-weight: 700; color: #C9D8D6">Version 2 maps · 3 June 2022</h2>
+          <div style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid #315153">
+            <span style="font-size: 15px"><em>Homo sapiens</em> · hg38</span>
+            <strong style="font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif; font-size: 34px; font-weight: 500; line-height: 1.1; color: {{lime}}">1,426,947 CRMs</strong>
+            <span style="font-size: 14px; color: #A9BDBC">95,717,222 TFBSs · 85.5% of the genome</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 4px; padding-bottom: 16px; border-bottom: 1px solid #315153">
+            <span style="font-size: 15px"><em>Mus musculus</em> · mm10</span>
+            <strong style="font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif; font-size: 34px; font-weight: 500; line-height: 1.1; color: {{lime}}">912,197 CRMs</strong>
+            <span style="font-size: 14px; color: #A9BDBC">125,113,756 TFBSs · 77.9% of the genome</span>
+          </div>
+          <p style="margin: 0; font-size: 14px; color: #C9D8D6">Version 1 maps: <em>C. elegans</em> (ce10), <em>A. thaliana</em> (TAIR10), <em>D. melanogaster</em> (dm3).</p>
+          <a href="#glance" style="display: inline-flex; align-items: center; justify-content: center; min-height: 46px; border: 1px solid {{lime}}; border-radius: 6px; color: {{lime}}; font-weight: 700; text-decoration: none">Download BED archives</a>
+        </aside>
+      </div>
+    </main>
+
+    <section aria-label="Release history and citation" style="border-top: 1px solid #D7E2DA">
+      <div style="max-width: 1180px; margin: 0 auto; padding: 44px clamp(16px, 3vw, 32px) 64px; display: flex; flex-wrap: wrap; gap: 32px 56px">
+        <div style="flex: 3 1 460px; min-width: 0">
+          <h2 style="margin: 0 0 12px; font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif; font-size: 26px; font-weight: 500">Release history</h2>
+          <ol style="margin: 0; padding: 0; list-style: none">
+            <li style="display: flex; flex-wrap: wrap; gap: 2px 24px; padding: 10px 0; border-top: 1px solid #D7E2DA"><time datetime="2022-06-03" style="width: 110px; font-size: 14px; font-weight: 600; color: #506D6E">3 Jun 2022</time><span style="flex: 1 1 300px">Version 2 human and mouse maps; mouse also lifted to GRCm39/mm39.</span></li>
+            <li style="display: flex; flex-wrap: wrap; gap: 2px 24px; padding: 10px 0; border-top: 1px solid #D7E2DA"><time datetime="2022-05-30" style="width: 110px; font-size: 14px; font-weight: 600; color: #506D6E">30 May 2022</time><span style="flex: 1 1 300px">Expanded version 2 mouse CRM map submitted.</span></li>
+            <li style="display: flex; flex-wrap: wrap; gap: 2px 24px; padding: 10px 0; border-top: 1px solid #D7E2DA; border-bottom: 1px solid #D7E2DA"><time datetime="2022-04-22" style="width: 110px; font-size: 14px; font-weight: 600; color: #506D6E">22 Apr 2022</time><span style="flex: 1 1 300px">Database paper published in <em>Database</em>.</span></li>
+          </ol>
+        </div>
+        <div id="cite" style="flex: 2 1 320px; min-width: 0">
+          <h2 style="margin: 0 0 12px; font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif; font-size: 26px; font-weight: 500">Cite</h2>
+          <p style="margin: 0 0 8px">Ni P, Su Z. PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes. <em>Database</em> 2022; baac024.</p>
+          <a href="https://doi.org/10.1093/database/baac024" style="font-weight: 600">doi:10.1093/database/baac024</a>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer style="color: #FFFFFF">
+    <div style="max-width: 1180px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 32px) 36px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; font-size: 14px; color: #C9D8D6">
+      <span style="display: flex; align-items: center; gap: 12px"><img src="../www/images/logo-unc-charlotte-transparent.png" alt="UNC Charlotte" style="height: 30px; width: auto">© 2020–2026 The Su Lab at UNC Charlotte</span>
+      <span style="display: flex; gap: 20px"><a href="https://doi.org/10.1093/nargab/lqab052" style="color: #FFFFFF">dePCRM2 method</a><a href="https://sulab.charlotte.edu/" style="color: #FFFFFF">Su Lab</a></span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"lime":{"editor":"color","default":"#C8E86C","options":["#C8E86C","#F7C96B","#9FD8C8"]},"$preview":{"width":1440,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const lime = this.props.lime ?? '#C8E86C';
+    const st = this.state || {};
+    const tab = st.tab || 'browse';
+    const sel = st.sel || ['chr1'];
+    const p = st.p || '0.05';
+    const loc = st.loc || 'both';
+    const dist = st.dist || '100';
+    const names = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY'];
+    const toggleStyle = (on) => ({
+      bg: on ? '#0B2528' : '#FFFFFF',
+      fg: on ? lime : '#0B2528',
+      border: on ? '#0B2528' : '#B9CABF',
+    });
+    const tabDefs = [['browse', 'By chromosome', 'Search CRMs'], ['closest', 'Closest CRMs to a gene', 'Find closest CRMs'], ['range', 'Around a gene', 'Search gene range'], ['tf', 'TF binding sites', 'Search TF sites']];
+    const tabs = tabDefs.map((d) => {
+      const on = d[0] === tab;
+      return {
+        label: d[1],
+        selected: on ? 'true' : 'false',
+        underline: on ? '#00644F' : 'transparent',
+        color: on ? '#0B2528' : '#506D6E',
+        weight: on ? '700' : '500',
+        pick: () => this.setState({ tab: d[0] }),
+      };
+    });
+    const chroms = names.map((name) => {
+      const on = sel.indexOf(name) !== -1;
+      return Object.assign({
+        name: name,
+        label: name.replace('chr', ''),
+        pressed: on ? 'true' : 'false',
+        toggle: () => this.setState({ sel: on ? sel.filter((x) => x !== name) : sel.concat([name]) }),
+      }, toggleStyle(on));
+    });
+    const radio = (pairs, current, key) => pairs.map((pair) => {
+      const on = pair[0] === current;
+      const patch = {};
+      patch[key] = pair[0];
+      return Object.assign({ label: pair[1], checked: on ? 'true' : 'false', pick: () => this.setState(patch) }, toggleStyle(on));
+    });
+    const activeTab = tabDefs.filter((d) => d[0] === tab)[0];
+    return {
+      lime: lime,
+      tabs: tabs,
+      chroms: chroms,
+      selectedCount: sel.length,
+      pvals: radio([['0.05', '0.05'], ['0.01', '0.01'], ['0.000005', '5 × 10⁻⁶'], ['0.000001', '1 × 10⁻⁶']], p, 'p'),
+      locs: radio([['upstream', 'Upstream'], ['downstream', 'Downstream'], ['both', 'Both sides']], loc, 'loc'),
+      dists: radio([['50', '0.5 Mb'], ['100', '1 Mb'], ['200', '2 Mb']], dist, 'dist'),
+      showGene: tab === 'closest' || tab === 'range',
+      isTf: tab === 'tf',
+      isRange: tab === 'range',
+      showChroms: tab === 'browse' || tab === 'tf',
+      showP: tab !== 'tf',
+      submitLabel: activeTab[2],
+    };
+  }
+}
+</script>
+</body>
+</html>

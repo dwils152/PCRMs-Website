@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCRMs — 2022 site, modernised</title>
+<link rel="icon" href="logo/favicon.svg" type="image/svg+xml">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap">
+<style>
+body{margin:0;background:#0C5A66}
+*{box-sizing:border-box}
+a{color:#0062CC}a:hover{color:#004A99}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #0C5A66; color: #1D2A30; font-family: 'Hanken Grotesk', system-ui, sans-serif; font-size: 16px; line-height: 1.55">
+  <div style="background: #F4F8F9">
+
+    <header style="background: #FFFFFF; border-bottom: 1px solid #DCE4E7">
+      <div style="max-width: 1200px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 32px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 32px">
+        <div style="display: flex; align-items: center; gap: 16px; padding: 10px 0">
+          <a href="#top" style="display: flex"><img src="logo/pcrms-logo.svg" alt="PCRMs, Predicted cis-Regulatory Modules" style="height: 44px; width: auto"></a>
+          <span aria-hidden="true" style="width: 1px; height: 36px; background: #CBD5D9"></span>
+          <a href="https://www.charlotte.edu/" style="display: flex"><img src="../www/images/UNCC.png" alt="UNC Charlotte" style="height: 36px; width: auto"></a>
+        </div>
+        <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 0 22px; font-size: 15px; font-weight: 600">
+          <a href="#top" aria-current="page" style="display: inline-flex; align-items: center; gap: 7px; padding: 14px 0 11px; color: #1D2A30; text-decoration: none; border-bottom: 3px solid {{blue}}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{blue}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"></path></svg>Home</a>
+          <a href="#browse" style="display: inline-flex; align-items: center; gap: 7px; padding: 14px 0; color: #1D2A30; text-decoration: none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{blue}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"></path></svg>Browse</a>
+          <a href="#analysis" style="display: inline-flex; align-items: center; gap: 7px; padding: 14px 0; color: #1D2A30; text-decoration: none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{blue}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Functional analysis</a>
+          <a href="#genomes" style="display: inline-flex; align-items: center; gap: 7px; padding: 14px 0; color: #1D2A30; text-decoration: none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{blue}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 21h16"></path></svg>Download</a>
+          <a href="https://sulab.charlotte.edu/" style="display: inline-flex; align-items: center; gap: 7px; padding: 14px 0; color: #1D2A30; text-decoration: none"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{blue}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"></path></svg>The Su Lab</a>
+        </nav>
+      </div>
+    </header>
+
+    <section id="top" aria-labelledby="k-title" style="background: {{teal}}; color: #FFFFFF">
+      <div id="browse" style="max-width: 1200px; margin: 0 auto; padding: 40px clamp(16px, 3vw, 32px) 44px; display: flex; flex-wrap: wrap; gap: 32px 48px">
+        <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+          <h1 id="k-title" style="margin: 0; font-size: clamp(30px, 3.4vw, 40px); font-weight: 700; line-height: 1.15">Predicted cis-regulatory modules and their binding sites</h1>
+          <p style="margin: 0; font-size: 17px; color: #E3F2F4">CRMs and transcription factor binding sites predicted from public TF ChIP-seq data for human, mouse, worm, thale cress and fruit fly.</p>
+          <dl style="margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 14px 32px">
+            <div><dt style="font-size: 13px; color: #CDE8EC">Human CRMs (v2)</dt><dd style="margin: 0; font-size: 24px; font-weight: 700">1,426,947</dd></div>
+            <div><dt style="font-size: 13px; color: #CDE8EC">Mouse CRMs (v2)</dt><dd style="margin: 0; font-size: 24px; font-weight: 700">912,197</dd></div>
+            <div><dt style="font-size: 13px; color: #CDE8EC">ChIP-seq datasets</dt><dd style="margin: 0; font-size: 24px; font-weight: 700">20,408</dd></div>
+          </dl>
+        </div>
+
+        <form aria-labelledby="k-browse" style="flex: 1 1 460px; min-width: 0; display: flex; flex-direction: column; gap: 14px; padding: 22px 24px; background: #FFFFFF; color: #1D2A30; border-radius: 8px">
+          <h2 id="k-browse" style="margin: 0; font-size: 19px; font-weight: 700">Browse the database</h2>
+          <div style="display: flex; flex-wrap: wrap; gap: 12px">
+            <div style="flex: 2 1 220px; display: flex; flex-direction: column; gap: 5px">
+              <label for="k-org" style="font-size: 14px; font-weight: 600">Organism</label>
+              <select id="k-org" style="height: 44px; padding: 0 10px; border: 1px solid #B8C6CC; border-radius: 6px; font: inherit; background: #FFFFFF; color: #1D2A30">
+                <option>Homo sapiens (hg38)</option>
+                <option>Mus musculus (mm10)</option>
+                <option>Caenorhabditis elegans (ce10)</option>
+                <option>Arabidopsis thaliana (TAIR10)</option>
+                <option>Drosophila melanogaster (dm3)</option>
+              </select>
+            </div>
+            <div style="flex: 1 1 140px; display: flex; flex-direction: column; gap: 5px">
+              <label for="k-p" style="font-size: 14px; font-weight: 600">P value ≤</label>
+              <select id="k-p" style="height: 44px; padding: 0 10px; border: 1px solid #B8C6CC; border-radius: 6px; font: inherit; background: #FFFFFF; color: #1D2A30">
+                <option>0.05</option>
+                <option>0.01</option>
+                <option>5 × 10⁻⁶</option>
+                <option>1 × 10⁻⁶</option>
+              </select>
+            </div>
+          </div>
+          <div role="group" aria-labelledby="k-chr-label" style="display: flex; flex-direction: column; gap: 6px">
+            <span id="k-chr-label" style="font-size: 14px; font-weight: 600">Chromosomes · {{selectedCount}} selected</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 4px">
+              <sc-for list="{{chroms}}" as="c" hint-placeholder-count="24">
+                <button type="button" aria-pressed="{{c.pressed}}" aria-label="{{c.name}}" onClick="{{c.toggle}}" style="min-width: 40px; height: 36px; padding: 0 6px; border: 1px solid {{c.border}}; border-radius: 6px; background: {{c.bg}}; color: {{c.fg}}; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer">{{c.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+          <div><button type="button" style="min-height: 44px; padding: 0 22px; border: 0; border-radius: 6px; background: {{blue}}; color: #FFFFFF; font: inherit; font-weight: 700; cursor: pointer">Search CRMs</button></div>
+        </form>
+      </div>
+    </section>
+
+    <main style="max-width: 1200px; margin: 0 auto; padding: 48px clamp(16px, 3vw, 32px) 64px; display: flex; flex-wrap: wrap; gap: 40px 48px">
+      <div style="flex: 3 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 40px">
+        <section id="analysis" aria-labelledby="k-analysis">
+          <h2 id="k-analysis" style="margin: 0 0 14px; font-size: 24px; font-weight: 700">Functional analysis</h2>
+          <div style="background: #FFFFFF; border: 1px solid #DCE4E7; border-radius: 8px">
+            <a href="#analysis" style="display: flex; gap: 16px; padding: 18px 20px; border-bottom: 1px solid #E7EDEF; color: #1D2A30; text-decoration: none">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{blue}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>
+              <span style="display: flex; flex-direction: column; gap: 2px"><strong style="font-size: 17px; color: {{blue}}">Closest CRMs to a gene</strong><span style="color: #4B5B62">Enter a gene symbol or ID, e.g. CSTP1 or ENSG00000228476, and a P-value threshold.</span></span>
+            </a>
+            <a href="#analysis" style="display: flex; gap: 16px; padding: 18px 20px; border-bottom: 1px solid #E7EDEF; color: #1D2A30; text-decoration: none">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{blue}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M3 12h18M7 8l-4 4 4 4M17 8l4 4-4 4"></path></svg>
+              <span style="display: flex; flex-direction: column; gap: 2px"><strong style="font-size: 17px; color: {{blue}}">CRMs around a gene</strong><span style="color: #4B5B62">Upstream, downstream or both sides of a gene, within 0.5, 1 or 2 Mb.</span></span>
+            </a>
+            <a href="#analysis" style="display: flex; gap: 16px; padding: 18px 20px; color: #1D2A30; text-decoration: none">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="{{blue}}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M4 7h16M4 12h10M4 17h6"></path></svg>
+              <span style="display: flex; flex-direction: column; gap: 2px"><strong style="font-size: 17px; color: {{blue}}">TF binding sites</strong><span style="color: #4B5B62">Predicted sites for a TF symbol on selected chromosomes, with motif logos.</span></span>
+            </a>
+          </div>
+        </section>
+
+        <section id="genomes" aria-labelledby="k-genomes">
+          <h2 id="k-genomes" style="margin: 0 0 14px; font-size: 24px; font-weight: 700">Genomes and downloads</h2>
+          <div style="overflow-x: auto; background: #FFFFFF; border: 1px solid #DCE4E7; border-radius: 8px">
+            <table style="width: 100%; min-width: 560px; border-collapse: collapse; font-size: 15px">
+              <thead>
+                <tr style="border-bottom: 1px solid #DCE4E7; background: #F7FAFB">
+                  <th scope="col" style="text-align: left; padding: 11px 16px; font-weight: 600">Organism</th>
+                  <th scope="col" style="text-align: left; padding: 11px 16px; font-weight: 600">Assembly</th>
+                  <th scope="col" style="text-align: right; padding: 11px 16px; font-weight: 600">CRMs</th>
+                  <th scope="col" style="text-align: right; padding: 11px 16px; font-weight: 600">TFBSs</th>
+                  <th scope="col" style="text-align: left; padding: 11px 16px; font-weight: 600">Files</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr style="border-bottom: 1px solid #E7EDEF"><th scope="row" style="text-align: left; padding: 11px 16px; font-weight: 400; font-style: italic">Homo sapiens</th><td style="padding: 11px 16px">hg38 · v2</td><td style="padding: 11px 16px; text-align: right">1,426,947</td><td style="padding: 11px 16px; text-align: right">95,717,222</td><td style="padding: 11px 16px"><a href="#genomes">BED</a></td></tr>
+                <tr style="border-bottom: 1px solid #E7EDEF"><th scope="row" style="text-align: left; padding: 11px 16px; font-weight: 400; font-style: italic">Mus musculus</th><td style="padding: 11px 16px">mm10 · v2</td><td style="padding: 11px 16px; text-align: right">912,197</td><td style="padding: 11px 16px; text-align: right">125,113,756</td><td style="padding: 11px 16px"><a href="#genomes">BED</a> · <a href="#genomes">mm39</a></td></tr>
+                <tr style="border-bottom: 1px solid #E7EDEF"><th scope="row" style="text-align: left; padding: 11px 16px; font-weight: 400; font-style: italic">Caenorhabditis elegans</th><td style="padding: 11px 16px">ce10 · v1</td><td style="padding: 11px 16px; text-align: right; color: #6A7A80">—</td><td style="padding: 11px 16px; text-align: right; color: #6A7A80">—</td><td style="padding: 11px 16px"><a href="#genomes">BED</a></td></tr>
+                <tr style="border-bottom: 1px solid #E7EDEF"><th scope="row" style="text-align: left; padding: 11px 16px; font-weight: 400; font-style: italic">Arabidopsis thaliana</th><td style="padding: 11px 16px">TAIR10 · v1</td><td style="padding: 11px 16px; text-align: right; color: #6A7A80">—</td><td style="padding: 11px 16px; text-align: right; color: #6A7A80">—</td><td style="padding: 11px 16px"><a href="#genomes">BED</a></td></tr>
+                <tr><th scope="row" style="text-align: left; padding: 11px 16px; font-weight: 400; font-style: italic">Drosophila melanogaster</th><td style="padding: 11px 16px">dm3 · v1</td><td style="padding: 11px 16px; text-align: right; color: #6A7A80">—</td><td style="padding: 11px 16px; text-align: right; color: #6A7A80">—</td><td style="padding: 11px 16px"><a href="#genomes">BED</a></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+      <aside style="flex: 2 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 24px">
+        <section aria-labelledby="k-news" style="background: #FFFFFF; border: 1px solid #DCE4E7; border-radius: 8px; padding: 20px 22px">
+          <h2 id="k-news" style="margin: 0 0 12px; font-size: 19px; font-weight: 700">News</h2>
+          <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 12px; font-size: 15px">
+            <li><span style="display: block; font-size: 13px; font-weight: 600; color: {{teal}}">06/03/2022</span>Version 2 human and mouse maps released; mouse coordinates also lifted to GRCm39/mm39.</li>
+            <li><span style="display: block; font-size: 13px; font-weight: 600; color: {{teal}}">05/30/2022</span>Expanded version 2 mouse CRM map submitted.</li>
+            <li><span style="display: block; font-size: 13px; font-weight: 600; color: {{teal}}">04/22/2022</span>Database paper published in <em>Database</em>.</li>
+          </ul>
+        </section>
+        <section aria-labelledby="k-cite" style="background: #FFFFFF; border: 1px solid #DCE4E7; border-radius: 8px; padding: 20px 22px">
+          <h2 id="k-cite" style="margin: 0 0 10px; font-size: 19px; font-weight: 700">Cite PCRMs</h2>
+          <p style="margin: 0 0 8px; font-size: 15px">Ni P, Su Z. PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes. <em>Database</em> 2022; baac024.</p>
+          <a href="https://doi.org/10.1093/database/baac024" style="font-size: 15px; font-weight: 600">doi:10.1093/database/baac024</a>
+        </section>
+      </aside>
+    </main>
+  </div>
+
+  <footer style="color: #FFFFFF">
+    <div style="max-width: 1200px; margin: 0 auto; padding: 28px clamp(16px, 3vw, 32px) 36px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 32px; font-size: 14px">
+      <span style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px 24px"><img src="logo/pcrms-logo-reversed.svg" alt="PCRMs, Predicted cis-Regulatory Modules" style="height: 38px; width: auto"><span style="display: flex; align-items: center; gap: 12px"><img src="../www/images/logo-unc-charlotte-transparent.png" alt="UNC Charlotte" style="height: 30px; width: auto">© 2020–2026 The Su Lab, University of North Carolina at Charlotte</span></span>
+      <span style="display: flex; gap: 20px"><a href="https://doi.org/10.1093/nargab/lqab052" style="color: #FFFFFF">dePCRM2 method</a><a href="https://sulab.charlotte.edu/" style="color: #FFFFFF">Su Lab</a></span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"blue":{"editor":"color","default":"#0062CC","options":["#0062CC","#1F3A5F","#005035"]},"teal":{"editor":"color","default":"#117A8B","options":["#117A8B","#0B6E6E","#005035"]},"$preview":{"width":1440,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const blue = this.props.blue ?? '#0062CC';
+    const teal = this.props.teal ?? '#117A8B';
+    const st = this.state || {};
+    const sel = st.sel || ['chr1'];
+    const names = ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY'];
+    const chroms = names.map((name) => {
+      const on = sel.indexOf(name) !== -1;
+      return {
+        name: name,
+        label: name.replace('chr', ''),
+        pressed: on ? 'true' : 'false',
+        bg: on ? blue : '#FFFFFF',
+        fg: on ? '#FFFFFF' : '#1D2A30',
+        border: on ? blue : '#B8C6CC',
+        toggle: () => this.setState({ sel: on ? sel.filter((x) => x !== name) : sel.concat([name]) }),
+      };
+    });
+    return { blue: blue, teal: teal, chroms: chroms, selectedCount: sel.length };
+  }
+}
+</script>
+</body>
+</html>

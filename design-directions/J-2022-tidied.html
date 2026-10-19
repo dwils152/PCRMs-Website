@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCRMs — 2022 site, tidied</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+body{margin:0;background:#FFFFFF}
+*{box-sizing:border-box}
+a{color:#0062CC}a:hover{color:#004A99}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #FFFFFF; color: #212529; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif; font-size: 16px; line-height: 1.5">
+
+  <header style="background: #F8F9FA; border-bottom: 1px solid #DEE2E6">
+    <div style="max-width: 1140px; margin: 0 auto; padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px">
+      <a href="#top" style="display: flex; align-items: center"><img src="../www/images/UNCC.png" alt="UNC Charlotte" style="height: 46px; width: auto"></a>
+      <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 4px; font-size: 17px">
+        <a href="#top" aria-current="page" style="display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 14px; border-radius: 4px; background: {{blue}}; color: #FFFFFF; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"></path></svg>Home</a>
+        <a href="#browse" style="display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 14px; color: {{blue}}; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"></path></svg>Browse Database</a>
+        <a href="#analysis" style="display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 14px; color: {{blue}}; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Functional analysis</a>
+        <a href="#download" style="display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 14px; color: {{blue}}; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 21h16"></path></svg>Download</a>
+        <a href="https://sulab.charlotte.edu/" style="display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 14px; color: {{blue}}; text-decoration: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"></path></svg>The Su Lab</a>
+      </nav>
+    </div>
+  </header>
+
+  <div id="top" style="background: {{teal}}; color: #FFFFFF">
+    <div style="max-width: 1140px; margin: 0 auto; padding: 30px 16px 32px">
+      <h1 style="margin: 0 0 6px; font-size: 32px; font-weight: 500; line-height: 1.2">PCRMs: Predicted cis-Regulatory Modules</h1>
+      <p style="margin: 0; font-size: 18px; color: #E6F4F6">A database of predicted CRMs and their constituent transcription factor binding sites in five genomes</p>
+    </div>
+  </div>
+
+  <main style="max-width: 1140px; margin: 0 auto; padding: 32px 16px 56px; display: flex; flex-direction: column; gap: 40px">
+
+    <div style="display: flex; flex-wrap: wrap; gap: 24px 32px">
+      <section aria-labelledby="j-about" style="flex: 2 1 520px; min-width: 0">
+        <h2 id="j-about" style="margin: 0 0 10px; font-size: 24px; font-weight: 500">About PCRMs</h2>
+        <p style="margin: 0 0 12px">PCRMs contains cis-regulatory modules (CRMs) and their constituent transcription factor binding sites (TFBSs), predicted de novo by integrating available TF ChIP-seq datasets across cell and tissue types with dePCRM2.</p>
+        <h3 style="margin: 20px 0 8px; font-size: 18px; font-weight: 600">News</h3>
+        <ul style="margin: 0; padding-left: 1.25em; display: flex; flex-direction: column; gap: 6px">
+          <li><strong>06/03/2022:</strong> Version 2 human and mouse CRM maps released. Mouse coordinates are also lifted to GRCm39/mm39.</li>
+          <li><strong>05/30/2022:</strong> Expanded version 2 mouse CRM map submitted.</li>
+          <li><strong>04/22/2022:</strong> PCRMs database paper published in <em>Database</em>.</li>
+        </ul>
+      </section>
+      <aside aria-labelledby="j-cite" style="flex: 1 1 300px; min-width: 0; border: 1px solid #DEE2E6; border-radius: 4px; overflow: hidden; align-self: flex-start">
+        <h2 id="j-cite" style="margin: 0; padding: 12px 18px; background: {{blue}}; color: #FFFFFF; font-size: 20px; font-weight: 500">Cite PCRMs</h2>
+        <div style="padding: 16px 18px">
+          <p style="margin: 0 0 10px; font-size: 15px">Ni P, Su Z. PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes. <em>Database</em> 2022; baac024.</p>
+          <a href="https://doi.org/10.1093/database/baac024" style="font-size: 15px">doi:10.1093/database/baac024</a>
+        </div>
+      </aside>
+    </div>
+
+    <section id="browse" aria-labelledby="j-browse" style="display: flex; flex-direction: column; gap: 20px">
+      <h2 id="j-browse" style="margin: 0; font-size: 24px; font-weight: 500">Browse Database</h2>
+      <div style="overflow-x: auto; border: 1px solid #DEE2E6">
+        <table style="width: 100%; min-width: 520px; border-collapse: collapse; font-size: 16px">
+          <thead>
+            <tr style="border-bottom: 2px solid #DEE2E6">
+              <th scope="col" style="text-align: left; padding: 12px 16px">Organisms</th>
+              <th scope="col" style="text-align: left; padding: 12px 16px">Assembly</th>
+              <th scope="col" style="text-align: left; padding: 12px 16px">Number of CRMs</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background: #F2F2F2; border-bottom: 1px solid #DEE2E6"><th scope="row" style="text-align: left; padding: 12px 16px; font-style: italic">Homo sapiens</th><td style="padding: 12px 16px">GRCh38/hg38</td><td style="padding: 12px 16px; font-weight: 600">1,426,947</td></tr>
+            <tr style="border-bottom: 1px solid #DEE2E6"><th scope="row" style="text-align: left; padding: 12px 16px; font-style: italic">Mus musculus</th><td style="padding: 12px 16px">GRCm38/mm10</td><td style="padding: 12px 16px; font-weight: 600">912,197</td></tr>
+            <tr style="background: #F2F2F2; border-bottom: 1px solid #DEE2E6"><th scope="row" style="text-align: left; padding: 12px 16px; font-style: italic">Caenorhabditis elegans</th><td style="padding: 12px 16px">ce10</td><td style="padding: 12px 16px; color: #6C757D">Version 1</td></tr>
+            <tr style="border-bottom: 1px solid #DEE2E6"><th scope="row" style="text-align: left; padding: 12px 16px; font-style: italic">Arabidopsis thaliana</th><td style="padding: 12px 16px">TAIR10</td><td style="padding: 12px 16px; color: #6C757D">Version 1</td></tr>
+            <tr style="background: #F2F2F2"><th scope="row" style="text-align: left; padding: 12px 16px; font-style: italic">Drosophila melanogaster</th><td style="padding: 12px 16px">dm3</td><td style="padding: 12px 16px; color: #6C757D">Version 1</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; gap: 24px; padding: 28px; border: 1px solid #343A40; border-radius: 4px">
+        <form style="flex: 3 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 16px">
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="j-org">Select an organism:</label>
+            <select id="j-org" style="height: 46px; padding: 0 12px; border: 1px solid #CED4DA; border-radius: 4px; font: inherit; background: #FFFFFF; color: #495057">
+              <option>Homo sapiens</option>
+              <option>Mus musculus</option>
+              <option>Caenorhabditis elegans</option>
+              <option>Arabidopsis thaliana</option>
+              <option>Drosophila melanogaster</option>
+            </select>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="j-chr">Select chromosomes:</label>
+            <select id="j-chr" multiple size="5" style="padding: 6px 8px; border: 1px solid #CED4DA; border-radius: 4px; font: inherit; color: #495057">
+              <option selected>chr1</option>
+              <option>chr2</option>
+              <option>chr3</option>
+              <option>chr4</option>
+              <option>chr5</option>
+              <option>chr6</option>
+              <option>chr7</option>
+              <option>chr8</option>
+              <option>chr9</option>
+              <option>chr10</option>
+              <option>chr11</option>
+              <option>chr12</option>
+              <option>chr13</option>
+              <option>chr14</option>
+              <option>chr15</option>
+              <option>chr16</option>
+              <option>chr17</option>
+              <option>chr18</option>
+              <option>chr19</option>
+              <option>chr20</option>
+              <option>chr21</option>
+              <option>chr22</option>
+              <option>chrX</option>
+              <option>chrY</option>
+            </select>
+            <small style="color: #6C757D">Hold Ctrl (Windows) or Command (Mac) to select several.</small>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <label for="j-p">P value threshold:</label>
+            <select id="j-p" style="height: 46px; padding: 0 12px; border: 1px solid #CED4DA; border-radius: 4px; font: inherit; background: #FFFFFF; color: #495057">
+              <option>0.05</option>
+              <option>0.01</option>
+              <option>5E-06</option>
+              <option>1E-06</option>
+            </select>
+          </div>
+          <div><button type="button" style="min-height: 44px; padding: 0 18px; border: 0; border-radius: 4px; background: {{blue}}; color: #FFFFFF; font: inherit; font-size: 17px; cursor: pointer">Search</button></div>
+        </form>
+        <aside aria-labelledby="j-quick" style="flex: 2 1 280px; min-width: 0; border: 1px solid #DEE2E6; border-radius: 4px; overflow: hidden; align-self: flex-start">
+          <h3 id="j-quick" style="margin: 0; padding: 14px 20px; background: {{blue}}; color: #FFFFFF; font-size: 22px; font-weight: 500">Quick Search</h3>
+          <ul style="margin: 0; padding: 20px 20px 22px 2.4em; display: flex; flex-direction: column; gap: 4px">
+            <li>Select an organism</li>
+            <li>Select chromosomes</li>
+            <li>Select a P value</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <section id="analysis" aria-labelledby="j-analysis" style="display: flex; flex-direction: column; gap: 20px">
+      <h2 id="j-analysis" style="margin: 0; font-size: 24px; font-weight: 500">Functional analysis</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 24px">
+        <article style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; border: 1px solid #DEE2E6; border-radius: 4px; overflow: hidden">
+          <h3 style="margin: 0; padding: 14px 20px; background: {{blue}}; color: #FFFFFF; font-size: 20px; font-weight: 500">Search the closest CRMs to a gene</h3>
+          <ul style="margin: 0; padding: 18px 20px 8px 2.4em; flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <li>Select an organism</li>
+            <li>Input the symbol/ID of a gene, e.g. CSTP1 or ENSG00000228476</li>
+            <li>Select a P value threshold of the CRMs</li>
+          </ul>
+          <div style="padding: 12px 20px 20px"><a href="#analysis" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid {{blue}}; border-radius: 4px; text-decoration: none">Open search</a></div>
+        </article>
+        <article style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; border: 1px solid #DEE2E6; border-radius: 4px; overflow: hidden">
+          <h3 style="margin: 0; padding: 14px 20px; background: {{blue}}; color: #FFFFFF; font-size: 20px; font-weight: 500">Search CRMs around a gene</h3>
+          <ul style="margin: 0; padding: 18px 20px 8px 2.4em; flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <li>Select an organism and input a gene</li>
+            <li>Choose upstream, downstream or both</li>
+            <li>Choose a range of 0.5, 1 or 2 Mb</li>
+          </ul>
+          <div style="padding: 12px 20px 20px"><a href="#analysis" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid {{blue}}; border-radius: 4px; text-decoration: none">Open search</a></div>
+        </article>
+        <article style="flex: 1 1 300px; min-width: 0; display: flex; flex-direction: column; border: 1px solid #DEE2E6; border-radius: 4px; overflow: hidden">
+          <h3 style="margin: 0; padding: 14px 20px; background: {{blue}}; color: #FFFFFF; font-size: 20px; font-weight: 500">Search TF binding sites</h3>
+          <ul style="margin: 0; padding: 18px 20px 8px 2.4em; flex: 1; display: flex; flex-direction: column; gap: 4px">
+            <li>Select an organism</li>
+            <li>Input a TF symbol, e.g. RUNX1</li>
+            <li>Select chromosomes</li>
+          </ul>
+          <div style="padding: 12px 20px 20px"><a href="#analysis" style="display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid {{blue}}; border-radius: 4px; text-decoration: none">Open search</a></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="download" aria-labelledby="j-download">
+      <h2 id="j-download" style="margin: 0 0 10px; font-size: 24px; font-weight: 500">Download</h2>
+      <p style="margin: 0">Genome-wide CRM and TFBS coordinates (BED, tar.gz) for all five genomes are on the <a href="#download">Download page</a>.</p>
+    </section>
+  </main>
+
+  <footer style="background: #F8F9FA; border-top: 1px solid #DEE2E6">
+    <div style="max-width: 1140px; margin: 0 auto; padding: 20px 16px 28px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; font-size: 14px; color: #6C757D">
+      <span>© 2020–2026 The Su Lab, University of North Carolina at Charlotte</span>
+      <span><a href="https://doi.org/10.1093/nargab/lqab052">dePCRM2 method paper</a></span>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"blue":{"editor":"color","default":"#0062CC","options":["#0062CC","#1F3A5F","#005035"]},"teal":{"editor":"color","default":"#117A8B","options":["#117A8B","#0B6E6E","#005035"]},"$preview":{"width":1440,"height":2300}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return { blue: this.props.blue ?? '#0062CC', teal: this.props.teal ?? '#117A8B' };
+  }
+}
+</script>
+</body>
+</html>

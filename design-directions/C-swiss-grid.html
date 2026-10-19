@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>PCRMs — Swiss grid direction</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800&amp;display=swap">
+<style>
+body{margin:0;background:#0B0B0C}
+*{box-sizing:border-box}
+a{color:#0B0B0C}a:hover{color:#5A5E66}
+</style>
+</helmet>
+<div style="min-height: 100vh; background: #0B0B0C; color: #0B0B0C; font-family: 'Archivo', 'Helvetica Neue', sans-serif; font-size: 17px; line-height: 1.5; font-variant-numeric: tabular-nums">
+  <div style="background: #FFFFFF">
+
+    <header style="border-bottom: 1px solid #0B0B0C">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 40px); display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 32px">
+        <a href="#top" style="padding: 16px 0; font-size: 20px; font-weight: 800; letter-spacing: -0.01em; text-decoration: none">PCRMs</a>
+        <nav aria-label="Primary" style="display: flex; flex-wrap: wrap; gap: 0 28px; font-size: 15px; font-weight: 500">
+          <a href="#browse" style="padding: 16px 0 13px; text-decoration: none; border-bottom: 3px solid {{accent}}">Browse</a>
+          <a href="#tools" style="padding: 16px 0 13px; text-decoration: none; border-bottom: 3px solid transparent">Analysis</a>
+          <a href="#collection" style="padding: 16px 0 13px; text-decoration: none; border-bottom: 3px solid transparent">Downloads</a>
+          <a href="#cite" style="padding: 16px 0 13px; text-decoration: none; border-bottom: 3px solid transparent">Cite</a>
+          <a href="https://sulab.charlotte.edu/" style="padding: 16px 0 13px; text-decoration: none; border-bottom: 3px solid transparent">Su Lab</a>
+        </nav>
+      </div>
+    </header>
+
+    <section id="top" aria-label="Introduction" style="max-width: 1280px; margin: 0 auto; padding: 56px clamp(16px, 3vw, 40px) 48px; display: flex; flex-wrap: wrap; align-items: flex-end; gap: 32px 40px">
+      <h1 style="flex: 7 1 560px; margin: 0; font-size: clamp(96px, 15vw, 216px); font-weight: 800; line-height: 0.82; letter-spacing: -0.055em">PCRMs</h1>
+      <div style="flex: 5 1 340px; display: flex; flex-direction: column; gap: 20px; padding-bottom: 8px">
+        <p style="margin: 0; font-size: 24px; font-weight: 500; line-height: 1.3; letter-spacing: -0.01em">A database of predicted cis-regulatory modules and their constituent transcription factor binding sites in five genomes.</p>
+        <p style="margin: 0; font-size: 15px; color: #5A5E66">Version 2 maps for human and mouse, released 3 June 2022. Developed by the Su Lab, University of North Carolina at Charlotte.</p>
+      </div>
+    </section>
+
+    <section id="collection" aria-labelledby="c-collection" style="max-width: 1280px; margin: 0 auto; padding: 0 clamp(16px, 3vw, 40px) 88px">
+      <div style="display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px 32px; padding: 14px 0 28px; border-top: 2px solid #0B0B0C">
+        <h2 id="c-collection" style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.02em">The collection</h2>
+        <a href="#collection" style="font-size: 15px; font-weight: 600; color: {{accent}}">All release files</a>
+      </div>
+      <div style="overflow-x: auto">
+        <table style="width: 100%; min-width: 980px; border-collapse: collapse">
+          <thead>
+            <tr style="border-bottom: 1px solid #0B0B0C; font-size: 14px">
+              <th scope="col" style="text-align: left; padding: 0 16px 10px 0; font-weight: 600">Organism</th>
+              <th scope="col" style="text-align: left; padding: 0 16px 10px; font-weight: 600">Assembly</th>
+              <th scope="col" style="text-align: left; padding: 0 16px 10px; font-weight: 600">Release</th>
+              <th scope="col" style="text-align: right; padding: 0 16px 10px; font-weight: 600">CRMs</th>
+              <th scope="col" style="text-align: right; padding: 0 16px 10px; font-weight: 600">TFBSs</th>
+              <th scope="col" style="text-align: right; padding: 0 0 10px 16px; font-weight: 600">Genome coverage</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom: 1px solid #D4D6DA">
+              <th scope="row" style="text-align: left; padding: 18px 16px 18px 0; font-size: 24px; font-weight: 600; font-style: italic; letter-spacing: -0.01em">Homo sapiens</th>
+              <td style="padding: 18px 16px; font-size: 16px">GRCh38/hg38</td>
+              <td style="padding: 18px 16px; font-size: 16px">2</td>
+              <td style="padding: 18px 16px; text-align: right; font-size: 36px; font-weight: 800; letter-spacing: -0.03em">1,426,947</td>
+              <td style="padding: 18px 16px; text-align: right; font-size: 36px; font-weight: 800; letter-spacing: -0.03em">95,717,222</td>
+              <td style="padding: 18px 0 18px 16px; text-align: right; font-size: 36px; font-weight: 800; letter-spacing: -0.03em">85.5%</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #D4D6DA">
+              <th scope="row" style="text-align: left; padding: 18px 16px 18px 0; font-size: 24px; font-weight: 600; font-style: italic; letter-spacing: -0.01em">Mus musculus</th>
+              <td style="padding: 18px 16px; font-size: 16px">GRCm38/mm10</td>
+              <td style="padding: 18px 16px; font-size: 16px">2</td>
+              <td style="padding: 18px 16px; text-align: right; font-size: 36px; font-weight: 800; letter-spacing: -0.03em">912,197</td>
+              <td style="padding: 18px 16px; text-align: right; font-size: 36px; font-weight: 800; letter-spacing: -0.03em">125,113,756</td>
+              <td style="padding: 18px 0 18px 16px; text-align: right; font-size: 36px; font-weight: 800; letter-spacing: -0.03em">77.9%</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #D4D6DA">
+              <th scope="row" style="text-align: left; padding: 14px 16px 14px 0; font-size: 20px; font-weight: 500; font-style: italic">Caenorhabditis elegans</th>
+              <td style="padding: 14px 16px; font-size: 16px">ce10</td>
+              <td style="padding: 14px 16px; font-size: 16px">1</td>
+              <td style="padding: 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+              <td style="padding: 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+              <td style="padding: 14px 0 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+            </tr>
+            <tr style="border-bottom: 1px solid #D4D6DA">
+              <th scope="row" style="text-align: left; padding: 14px 16px 14px 0; font-size: 20px; font-weight: 500; font-style: italic">Arabidopsis thaliana</th>
+              <td style="padding: 14px 16px; font-size: 16px">TAIR10</td>
+              <td style="padding: 14px 16px; font-size: 16px">1</td>
+              <td style="padding: 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+              <td style="padding: 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+              <td style="padding: 14px 0 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+            </tr>
+            <tr>
+              <th scope="row" style="text-align: left; padding: 14px 16px 14px 0; font-size: 20px; font-weight: 500; font-style: italic">Drosophila melanogaster</th>
+              <td style="padding: 14px 16px; font-size: 16px">dm3</td>
+              <td style="padding: 14px 16px; font-size: 16px">1</td>
+              <td style="padding: 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+              <td style="padding: 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+              <td style="padding: 14px 0 14px 16px; text-align: right; font-size: 20px; color: #5A5E66">—</td>
+            </tr>
+          </tbody>
+          <tfoot>
+            <tr style="border-top: 2px solid #0B0B0C">
+              <th scope="row" colspan="3" style="text-align: left; padding: 14px 16px 0 0; font-size: 15px; font-weight: 600">Version 2 total, human and mouse · 20,408 ChIP-seq datasets</th>
+              <td style="padding: 14px 16px 0; text-align: right; font-size: 20px; font-weight: 700">2,339,144</td>
+              <td style="padding: 14px 16px 0; text-align: right; font-size: 20px; font-weight: 700">220,830,978</td>
+              <td style="padding: 14px 0 0 16px"></td>
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+    </section>
+
+    <section id="browse" aria-labelledby="c-browse" style="background: {{accent}}; color: #FFFFFF">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 72px clamp(16px, 3vw, 40px) 80px; display: flex; flex-direction: column; gap: 36px">
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 12px 40px">
+          <h2 id="c-browse" style="margin: 0; font-size: clamp(48px, 6vw, 80px); font-weight: 800; line-height: 0.95; letter-spacing: -0.04em">Browse</h2>
+          <p style="margin: 0; flex: 0 1 460px; font-size: 17px">Pick an organism, chromosomes and a P-value threshold. Results open as a paginated table of CRMs.</p>
+        </div>
+
+        <div role="radiogroup" aria-labelledby="c-org-label" style="display: flex; flex-direction: column; gap: 10px; padding-top: 14px; border-top: 1px solid #FFFFFF">
+          <span id="c-org-label" style="font-size: 14px; font-weight: 600">Organism</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 6px">
+            <sc-for list="{{orgs}}" as="o" hint-placeholder-count="5">
+              <button type="button" role="radio" aria-checked="{{o.checked}}" onClick="{{o.pick}}" style="min-height: 48px; padding: 6px 18px; border: 1.5px solid #FFFFFF; background: {{o.bg}}; color: {{o.fg}}; font: inherit; font-size: 16px; font-weight: 600; text-align: left; cursor: pointer"><span style="display: block; font-style: italic">{{o.name}}</span><span style="display: block; font-size: 13px; font-weight: 500">{{o.assembly}}</span></button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div role="group" aria-labelledby="c-chr-label" style="display: flex; flex-direction: column; gap: 10px; padding-top: 14px; border-top: 1px solid #FFFFFF">
+          <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px">
+            <span id="c-chr-label" style="font-size: 14px; font-weight: 600">Chromosomes · {{selectedCount}} selected</span>
+            <div style="display: flex; gap: 20px">
+              <button type="button" onClick="{{selectAll}}" style="min-height: 32px; padding: 0; border: 0; background: none; color: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; text-decoration: underline; cursor: pointer">Select all</button>
+              <button type="button" onClick="{{clearAll}}" style="min-height: 32px; padding: 0; border: 0; background: none; color: #FFFFFF; font: inherit; font-size: 14px; font-weight: 600; text-decoration: underline; cursor: pointer">Clear</button>
+            </div>
+          </div>
+          <div style="display: flex; flex-wrap: wrap; gap: 4px">
+            <sc-for list="{{chroms}}" as="c" hint-placeholder-count="24">
+              <button type="button" aria-pressed="{{c.pressed}}" aria-label="{{c.name}}" onClick="{{c.toggle}}" style="min-width: 46px; height: 46px; padding: 0 6px; border: 1.5px solid #FFFFFF; background: {{c.bg}}; color: {{c.fg}}; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer">{{c.label}}</button>
+            </sc-for>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 24px; padding-top: 14px; border-top: 1px solid #FFFFFF">
+          <div role="radiogroup" aria-labelledby="c-p-label" style="display: flex; flex-direction: column; gap: 10px">
+            <span id="c-p-label" style="font-size: 14px; font-weight: 600">CRM P value ≤</span>
+            <div style="display: flex; flex-wrap: wrap; gap: 4px">
+              <sc-for list="{{pvals}}" as="p" hint-placeholder-count="4">
+                <button type="button" role="radio" aria-checked="{{p.checked}}" onClick="{{p.pick}}" style="min-width: 96px; height: 46px; padding: 0 14px; border: 1.5px solid #FFFFFF; background: {{p.bg}}; color: {{p.fg}}; font: inherit; font-size: 15px; font-weight: 700; cursor: pointer">{{p.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+          <button type="button" style="display: inline-flex; align-items: center; gap: 12px; height: 56px; padding: 0 28px; border: 0; background: #0B0B0C; color: #FFFFFF; font: inherit; font-size: 17px; font-weight: 700; cursor: pointer">Search CRMs<svg width="20" height="20" viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"></path></svg></button>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools" aria-labelledby="c-tools" style="max-width: 1280px; margin: 0 auto; padding: 88px clamp(16px, 3vw, 40px)">
+      <div style="padding: 14px 0 32px; border-top: 2px solid #0B0B0C">
+        <h2 id="c-tools" style="margin: 0; font-size: 32px; font-weight: 700; letter-spacing: -0.02em">Search by gene or transcription factor</h2>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 40px">
+        <article style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 12px; padding-top: 14px; border-top: 1px solid #0B0B0C">
+          <h3 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em">Closest CRMs to a gene</h3>
+          <p style="margin: 0; color: #33363B">Lists the CRMs whose closest gene is your query. Accepts a gene symbol or stable ID such as RUNX1 or ENSG00000159216.</p>
+          <a href="#tools" style="margin-top: 4px; padding: 10px 0; font-weight: 700; color: {{accent}}">Find closest CRMs</a>
+        </article>
+        <article style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 12px; padding-top: 14px; border-top: 1px solid #0B0B0C">
+          <h3 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em">CRMs around a gene</h3>
+          <p style="margin: 0; color: #33363B">Searches upstream, downstream or both sides within 0.5, 1 or 2 Mb, following the gene’s annotated strand.</p>
+          <a href="#tools" style="margin-top: 4px; padding: 10px 0; font-weight: 700; color: {{accent}}">Search a gene range</a>
+        </article>
+        <article style="flex: 1 1 300px; display: flex; flex-direction: column; gap: 12px; padding-top: 14px; border-top: 1px solid #0B0B0C">
+          <h3 style="margin: 0; font-size: 24px; font-weight: 700; letter-spacing: -0.01em">TF binding sites</h3>
+          <p style="margin: 0; color: #33363B">Finds predicted sites for a TF symbol on selected chromosomes, with motif IDs, sequence logos and the CRM each site belongs to.</p>
+          <a href="#tools" style="margin-top: 4px; padding: 10px 0; font-weight: 700; color: {{accent}}">Search TF sites</a>
+        </article>
+      </div>
+    </section>
+
+    <section aria-label="Releases and citation" style="background: #F1F2F4">
+      <div style="max-width: 1280px; margin: 0 auto; padding: 72px clamp(16px, 3vw, 40px) 88px; display: flex; flex-wrap: wrap; gap: 48px 64px">
+        <div style="flex: 7 1 520px; min-width: 0">
+          <h2 style="margin: 0 0 20px; font-size: 32px; font-weight: 700; letter-spacing: -0.02em">Release history</h2>
+          <dl style="margin: 0; border-top: 2px solid #0B0B0C">
+            <div style="display: flex; flex-wrap: wrap; gap: 4px 32px; padding: 16px 0; border-bottom: 1px solid #C2C5CA">
+              <dt style="width: 140px; font-weight: 700">3 Jun 2022</dt>
+              <dd style="margin: 0; flex: 1 1 320px">Version 2 human and mouse maps released, with mouse coordinates also lifted to GRCm39/mm39.</dd>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 4px 32px; padding: 16px 0; border-bottom: 1px solid #C2C5CA">
+              <dt style="width: 140px; font-weight: 700">30 May 2022</dt>
+              <dd style="margin: 0; flex: 1 1 320px">Expanded version 2 mouse CRM map submitted.</dd>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 4px 32px; padding: 16px 0; border-bottom: 1px solid #C2C5CA">
+              <dt style="width: 140px; font-weight: 700">22 Apr 2022</dt>
+              <dd style="margin: 0; flex: 1 1 320px">PCRMs database paper published in <em>Database</em>, Oxford Academic.</dd>
+            </div>
+          </dl>
+        </div>
+        <div id="cite" style="flex: 5 1 360px; min-width: 0">
+          <h2 style="margin: 0 0 20px; font-size: 32px; font-weight: 700; letter-spacing: -0.02em">Cite</h2>
+          <div style="border-top: 2px solid #0B0B0C; padding-top: 16px; display: flex; flex-direction: column; gap: 12px">
+            <p style="margin: 0; font-size: 19px; line-height: 1.45">Ni P, Su Z. PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes. <em>Database</em> 2022; baac024.</p>
+            <a href="https://doi.org/10.1093/database/baac024" style="padding: 6px 0; font-weight: 700; color: {{accent}}">doi:10.1093/database/baac024</a>
+            <p style="margin: 0; font-size: 15px; color: #5A5E66">Prediction method: dePCRM2, <a href="https://doi.org/10.1093/nargab/lqab052" style="color: #33363B"><em>NAR Genomics and Bioinformatics</em> lqab052</a>.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <footer style="color: #FFFFFF">
+    <div style="max-width: 1280px; margin: 0 auto; padding: 48px clamp(16px, 3vw, 40px) 56px; display: flex; flex-wrap: wrap; gap: 32px 64px">
+      <div style="flex: 2 1 320px; display: flex; flex-direction: column; gap: 10px">
+        <span style="font-size: 40px; font-weight: 800; letter-spacing: -0.04em; line-height: 1">PCRMs</span>
+        <span style="font-size: 15px; color: #A9ADB4">© 2020–2026 The Su Lab, University of North Carolina at Charlotte</span>
+      </div>
+      <nav aria-label="Footer" style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 2px; font-size: 15px">
+        <a href="#browse" style="color: #FFFFFF; padding: 6px 0; text-decoration: none">Browse</a>
+        <a href="#tools" style="color: #FFFFFF; padding: 6px 0; text-decoration: none">Analysis</a>
+        <a href="#collection" style="color: #FFFFFF; padding: 6px 0; text-decoration: none">Downloads</a>
+      </nav>
+      <nav aria-label="Research" style="flex: 1 1 200px; display: flex; flex-direction: column; gap: 2px; font-size: 15px">
+        <a href="https://doi.org/10.1093/database/baac024" style="color: #FFFFFF; padding: 6px 0; text-decoration: none">Database paper</a>
+        <a href="https://doi.org/10.1093/nargab/lqab052" style="color: #FFFFFF; padding: 6px 0; text-decoration: none">Method paper</a>
+        <a href="https://sulab.charlotte.edu/" style="color: #FFFFFF; padding: 6px 0; text-decoration: none">Su Lab</a>
+      </nav>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#D62E1F","options":["#D62E1F","#1E4BD8","#0B7A4B","#0B0B0C"]},"$preview":{"width":1440,"height":3250}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#D62E1F';
+    const st = this.state || {};
+    const genomes = {
+      hs: { name: 'Homo sapiens', assembly: 'GRCh38/hg38', chroms: ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chr21', 'chr22', 'chrX', 'chrY'] },
+      mm: { name: 'Mus musculus', assembly: 'GRCm38/mm10', chroms: ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8', 'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15', 'chr16', 'chr17', 'chr18', 'chr19', 'chrX', 'chrY'] },
+      ce: { name: 'Caenorhabditis elegans', assembly: 'ce10', chroms: ['chr1', 'chr2', 'chr3', 'chr4', 'chr5'] },
+      at: { name: 'Arabidopsis thaliana', assembly: 'TAIR10', chroms: ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chrM', 'chrC'] },
+      dm: { name: 'Drosophila melanogaster', assembly: 'dm3', chroms: ['chr2L', 'chr2LHet', 'chr2R', 'chr2RHet', 'chr3L', 'chr3LHet', 'chr3R', 'chr3RHet', 'chr4', 'chrU', 'chrUextra', 'chrX', 'chrXHet', 'chrYHet', 'chrY', 'chrM'] },
+    };
+    const org = st.org || 'hs';
+    const names = genomes[org].chroms;
+    const sel = (st.sel || ['chr1', 'chr2']).filter((c) => names.indexOf(c) !== -1);
+    const p = st.p || '0.05';
+    const orgs = ['hs', 'mm', 'ce', 'at', 'dm'].map((key) => {
+      const on = key === org;
+      return {
+        name: genomes[key].name,
+        assembly: genomes[key].assembly,
+        checked: on ? 'true' : 'false',
+        bg: on ? '#FFFFFF' : 'transparent',
+        fg: on ? accent : '#FFFFFF',
+        pick: () => this.setState({ org: key, sel: [genomes[key].chroms[0]] }),
+      };
+    });
+    const chroms = names.map((name) => {
+      const on = sel.indexOf(name) !== -1;
+      return {
+        name: name,
+        label: name.replace('chr', ''),
+        pressed: on ? 'true' : 'false',
+        bg: on ? '#FFFFFF' : 'transparent',
+        fg: on ? accent : '#FFFFFF',
+        toggle: () => this.setState({ sel: on ? sel.filter((x) => x !== name) : sel.concat([name]) }),
+      };
+    });
+    const pvals = [['0.05', '0.05'], ['0.01', '0.01'], ['0.000005', '5 × 10⁻⁶'], ['0.000001', '1 × 10⁻⁶']].map((pair) => {
+      const on = p === pair[0];
+      return {
+        label: pair[1],
+        checked: on ? 'true' : 'false',
+        bg: on ? '#FFFFFF' : 'transparent',
+        fg: on ? accent : '#FFFFFF',
+        pick: () => this.setState({ p: pair[0] }),
+      };
+    });
+    return {
+      accent: accent,
+      orgs: orgs,
+      chroms: chroms,
+      pvals: pvals,
+      selectedCount: sel.length,
+      selectAll: () => this.setState({ sel: names.slice() }),
+      clearAll: () => this.setState({ sel: [] }),
+    };
+  }
+}
+</script>
+</body>
+</html>
