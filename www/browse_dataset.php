@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/forms.php';
+require_once dirname(__DIR__) . '/includes/forms.php';
 
 // Prefill from an "Edit search" link: ?genome_id=1&chr=chr1,chr2&p_value=0.05
 $genomeId = 1;

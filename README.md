@@ -40,7 +40,7 @@ After configuring the database:
 php -S 127.0.0.1:8000 -t www
 ```
 
-Open `http://127.0.0.1:8000/`. The home, browse, functional analysis and download pages render without the database; results pages show a "temporarily unavailable" page (HTTP 503) when it cannot be reached.
+Open `http://127.0.0.1:8000/`. PHP errors are hidden from the page; run with `PCRMS_DEBUG=1 php -S …` to see them while developing. The home, browse, functional analysis and download pages render without the database; results pages show a "temporarily unavailable" page (HTTP 503) when it cannot be reached.
 
 ## Structure
 
@@ -53,18 +53,26 @@ Open `http://127.0.0.1:8000/`. The home, browse, functional analysis and downloa
 - `www/server_side_process.php`, `www/server_side_tf.php` — JSON pages of the large result tables
 - `www/export.php` — CSV export of browse and TF results (up to 250,000 rows)
 - `www/404.php` — not-found page (`www/.htaccess` points Apache at it)
-- `www/includes/layout.php` — page head, header and footer; `partials/` holds the header and footer markup
-- `www/includes/catalog.php` — genomes, UCSC assemblies, validation and message pages
-- `www/includes/forms.php`, `results.php`, `queries.php` — shared form pieces, results tables and SQL
-- `www/includes/releases.php`, `publications.php` — download manifest, citation and related papers
-- `www/includes/svg/` — inline organism silhouettes and pipeline figures
 - `www/css/modern.css` — all styles; `www/js/` — small scripts (menu, forms, results tables)
-- `tracker/` — optional visitor logging, outside the web root
+
+Code that pages include lives outside the web root, so it cannot be requested directly:
+
+- `includes/bootstrap.php` — security headers, error display and session cookie settings
+- `includes/connection.php` — database connection and the 15-second statement timeout
+- `includes/layout.php` — page head, header and footer; `includes/partials/` holds their markup
+- `includes/catalog.php` — genomes, UCSC assemblies, validation and message pages
+- `includes/forms.php`, `results.php`, `queries.php` — shared form pieces, results tables and SQL
+- `includes/releases.php`, `publications.php` — download manifest, citation and related papers
+- `includes/svg/` — inline organism silhouettes and pipeline figures
+- `tracker/` — optional visitor logging
+- `database/grants.sql` — read-only grants for the website's database account
 
 Results tables keep their state in the address (`page`, `size`, `sort`, `dir`, `search`), so paging,
 sorting and filtering work without JavaScript; the scripts redraw the table in place when it is available.
 CRM IDs and binding sites link to the UCSC Genome Browser (hg38, mm10, dm3, ce10, and TAIR10 through
 the GenArk assembly `GCF_000001735.3`).
+
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) before putting the site online.
 
 ## Security note
 

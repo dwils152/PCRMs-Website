@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/includes/results.php';
+require_once dirname(__DIR__) . '/includes/results.php';
 
 try {
     if (!isset($_GET['crmId'], $_GET['genome_id'])) {
@@ -13,7 +13,7 @@ try {
 }
 
 try {
-    require_once __DIR__ . '/connection.php';
+    require_once dirname(__DIR__) . '/includes/connection.php';
     $crm = pcrms_execute_statement(
         $mysqli,
         'SELECT c.crmID, c.Chromosome, c.Start_Pos, c.End_Pos, c.Score, c.P_value, g.Genes_Symbol

@@ -1,2 +1,13 @@
-# Apache: used when this directory is the document root (see README).
+# Apache settings for when this directory is the document root (see README).
+# Security headers are sent by includes/bootstrap.php; HTTPS and HSTS belong
+# in the server configuration.
+
 ErrorDocument 404 /404.php
+
+# No directory listings (data/, motifs_version/ and so on).
+Options -Indexes
+
+# Never serve dotfiles such as this one.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>

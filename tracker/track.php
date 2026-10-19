@@ -4,7 +4,7 @@
 // www/index.php only when PCRMS_ENABLE_VISITOR_TRACKING is set; kept outside
 // the web root so it cannot be requested directly.
 
-require_once dirname(__DIR__) . '/www/connection.php';
+require_once dirname(__DIR__) . '/includes/connection.php';
 
 $trackerAutoload = __DIR__ . '/vendor/autoload.php';
 if (is_file($trackerAutoload)) {

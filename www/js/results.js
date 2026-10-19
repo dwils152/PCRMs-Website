@@ -347,7 +347,9 @@
             .then(function (response) {
                 return response.json().then(function (body) {
                     if (!response.ok || body.error) {
-                        throw new Error(body.error || 'Request failed');
+                        var error = new Error(body.error || 'Request failed');
+                        error.fromServer = Boolean(body.error);
+                        throw error;
                     }
                     return body;
                 });
@@ -357,8 +359,11 @@
                     render(body);
                 }
             })
-            .catch(function () {
+            .catch(function (error) {
                 if (request === latest) {
+                    errorBox.querySelector('p').textContent = error.fromServer
+                        ? error.message
+                        : 'The table could not be updated. Check your connection and try again.';
                     errorBox.hidden = false;
                 }
             })

@@ -157,7 +157,7 @@ if (!function_exists('pcrms_csv_cell')) {
     function pcrms_csv_cell($value, $isText = false)
     {
         $value = (string) $value;
-        if ($isText && $value !== '' && strpbrk($value[0], '=+-@') !== false) {
+        if ($isText && $value !== '' && strpbrk($value[0], "=+-@\t\r") !== false) {
             $value = "'" . $value;
         }
         if (strpbrk($value, "\",\r\n") !== false) {

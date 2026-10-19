@@ -3,8 +3,8 @@
 // Streams the rows of a browse or TF search as CSV.
 // export.php?type=browse|tf&query=<token>[&search=<filter text>]
 
-session_start();
-require_once __DIR__ . '/includes/queries.php';
+require_once dirname(__DIR__) . '/includes/queries.php';
+pcrms_session_start();
 
 try {
     $type = isset($_GET['type']) && in_array($_GET['type'], ['browse', 'tf'], true) ? $_GET['type'] : null;
@@ -19,7 +19,9 @@ try {
 session_write_close();
 
 try {
-    require_once __DIR__ . '/connection.php';
+    require_once dirname(__DIR__) . '/includes/connection.php';
+    // Streaming a large file takes longer than a page of results.
+    pcrms_statement_timeout($mysqli, 120);
 
     if ($type === 'browse') {
         list($where, $types, $values) = pcrms_browse_where($query, $search);

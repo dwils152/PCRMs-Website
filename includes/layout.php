@@ -18,7 +18,7 @@ if (!function_exists('pcrms_asset')) {
     // Adds a version stamp so browsers reload changed CSS and JavaScript.
     function pcrms_asset($path)
     {
-        $file = dirname(__DIR__) . '/' . $path;
+        $file = dirname(__DIR__) . '/www/' . $path;
         return pcrms_url($path) . (is_file($file) ? '?v=' . filemtime($file) : '');
     }
 }
@@ -69,7 +69,7 @@ if (!function_exists('pcrms_page_start')) {
 </head>
 <body>
 <?php
-        require dirname(__DIR__) . '/partials/site_header.php';
+        require __DIR__ . '/partials/site_header.php';
     }
 }
 
@@ -77,7 +77,7 @@ if (!function_exists('pcrms_page_end')) {
     // Closes a page: site footer and scripts (paths relative to www/).
     function pcrms_page_end($scripts = [])
     {
-        require dirname(__DIR__) . '/partials/site_footer.php';
+        require __DIR__ . '/partials/site_footer.php';
         echo '<script src="' . pcrms_h(pcrms_asset('js/site.js')) . '" defer></script>' . "\n";
         foreach ($scripts as $script) {
             echo '<script src="' . pcrms_h(pcrms_asset($script)) . '" defer></script>' . "\n";

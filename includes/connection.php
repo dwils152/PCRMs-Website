@@ -68,5 +68,24 @@ try {
     throw new RuntimeException('The PCRMs database is temporarily unavailable.');
 }
 
+if (!function_exists('pcrms_statement_timeout')) {
+    // Stops any single query after $seconds so one expensive search cannot tie
+    // up the server. MySQL 5.7.8+ limits SELECTs in milliseconds; MariaDB 10.1+
+    // limits all statements in seconds. Older servers keep their default.
+    function pcrms_statement_timeout($connection, $seconds)
+    {
+        $isMariaDb = stripos($connection->server_info, 'MariaDB') !== false;
+        try {
+            $connection->query($isMariaDb
+                ? 'SET SESSION max_statement_time = ' . (int) $seconds
+                : 'SET SESSION max_execution_time = ' . ((int) $seconds * 1000));
+        } catch (mysqli_sql_exception $exception) {
+            error_log('PCRMs could not set a statement timeout: ' . $exception->getMessage());
+        }
+    }
+}
+
+pcrms_statement_timeout($connection, 15);
+
 // Backward-compatible connection alias used by the query pages.
 $mysqli = $connection;

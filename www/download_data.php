@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/includes/layout.php';
-require_once __DIR__ . '/includes/releases.php';
-require_once __DIR__ . '/includes/publications.php';
+require_once dirname(__DIR__) . '/includes/layout.php';
+require_once dirname(__DIR__) . '/includes/releases.php';
+require_once dirname(__DIR__) . '/includes/publications.php';
 
 if (!function_exists('pcrms_file_size')) {
     function pcrms_file_size($bytes)

@@ -1,7 +1,7 @@
 <?php
 
 // Binding sites now sit on the CRM page; keep old links working.
-require_once __DIR__ . '/includes/catalog.php';
+require_once dirname(__DIR__) . '/includes/catalog.php';
 
 try {
     if (!isset($_GET['crmId'], $_GET['genome_id'])) {

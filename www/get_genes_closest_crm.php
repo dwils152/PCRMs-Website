@@ -1,6 +1,6 @@
 <?php
-session_start();
-require_once __DIR__ . '/includes/results.php';
+require_once dirname(__DIR__) . '/includes/results.php';
+pcrms_session_start();
 
 try {
     if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -31,7 +31,7 @@ try {
 session_write_close();
 
 try {
-    require_once __DIR__ . '/connection.php';
+    require_once dirname(__DIR__) . '/includes/connection.php';
     $gene = pcrms_execute_statement(
         $mysqli,
         'SELECT geneID FROM genes WHERE Genome = ? AND (geneID = ? OR Symbol = ?) LIMIT 1',

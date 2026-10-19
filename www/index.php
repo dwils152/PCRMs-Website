@@ -1,7 +1,7 @@
 <?php
-require_once __DIR__ . '/includes/layout.php';
-require_once __DIR__ . '/includes/releases.php';
-require_once __DIR__ . '/includes/publications.php';
+require_once dirname(__DIR__) . '/includes/layout.php';
+require_once dirname(__DIR__) . '/includes/releases.php';
+require_once dirname(__DIR__) . '/includes/publications.php';
 
 // Optional visitor logging; off unless the deployment opts in.
 if (filter_var(getenv('PCRMS_ENABLE_VISITOR_TRACKING'), FILTER_VALIDATE_BOOLEAN)) {

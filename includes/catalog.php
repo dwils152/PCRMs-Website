@@ -1,5 +1,7 @@
 <?php
 
+require_once __DIR__ . '/bootstrap.php';
+
 // Genomes, keyed by the database genome ID. 'ucsc' maps each genome to the
 // UCSC Genome Browser assembly PCRMs uses; 'chromosomes' there lists only the
 // names that differ from the PCRMs database (ce10 uses roman numerals and the
@@ -262,7 +264,8 @@ if (!function_exists('pcrms_message_page')) {
         echo '<p>' . pcrms_h($message) . '</p><div class="button-row">';
         foreach ($actions as $index => $action) {
             $class = $index === 0 ? 'btn btn-primary' : 'btn btn-outline';
-            echo '<a class="' . $class . '" href="' . pcrms_h(pcrms_url($action[1])) . '">' . pcrms_h($action[0]) . '</a>';
+            $href = substr($action[1], 0, 1) === '/' ? $action[1] : pcrms_url($action[1]);
+            echo '<a class="' . $class . '" href="' . pcrms_h($href) . '">' . pcrms_h($action[0]) . '</a>';
         }
         echo '</div></section></div></main>';
         pcrms_page_end();
@@ -280,12 +283,28 @@ if (!function_exists('pcrms_invalid_request')) {
     }
 }
 
+if (!function_exists('pcrms_is_timeout')) {
+    // True when a query was stopped by the statement timeout (connection.php).
+    function pcrms_is_timeout($exception)
+    {
+        // 3024: MySQL max_execution_time; 1969: MariaDB max_statement_time.
+        return $exception instanceof mysqli_sql_exception && in_array($exception->getCode(), [3024, 1969], true);
+    }
+}
+
 if (!function_exists('pcrms_service_unavailable')) {
     // Shown when the database cannot be reached or a query fails.
     function pcrms_service_unavailable($exception = null)
     {
         if ($exception instanceof Throwable) {
             error_log('PCRMs page failed: ' . $exception->getMessage());
+        }
+        if (pcrms_is_timeout($exception)) {
+            pcrms_message_page(503, 'Search took too long', 'That search took too long',
+                'It matches too many records to show here. Try fewer chromosomes or a stricter p-value cutoff, or download the genome-wide files instead.', [
+                    ['Go to downloads', 'download_data.php'],
+                    ['Browse the CRM maps', 'browse_dataset.php'],
+                ]);
         }
         if (!headers_sent()) {
             header('Retry-After: 300');
@@ -405,7 +424,7 @@ if (!function_exists('pcrms_motif_path')) {
         }
 
         $relativePath = 'motifs_version/' . $genomeId . '/' . $motifId . '.png';
-        return is_file(dirname(__DIR__) . '/' . $relativePath) ? $relativePath : null;
+        return is_file(dirname(__DIR__) . '/www/' . $relativePath) ? $relativePath : null;
     }
 }
 

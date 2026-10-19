@@ -1,7 +1,7 @@
 <?php
-session_start();
-require_once __DIR__ . '/includes/forms.php';
-require_once __DIR__ . '/includes/results.php';
+require_once dirname(__DIR__) . '/includes/forms.php';
+require_once dirname(__DIR__) . '/includes/results.php';
+pcrms_session_start();
 
 try {
     if (isset($_SERVER['REQUEST_METHOD']) && $_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -28,7 +28,7 @@ try {
 session_write_close();
 
 try {
-    require_once __DIR__ . '/connection.php';
+    require_once dirname(__DIR__) . '/includes/connection.php';
     $result = pcrms_fetch_browse($mysqli, $query, $state);
 } catch (Throwable $exception) {
     pcrms_service_unavailable($exception);
