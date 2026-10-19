@@ -1,205 +1,122 @@
 <?php
-$visitorCount = null;
+require_once __DIR__ . '/includes/layout.php';
 require_once __DIR__ . '/includes/releases.php';
+require_once __DIR__ . '/includes/publications.php';
 
-try {
-    require_once __DIR__ . '/connection.php';
-    $trackingEnabled = filter_var(getenv('PCRMS_ENABLE_VISITOR_TRACKING'), FILTER_VALIDATE_BOOLEAN);
-    if ($trackingEnabled) {
-        require_once __DIR__ . '/tracker.php';
+// Optional visitor logging; off unless the deployment opts in.
+if (filter_var(getenv('PCRMS_ENABLE_VISITOR_TRACKING'), FILTER_VALIDATE_BOOLEAN)) {
+    try {
+        require_once dirname(__DIR__) . '/tracker/track.php';
+    } catch (Throwable $exception) {
+        error_log('PCRMs visitor tracking unavailable: ' . $exception->getMessage());
     }
-    $visitorResult = mysqli_query($connection, 'SELECT COUNT(*) FROM visitors');
-    if ($visitorResult) {
-        $visitorRow = mysqli_fetch_row($visitorResult);
-        $visitorCount = isset($visitorRow[0]) ? (int) $visitorRow[0] : null;
-    }
-} catch (Throwable $exception) {
-    error_log('PCRMs visitor tracking unavailable: ' . $exception->getMessage());
 }
+
+$steps = [
+    ['A', 'Extend binding peaks', 'Each TF ChIP-seq binding peak in every dataset is extended at both ends to 1,000 bp, so nearby sites of cooperating TFs are included.'],
+    ['B', 'Find motifs', 'ProSampler finds the motifs in each dataset; each shape is a different motif.'],
+    ['C', 'Find co-occurring pairs', 'Pairs of motifs that repeatedly occur together in the same peaks are identified in each dataset.'],
+    ['D', 'Merge into unique motifs', 'Similar motifs from different datasets are clustered into unique motifs (UMs), each likely bound by one TF or TF family.'],
+    ['E', 'Build interaction networks', 'Unique motifs that tend to co-occur are connected, giving a network of cooperating TFs.'],
+    ['F', 'Link adjacent binding sites', 'Binding sites are mapped back to the genome and neighbouring sites are linked into CRM candidates (CRMCs).'],
+    ['G', 'Score and filter', 'Each candidate gets an S<sub>CRM</sub> score and p-value. Candidates that pass the p-value cutoff are the predicted CRMs in PCRMs.'],
+];
+// Steps whose card is followed by an arrow to the next card in the same row.
+$stepsWithArrow = ['A', 'B', 'C', 'E', 'F', 'G'];
+
+pcrms_page_start([
+    'title' => null,
+    'description' => 'PCRMs is a database of cis-regulatory modules and transcription factor binding sites predicted from TF ChIP-seq data for human, mouse, fruit fly, worm and thale cress.',
+    'active' => 'home',
+]);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="PCRMs is a database of predicted cis-regulatory modules and transcription factor binding sites across human and model-organism genomes.">
-    <title>PCRMs — Predicted cis-Regulatory Modules</title>
-    <link rel="icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="css/modern.css">
-</head>
-<body class="d-flex flex-column min-vh-100">
-    <?php include __DIR__ . '/home_header.php'; ?>
-
-    <main class="site-main" id="main-content">
-        <section class="home-hero">
-            <div class="home-hero__inner shell">
-                <div class="home-hero__copy">
-                    <p class="release-pill">Human and mouse maps · Version 2</p>
-                    <p class="eyebrow">Open regulatory genomics resource</p>
-                    <h1 class="display-title">Mapping the genome’s regulatory landscape.</h1>
-                    <p class="lede">Explore de novo predictions of cis-regulatory modules (CRMs) and their constituent transcription factor binding sites across human and model-organism genomes.</p>
-                    <div class="button-row">
-                        <a class="button button--accent" href="browse_dataset.php">
-                            Browse the database
-                            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                        </a>
-                        <a class="button button--secondary" href="detailed_search.php">Open analysis tools</a>
-                    </div>
-                </div>
-
-                <figure class="genome-map" aria-labelledby="genome-map-caption">
-                    <figcaption class="sr-only" id="genome-map-caption">Abstract view of predicted regulatory regions distributed across five chromosomes.</figcaption>
-                    <div class="genome-map__top">
-                        <span>Genome overview</span>
-                        <span class="genome-map__status">Prediction map</span>
-                    </div>
-                    <div class="genome-track">
-                        <span class="genome-track__label">chr01</span>
-                        <span class="genome-track__line">
-                            <i class="genome-track__segment" style="left: 4%; width: 18%"></i>
-                            <i class="genome-track__segment genome-track__segment--muted" style="left: 30%; width: 10%"></i>
-                            <i class="genome-track__segment" style="left: 48%; width: 26%"></i>
-                            <i class="genome-track__segment genome-track__segment--muted" style="left: 80%; width: 14%"></i>
+<main id="main-content">
+    <section class="band home-band" aria-labelledby="page-title">
+        <div class="band__inner shell">
+            <h1 id="page-title">Predicted cis-regulatory modules and their binding sites</h1>
+            <p class="band__lede">CRMs and transcription factor binding sites predicted from public TF ChIP-seq data for human, mouse, fruit fly, worm and thale cress.</p>
+            <ul class="genome-stats" aria-label="Predicted CRMs per genome">
+                <?php foreach ($PCRMS_RELEASES as $release): ?>
+                    <?php $genome = $PCRMS_GENOMES[$release['genome_id']]; ?>
+                    <li class="genome-stat">
+                        <span class="genome-stat__icon"><?php echo pcrms_svg('organisms/' . $genome['key']); ?></span>
+                        <span>
+                            <span class="genome-stat__label"><?php echo $genome['version'] === 2 ? pcrms_h($genome['common']) : '<em>' . pcrms_h($genome['short']) . '</em>'; ?> CRMs (v<?php echo (int) $release['version']; ?>)</span>
+                            <?php if ($release['crm_count'] !== null): ?>
+                                <span class="genome-stat__value"><?php echo number_format($release['crm_count']); ?></span>
+                            <?php else: ?>
+                                <span class="genome-stat__value genome-stat__value--soft"><?php echo pcrms_h($genome['assembly_short']); ?> map</span>
+                            <?php endif; ?>
                         </span>
-                    </div>
-                    <div class="genome-track">
-                        <span class="genome-track__label">chr02</span>
-                        <span class="genome-track__line">
-                            <i class="genome-track__segment genome-track__segment--muted" style="left: 2%; width: 12%"></i>
-                            <i class="genome-track__segment" style="left: 22%; width: 28%"></i>
-                            <i class="genome-track__segment genome-track__segment--muted" style="left: 59%; width: 17%"></i>
-                            <i class="genome-track__segment" style="left: 85%; width: 10%"></i>
-                        </span>
-                    </div>
-                    <div class="genome-track">
-                        <span class="genome-track__label">chr03</span>
-                        <span class="genome-track__line">
-                            <i class="genome-track__segment" style="left: 8%; width: 24%"></i>
-                            <i class="genome-track__segment genome-track__segment--muted" style="left: 39%; width: 8%"></i>
-                            <i class="genome-track__segment" style="left: 55%; width: 35%"></i>
-                        </span>
-                    </div>
-                    <div class="genome-track">
-                        <span class="genome-track__label">chr04</span>
-                        <span class="genome-track__line">
-                            <i class="genome-track__segment genome-track__segment--muted" style="left: 3%; width: 21%"></i>
-                            <i class="genome-track__segment" style="left: 34%; width: 14%"></i>
-                            <i class="genome-track__segment" style="left: 63%; width: 29%"></i>
-                        </span>
-                    </div>
-                    <div class="genome-track">
-                        <span class="genome-track__label">chr05</span>
-                        <span class="genome-track__line">
-                            <i class="genome-track__segment" style="left: 1%; width: 10%"></i>
-                            <i class="genome-track__segment genome-track__segment--muted" style="left: 19%; width: 26%"></i>
-                            <i class="genome-track__segment" style="left: 52%; width: 15%"></i>
-                            <i class="genome-track__segment genome-track__segment--muted" style="left: 74%; width: 20%"></i>
-                        </span>
-                    </div>
-                    <div class="genome-map__legend" aria-hidden="true">
-                        <span><i></i> CRM region</span>
-                        <span><i></i> TFBS cluster</span>
-                    </div>
-                </figure>
-            </div>
-        </section>
-
-        <div class="stats-strip shell" role="list" aria-label="Database highlights">
-            <div class="stat" role="listitem"><strong>5</strong><span>Reference genomes</span></div>
-            <div class="stat" role="listitem"><strong><?php echo number_format($PCRMS_FEATURED_TOTALS['crm_count'] / 1000000, 1); ?>M+</strong><span>Human + mouse CRMs</span></div>
-            <div class="stat" role="listitem"><strong><?php echo floor($PCRMS_FEATURED_TOTALS['tfbs_count'] / 1000000); ?>M+</strong><span>TFBS predictions</span></div>
-            <div class="stat" role="listitem"><strong><?php echo number_format($PCRMS_FEATURED_TOTALS['chip_seq_count']); ?></strong><span>ChIP-seq datasets</span></div>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
         </div>
+    </section>
 
-        <section class="section" aria-labelledby="explore-title">
-            <div class="shell">
-                <div class="section-heading">
-                    <div class="section-heading__copy">
-                        <p class="eyebrow">Start exploring</p>
-                        <h2 class="section-title" id="explore-title">From sequence to regulatory context</h2>
-                        <p class="lede">Move from broad genome maps to the regulatory evidence around a gene or transcription factor.</p>
+    <section class="how" aria-labelledby="how-title">
+        <div class="how__inner shell">
+            <div class="how__head">
+                <div class="how__title-row">
+                    <h2 id="how-title">How the predictions are made</h2>
+                    <a class="pill-link" href="https://github.com/zhengchangsulab/pcrm2">
+                        <svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z"/></svg>
+                        dePCRM2 on GitHub
+                    </a>
+                </div>
+                <p>PCRMs uses dePCRM2, which predicts CRMs from transcription factor (TF) ChIP-seq data alone, with no histone marks or other epigenetic data. It finds TF motifs that repeatedly occur together across thousands of TF ChIP-seq datasets and links their binding sites into cis-regulatory modules.</p>
+            </div>
+
+            <ol class="flow">
+                <?php foreach ($steps as $step): ?>
+                    <li class="flow-step">
+                        <div class="flow-step__head">
+                            <span class="flow-step__letter" aria-hidden="true"><?php echo $step[0]; ?></span>
+                            <h3><span class="sr-only">Step <?php echo $step[0]; ?>: </span><?php echo pcrms_h($step[1]); ?></h3>
+                        </div>
+                        <div class="flow-step__art"><?php echo pcrms_svg('pipeline/' . strtolower($step[0])); ?></div>
+                        <p><?php echo $step[2]; ?></p>
+                        <?php if (in_array($step[0], $stepsWithArrow, true)): ?>
+                            <span class="flow-step__arrow" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M7 4l6 6-6 6"/></svg></span>
+                        <?php endif; ?>
+                    </li>
+                <?php endforeach; ?>
+                <li class="flow-result">
+                    <div>
+                        <h3><span class="flow-result__check" aria-hidden="true"><svg viewBox="0 0 20 20"><path d="M4.5 10.5l3.6 3.6 7.4-8"/></svg></span>Result: predicted CRMs</h3>
+                        <p>The CRMs that pass the cutoff, with their binding sites, make up the maps in PCRMs.</p>
                     </div>
-                </div>
+                    <a class="btn" href="browse_dataset.php">Browse the CRM maps
+                        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11m-4-4 4 4-4 4"/></svg></a>
+                </li>
+            </ol>
+        </div>
+    </section>
 
-                <div class="task-grid">
-                    <a class="task-card" href="browse_dataset.php">
-                        <span class="task-card__number">01</span>
-                        <h3>Browse CRM maps</h3>
-                        <p>Filter predicted modules by organism, chromosome, and significance threshold.</p>
-                        <span class="task-card__arrow" aria-hidden="true">→</span>
-                    </a>
-                    <a class="task-card" href="DS_get_genes_closest_crm.php">
-                        <span class="task-card__number">02</span>
-                        <h3>Search by gene</h3>
-                        <p>Find the predicted CRM closest to a gene symbol or stable identifier.</p>
-                        <span class="task-card__arrow" aria-hidden="true">→</span>
-                    </a>
-                    <a class="task-card" href="DS_get_tf.php">
-                        <span class="task-card__number">03</span>
-                        <h3>Search by TF</h3>
-                        <p>Locate predicted binding sites associated with a transcription factor.</p>
-                        <span class="task-card__arrow" aria-hidden="true">→</span>
-                    </a>
-                    <a class="task-card" href="download_data.php">
-                        <span class="task-card__number">04</span>
-                        <h3>Download releases</h3>
-                        <p>Access genome-wide CRM and TFBS coordinate files for downstream analysis.</p>
-                        <span class="task-card__arrow" aria-hidden="true">→</span>
-                    </a>
-                </div>
-            </div>
+    <div class="home-refs shell">
+        <section class="cite-box" aria-labelledby="cite-title">
+            <h2 id="cite-title">Cite PCRMs</h2>
+            <p><?php echo pcrms_h($PCRMS_CITATION['text']); ?> <em><?php echo pcrms_h($PCRMS_CITATION['venue']); ?></em> <?php echo pcrms_h($PCRMS_CITATION['details']); ?>
+                <a href="https://doi.org/<?php echo pcrms_h($PCRMS_CITATION['doi']); ?>">doi:<?php echo pcrms_h($PCRMS_CITATION['doi']); ?></a></p>
         </section>
 
-        <section class="section section--surface" aria-labelledby="updates-title">
-            <div class="shell updates-layout">
-                <div>
-                    <p class="eyebrow">Release history</p>
-                    <h2 class="section-title" id="updates-title">What’s in the current collection</h2>
-                    <p class="lede">Version 2 expanded the human and mouse maps with substantially more public TF ChIP-seq evidence.</p>
-                    <a class="text-link" href="download_data.php">View all downloadable releases <span aria-hidden="true">→</span></a>
-                </div>
-
-                <ol class="update-list">
-                    <li class="update-item">
-                        <time datetime="2022-06-03">03 Jun 2022</time>
-                        <div>
-                            <h3>Version 2 human and mouse regulatory maps released</h3>
-                            <p>The updated collection includes <?php echo number_format($PCRMS_RELEASES[0]['crm_count']); ?> human CRMs and <?php echo number_format($PCRMS_RELEASES[1]['crm_count']); ?> mouse CRMs, with mouse coordinates also lifted to GRCm39/mm39.</p>
-                        </div>
+        <section class="related" aria-labelledby="related-title">
+            <h2 id="related-title">Check out our related work</h2>
+            <ul class="related-list" id="related-list" data-visible="<?php echo PCRMS_RELATED_VISIBLE; ?>">
+                <?php foreach ($PCRMS_RELATED_WORK as $paper): ?>
+                    <li>
+                        <a href="https://doi.org/<?php echo pcrms_h($paper['doi']); ?>"><?php echo pcrms_h($paper['title']); ?></a>
+                        <span class="related-list__meta"><?php echo pcrms_h($paper['authors']); ?> ·
+                            <?php echo $paper['preprint'] ? pcrms_h($paper['venue']) : '<em>' . pcrms_h($paper['venue']) . '</em>'; ?> ·
+                            <?php echo (int) $paper['year']; ?><?php if ($paper['preprint']): ?><span class="badge">Preprint</span><?php endif; ?></span>
                     </li>
-                    <li class="update-item">
-                        <time datetime="2022-05-30">30 May 2022</time>
-                        <div>
-                            <h3>Expanded mouse CRM map submitted</h3>
-                            <p>The version 2 mouse resource describes predicted regulatory modules across 80% of the genome.</p>
-                        </div>
-                    </li>
-                    <li class="update-item">
-                        <time datetime="2022-04-22">22 Apr 2022</time>
-                        <div>
-                            <h3>PCRMs database paper published</h3>
-                            <p>The database and its genome-scale query workflows were published in <em>Database</em>, Oxford Academic.</p>
-                        </div>
-                    </li>
-                </ol>
-            </div>
+                <?php endforeach; ?>
+            </ul>
+            <button class="related-toggle js-only" type="button" aria-controls="related-list" aria-expanded="false" hidden>
+                <span>Show more publications</span>
+                <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M5 7.5l5 5 5-5"/></svg>
+            </button>
         </section>
-
-        <section class="section">
-            <div class="shell">
-                <article class="publication-card">
-                    <p class="eyebrow">Methods &amp; citation</p>
-                    <h2>Predictions powered by dePCRM2</h2>
-                    <p>PCRMs integrates available TF ChIP-seq datasets across cell and tissue types to predict cis-regulatory modules and their constituent binding sites de novo.</p>
-                    <div class="button-row">
-                        <a class="button button--accent" href="https://doi.org/10.1093/database/baac024" target="_blank" rel="noopener noreferrer">Read the database paper</a>
-                        <a class="button button--secondary" href="https://doi.org/10.1093/nargab/lqab052" target="_blank" rel="noopener noreferrer">Explore the method</a>
-                    </div>
-                </article>
-            </div>
-        </section>
-    </main>
-
-    <?php include __DIR__ . '/partials/site_footer.php'; ?>
-</body>
-</html>
+    </div>
+</main>
+<?php pcrms_page_end(); ?>

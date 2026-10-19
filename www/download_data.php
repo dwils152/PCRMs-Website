@@ -1,141 +1,128 @@
 <?php
+require_once __DIR__ . '/includes/layout.php';
+require_once __DIR__ . '/includes/releases.php';
+require_once __DIR__ . '/includes/publications.php';
+
 if (!function_exists('pcrms_file_size')) {
     function pcrms_file_size($bytes)
     {
         $units = ['B', 'KB', 'MB', 'GB', 'TB'];
         $index = 0;
         $size = (float) $bytes;
-
         while ($size >= 1000 && $index < count($units) - 1) {
             $size /= 1000;
             $index++;
         }
-
         return number_format($size, $index > 1 ? 1 : 0) . ' ' . $units[$index];
     }
 }
 
-require_once __DIR__ . '/includes/releases.php';
-$releaseCards = $PCRMS_RELEASES;
-$missingArchiveCount = 0;
-
-foreach ($releaseCards as $release) {
-    foreach ($release['files'] as $file) {
-        if (!is_file(__DIR__ . '/data/' . $file['name'])) {
-            $missingArchiveCount++;
+// Archives live in www/data; anything missing is listed as not available yet.
+$missing = 0;
+$example = null;
+foreach ($PCRMS_RELEASES as $r => $release) {
+    foreach ($release['files'] as $f => $file) {
+        $path = __DIR__ . '/data/' . $file['name'];
+        $available = is_file($path);
+        $PCRMS_RELEASES[$r]['files'][$f]['size'] = $available ? pcrms_file_size(filesize($path)) : null;
+        if (!$available) {
+            $missing++;
+        } elseif ($example === null) {
+            $example = $file['name'];
         }
     }
 }
+
+pcrms_page_start([
+    'title' => 'Download the data',
+    'description' => 'Download genome-wide predicted CRMs and transcription factor binding sites as BED files.',
+    'active' => 'downloads',
+]);
 ?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="Download genome-wide PCRMs release files for human and model organisms.">
-    <title>Download datasets — PCRMs</title>
-    <link rel="icon" href="images/favicon.ico">
-    <link rel="stylesheet" href="css/modern.css">
-</head>
-<body class="d-flex flex-column min-vh-100">
-    <?php include __DIR__ . '/download_header.php'; ?>
+<main id="main-content">
+    <section class="band" aria-labelledby="page-title">
+        <div class="band__inner shell">
+            <h1 id="page-title">Download the data</h1>
+            <p class="band__lede">Genome-wide predicted CRMs and their transcription factor binding sites, as BED files packed in .tar.gz archives, one or more per genome.</p>
+        </div>
+    </section>
 
-    <main class="site-main" id="main-content">
-        <header class="page-hero">
-            <div class="page-hero__inner shell">
-                <p class="eyebrow">Genome-wide resources</p>
-                <h1 class="page-title">Download datasets</h1>
-                <p class="lede">Access packaged CRM and TFBS coordinate files for downstream analysis. Every available archive is linked directly from this page.</p>
-                <div class="page-hero__meta">
-                    <span class="meta-pill">BED-format coordinates</span>
-                    <span class="meta-pill">Scores &amp; P values</span>
-                    <span class="meta-pill">Versioned releases</span>
-                </div>
+    <div class="page-main shell stack">
+        <nav aria-label="Jump to a genome">
+            <ul class="jump-list">
+                <?php foreach ($PCRMS_RELEASES as $release): ?>
+                    <?php $genome = $PCRMS_GENOMES[$release['genome_id']]; ?>
+                    <li><a href="#<?php echo pcrms_h($genome['key']); ?>"><?php echo pcrms_svg('organisms/' . $genome['key']); ?><?php echo pcrms_h($genome['common']); ?></a></li>
+                <?php endforeach; ?>
+            </ul>
+        </nav>
+
+        <?php if ($missing > 0): ?>
+            <div class="alert" role="note">
+                <svg viewBox="0 0 20 20" aria-hidden="true" focusable="false"><circle cx="10" cy="10" r="8"/><path d="M10 6v5M10 14h.01"/></svg>
+                <p><?php echo $missing === 1 ? '1 of the listed archives is' : $missing . ' of the listed archives are'; ?> not on this server yet; <?php echo $missing === 1 ? 'it is' : 'they are'; ?> marked “Not available yet”.</p>
             </div>
-        </header>
+        <?php endif; ?>
 
-        <section class="section--tight">
-            <div class="shell">
-                <?php if ($missingArchiveCount > 0): ?>
-                    <div class="data-note" role="note">
-                        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M10 9v5m0-8v.2" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"/></svg>
-                        <div><strong>Archive availability:</strong> <?php echo number_format($missingArchiveCount); ?> referenced archive<?php echo $missingArchiveCount === 1 ? ' is' : 's are'; ?> not present in this deployment. Missing files are shown as unavailable instead of leading to broken downloads.</div>
+        <?php foreach ($PCRMS_RELEASES as $release): ?>
+            <?php $genome = $PCRMS_GENOMES[$release['genome_id']]; ?>
+            <section class="genome-section" id="<?php echo pcrms_h($genome['key']); ?>" aria-labelledby="<?php echo pcrms_h($genome['key']); ?>-title">
+                <div class="genome-section__head">
+                    <div class="genome-section__title">
+                        <span class="genome-section__icon"><?php echo pcrms_svg('organisms/' . $genome['key']); ?></span>
+                        <div>
+                            <h2 id="<?php echo pcrms_h($genome['key']); ?>-title"><?php echo pcrms_h($genome['common']); ?> <em><?php echo pcrms_h($genome['name']); ?></em></h2>
+                            <p class="genome-section__sub"><?php echo pcrms_h($genome['assembly']); ?> · Version <?php echo (int) $release['version']; ?></p>
+                        </div>
                     </div>
-                <?php endif; ?>
-
-                <div class="release-grid">
-                    <?php foreach ($releaseCards as $index => $release): ?>
-                        <article class="release-card<?php echo $index === count($releaseCards) - 1 ? ' release-card--wide' : ''; ?>">
-                            <div class="release-card__top">
-                                <div class="release-card__organism">
-                                    <strong><?php echo htmlspecialchars($release['common'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                    <em><?php echo htmlspecialchars($release['scientific'], ENT_QUOTES, 'UTF-8'); ?></em>
-                                </div>
-                                <span class="release-card__assembly"><?php echo htmlspecialchars($release['assembly'], ENT_QUOTES, 'UTF-8'); ?></span>
+                    <?php if ($release['facts']): ?>
+                        <dl class="facts">
+                            <?php foreach ($release['facts'] as $fact): ?>
+                                <div><dt><?php echo pcrms_h($fact[1]); ?></dt><dd><?php echo pcrms_h($fact[0]); ?></dd></div>
+                            <?php endforeach; ?>
+                        </dl>
+                    <?php endif; ?>
+                </div>
+                <ul class="file-list" aria-label="<?php echo pcrms_h($genome['common']); ?> files">
+                    <?php foreach ($release['files'] as $file): ?>
+                        <li class="file-row">
+                            <div>
+                                <span class="file-row__name"><?php echo str_replace('_', '_<wbr>', pcrms_h($file['name'])); ?></span>
+                                <span class="file-row__desc"><?php echo pcrms_h($file['label']); ?></span>
                             </div>
-
-                            <h3><?php echo htmlspecialchars($release['title'], ENT_QUOTES, 'UTF-8'); ?></h3>
-                            <ul class="release-card__facts">
-                                <?php foreach ($release['facts'] as $fact): ?>
-                                    <li><?php echo htmlspecialchars($fact, ENT_QUOTES, 'UTF-8'); ?></li>
-                                <?php endforeach; ?>
-                            </ul>
-
-                            <ul class="download-list">
-                                <?php foreach ($release['files'] as $file): ?>
-                                    <?php
-                                    $relativePath = 'data/' . $file['name'];
-                                    $absolutePath = __DIR__ . '/' . $relativePath;
-                                    $isAvailable = is_file($absolutePath);
-                                    $fileMeta = $isAvailable
-                                        ? pcrms_file_size(filesize($absolutePath)) . ' · TAR.GZ archive'
-                                        : (isset($file['expected']) ? $file['expected'] . ' · file needed' : 'File needed');
-                                    ?>
-                                    <li>
-                                        <?php if ($isAvailable): ?>
-                                            <a class="download-link" href="<?php echo htmlspecialchars($relativePath, ENT_QUOTES, 'UTF-8'); ?>" download>
-                                                <span class="download-link__copy">
-                                                    <strong><?php echo htmlspecialchars($file['name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                    <span><?php echo htmlspecialchars($file['label'] . ' · ' . $fileMeta, ENT_QUOTES, 'UTF-8'); ?></span>
-                                                </span>
-                                                <span class="download-link__icon" aria-hidden="true">
-                                                    <svg viewBox="0 0 20 20"><path d="M10 3v9m-3-3 3 3 3-3M4 15h12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                                                </span>
-                                            </a>
-                                        <?php else: ?>
-                                            <span class="download-link download-link--unavailable">
-                                                <span class="download-link__copy">
-                                                    <strong><?php echo htmlspecialchars($file['name'], ENT_QUOTES, 'UTF-8'); ?></strong>
-                                                    <span><?php echo htmlspecialchars($file['label'] . ' · ' . $fileMeta, ENT_QUOTES, 'UTF-8'); ?></span>
-                                                </span>
-                                                <span class="download-link__icon" aria-hidden="true">—</span>
-                                            </span>
-                                        <?php endif; ?>
-                                    </li>
-                                <?php endforeach; ?>
-                            </ul>
-                        </article>
+                            <span class="file-row__size">
+                                <?php if ($file['size'] !== null): ?>
+                                    <?php echo pcrms_h($file['size']); ?> · .tar.gz
+                                <?php elseif (isset($file['expected'])): ?>
+                                    About <?php echo pcrms_h($file['expected']); ?> · .tar.gz
+                                <?php endif; ?>
+                            </span>
+                            <span class="file-row__action">
+                                <?php if ($file['size'] !== null): ?>
+                                    <a class="btn btn-primary" href="data/<?php echo rawurlencode($file['name']); ?>" download>
+                                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m-5-5 5 5 5-5M4 21h16"/></svg>Download<span class="sr-only"> <?php echo pcrms_h($file['name']); ?>, <?php echo pcrms_h($file['size']); ?></span></a>
+                                <?php else: ?>
+                                    <span class="file-row__unavailable">Not available yet</span>
+                                <?php endif; ?>
+                            </span>
+                        </li>
                     <?php endforeach; ?>
-                </div>
+                </ul>
+            </section>
+        <?php endforeach; ?>
+
+        <section class="using card" aria-labelledby="using-title">
+            <div>
+                <h2 id="using-title">Using the files</h2>
+                <p>Unpack an archive, then open the BED files in a genome browser or with tools such as bedtools.</p>
+                <pre><code>tar -xzf <?php echo pcrms_h($example !== null ? $example : 'Human_CRMCs_TFBSs_v2_hg38.bed.tar.gz'); ?></code></pre>
+            </div>
+            <div>
+                <h2>Using PCRMs data?</h2>
+                <p>Please cite: <?php echo pcrms_h($PCRMS_CITATION['text']); ?> <em><?php echo pcrms_h($PCRMS_CITATION['venue']); ?></em> <?php echo pcrms_h($PCRMS_CITATION['details']); ?></p>
+                <a href="https://doi.org/<?php echo pcrms_h($PCRMS_CITATION['doi']); ?>">doi:<?php echo pcrms_h($PCRMS_CITATION['doi']); ?></a>
             </div>
         </section>
-
-        <section class="section--tight section--surface">
-            <div class="shell content-grid">
-                <div>
-                    <p class="eyebrow">Using the data</p>
-                    <h2 class="section-title">Built for reproducible analysis</h2>
-                    <p class="lede">Release archives contain genomic coordinates plus the prediction metadata used to filter and interpret CRM and TFBS records.</p>
-                </div>
-                <aside class="panel panel--tinted">
-                    <h3>Cite PCRMs</h3>
-                    <p>Ni P, Su Z. PCRMS: a database of predicted cis-regulatory modules and constituent transcription factor binding sites in genomes. <em>Database</em> (2022).</p>
-                    <a class="text-link" href="https://doi.org/10.1093/database/baac024" target="_blank" rel="noopener noreferrer">Open publication <span aria-hidden="true">↗</span></a>
-                </aside>
-            </div>
-        </section>
-    </main>
-
-    <?php include __DIR__ . '/partials/site_footer.php'; ?>
-</body>
-</html>
+    </div>
+</main>
+<?php pcrms_page_end(); ?>

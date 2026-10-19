@@ -1,74 +1,39 @@
 <?php
 $activePage = isset($activePage) ? $activePage : '';
 
-if (!function_exists('pcrms_nav_class')) {
-    function pcrms_nav_class($page, $activePage)
+if (!function_exists('pcrms_nav_link')) {
+    function pcrms_nav_link($page, $activePage, $href, $label, $iconPath)
     {
-        return $page === $activePage ? 'site-nav__link is-active' : 'site-nav__link';
-    }
-}
-
-if (!function_exists('pcrms_aria_current')) {
-    function pcrms_aria_current($page, $activePage)
-    {
-        return $page === $activePage ? ' aria-current="page"' : '';
+        $current = $page === $activePage;
+        echo '<a class="site-nav__link' . ($current ? ' is-active' : '') . '" href="' . pcrms_h(pcrms_url($href)) . '"'
+            . ($current ? ' aria-current="page"' : '') . '>'
+            . '<svg class="site-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">' . $iconPath . '</svg>'
+            . pcrms_h($label) . '</a>';
     }
 }
 ?>
 <a class="skip-link" href="#main-content">Skip to main content</a>
 <header class="site-header">
-    <div class="site-header__inner">
-        <a class="site-brand" href="index.php" aria-label="PCRMs home">
-            <span class="site-brand__mark" aria-hidden="true">
-                <svg viewBox="0 0 48 48" role="img">
-                    <path d="M12 7c12 0 12 10 24 10M12 31c12 0 12 10 24 10M12 7c0 17 24 17 24 34M36 7c0 17-24 17-24 34" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-                    <path d="M15 15h18M15 33h18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".55"/>
-                </svg>
-            </span>
-            <span class="site-brand__copy">
-                <strong>PCRMs</strong>
-                <span>Predicted regulatory modules</span>
-            </span>
+    <div class="site-header__inner shell">
+        <a class="site-brand" href="<?php echo pcrms_h(pcrms_url('index.php')); ?>">
+            <img src="<?php echo pcrms_h(pcrms_url('images/brand/pcrms-logo.svg')); ?>" alt="PCRMs, Predicted cis-Regulatory Modules — home" width="291" height="60">
         </a>
 
         <button class="site-nav__toggle" type="button" aria-expanded="false" aria-controls="site-navigation">
-            <span class="sr-only">Toggle navigation</span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
-            <span aria-hidden="true"></span>
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            <span>Menu</span>
         </button>
 
-        <nav class="site-nav" id="site-navigation" aria-label="Primary navigation">
-            <a class="<?php echo pcrms_nav_class('home', $activePage); ?>" href="index.php"<?php echo pcrms_aria_current('home', $activePage); ?>>Home</a>
-            <a class="<?php echo pcrms_nav_class('browse', $activePage); ?>" href="browse_dataset.php"<?php echo pcrms_aria_current('browse', $activePage); ?>>Browse</a>
-
-            <details class="site-nav__group<?php echo $activePage === 'analysis' ? ' is-active' : ''; ?>">
-                <summary<?php echo pcrms_aria_current('analysis', $activePage); ?>>Analysis <span aria-hidden="true">⌄</span></summary>
-                <div class="site-nav__submenu">
-                    <a href="detailed_search.php">
-                        <strong>All analysis tools</strong>
-                        <span>Choose a gene- or TF-based workflow</span>
-                    </a>
-                    <a href="DS_get_genes_closest_crm.php">
-                        <strong>Closest CRM</strong>
-                        <span>Find the nearest module to a gene</span>
-                    </a>
-                    <a href="DS_get_crm_in_genes_range.php">
-                        <strong>CRMs around a gene</strong>
-                        <span>Search a defined genomic range</span>
-                    </a>
-                    <a href="DS_get_tf.php">
-                        <strong>TF binding sites</strong>
-                        <span>Find sites associated with a TF</span>
-                    </a>
-                </div>
-            </details>
-
-            <a class="<?php echo pcrms_nav_class('downloads', $activePage); ?>" href="download_data.php"<?php echo pcrms_aria_current('downloads', $activePage); ?>>Downloads</a>
-            <a class="site-nav__link site-nav__link--external" href="https://sulab.charlotte.edu/" target="_blank" rel="noopener noreferrer">
-                Su Lab <span aria-hidden="true">↗</span>
+        <nav class="site-nav" id="site-navigation" aria-label="Primary">
+            <?php
+            pcrms_nav_link('home', $activePage, 'index.php', 'Home', '<path d="M3 10.5 12 3l9 7.5V21h-6v-6H9v6H3z"/>');
+            pcrms_nav_link('browse', $activePage, 'browse_dataset.php', 'Browse', '<path d="M8 6h13M8 12h13M8 18h13M3.5 6h.01M3.5 12h.01M3.5 18h.01"/>');
+            pcrms_nav_link('analysis', $activePage, 'detailed_search.php', 'Functional analysis', '<circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/>');
+            pcrms_nav_link('downloads', $activePage, 'download_data.php', 'Download', '<path d="M12 3v12m-5-5 5 5 5-5M4 21h16"/>');
+            ?>
+            <a class="site-nav__link" href="https://sulab.charlotte.edu/" target="_blank" rel="noopener noreferrer">
+                <svg class="site-nav__icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 3h6M10 3v6L4.5 19a1.5 1.5 0 0 0 1.3 2h12.4a1.5 1.5 0 0 0 1.3-2L14 9V3"/></svg>The Su Lab<span class="sr-only"> (opens in a new tab)</span>
             </a>
         </nav>
     </div>
 </header>
-<script src="js/site.js" defer></script>

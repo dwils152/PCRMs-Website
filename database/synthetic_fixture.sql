@@ -122,7 +122,7 @@ CREATE TABLE tfbss (
     CONSTRAINT chk_tfbss_coordinates CHECK (TFBS_End >= TFBS_Start)
 ) ENGINE = InnoDB;
 
--- Column order is significant because tracker.php uses INSERT ... VALUES
+-- Column order is significant because tracker/track.php uses INSERT ... VALUES
 -- without a column list.
 CREATE TABLE visitors (
     visitorID BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,

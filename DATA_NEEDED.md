@@ -33,6 +33,9 @@ Large archives can instead be supplied as durable object-storage or institutiona
 - Preferred support/contact address and the current Su Lab URL.
 - Whether Arabidopsis and Drosophila motif logos should exist. Motif images are currently available only for genome IDs 1–3.
 - Current funding acknowledgements and preferred citation text.
-- Which associated gene should set the NCBI viewer window when a CRM maps to multiple genes; the current implementation uses the full associated-gene extent deterministically.
+- CRM counts for the version 1 genomes (fly, worm, thale cress). The home page shows the assembly until `crm_count` is set in `www/includes/releases.php`.
+- Worm chromosome names: the database uses `chr1`–`chr5` and has no X. The UCSC links assume these are `chrI`–`chrV` in ce10.
+- Fly `chrY`: dm3 at UCSC has no plain `chrY`, so links for CRMs on it will not resolve.
+- Whether CRM and TFBS coordinates are 0- or 1-based (this shifts UCSC highlights by one base).
 
 Until these are confirmed, the interface labels the collection from the existing source material and marks absent archives as unavailable instead of exposing broken links.

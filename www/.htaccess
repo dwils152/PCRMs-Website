@@ -1,0 +1,2 @@
+# Apache: used when this directory is the document root (see README).
+ErrorDocument 404 /404.php

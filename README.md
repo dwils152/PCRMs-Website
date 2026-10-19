@@ -40,21 +40,31 @@ After configuring the database:
 php -S 127.0.0.1:8000 -t www
 ```
 
-Open `http://127.0.0.1:8000/`. The homepage and static analysis/download entry pages can render without the database, but browsing and query results require it.
+Open `http://127.0.0.1:8000/`. The home, browse, functional analysis and download pages render without the database; results pages show a "temporarily unavailable" page (HTTP 503) when it cannot be reached.
 
 ## Structure
 
-- `www/index.php` — homepage
-- `www/browse_dataset.php` — database browser
-- `www/detailed_search.php` — analysis hub
-- `www/DS_*.php` — focused query forms
-- `www/get_*.php` — database-backed result pages
-- `www/crm.php`, `www/tfbs.php` — record details
-- `www/download_data.php` — release manifest and downloads
-- `www/partials/` — shared header and footer
-- `www/includes/catalog.php` — validated organism/query metadata
-- `www/includes/releases.php` — canonical release facts and file manifest
-- `www/css/modern.css` — responsive visual system
+- `www/index.php` — home page
+- `www/browse_dataset.php` → `www/get_crms.php` — browse CRMs by genome, chromosome and p-value
+- `www/detailed_search.php` — functional analysis, three tabs (`?tool=closest|range|tf`) that post to
+  `get_genes_closest_crm.php`, `get_crm_in_genes_range.php` and `get_tf.php`
+- `www/crm.php` — CRM record with its binding sites (`tfbs.php` and the old `DS_*.php` pages redirect)
+- `www/download_data.php` — release archives in `www/data/`
+- `www/server_side_process.php`, `www/server_side_tf.php` — JSON pages of the large result tables
+- `www/export.php` — CSV export of browse and TF results (up to 250,000 rows)
+- `www/404.php` — not-found page (`www/.htaccess` points Apache at it)
+- `www/includes/layout.php` — page head, header and footer; `partials/` holds the header and footer markup
+- `www/includes/catalog.php` — genomes, UCSC assemblies, validation and message pages
+- `www/includes/forms.php`, `results.php`, `queries.php` — shared form pieces, results tables and SQL
+- `www/includes/releases.php`, `publications.php` — download manifest, citation and related papers
+- `www/includes/svg/` — inline organism silhouettes and pipeline figures
+- `www/css/modern.css` — all styles; `www/js/` — small scripts (menu, forms, results tables)
+- `tracker/` — optional visitor logging, outside the web root
+
+Results tables keep their state in the address (`page`, `size`, `sort`, `dir`, `search`), so paging,
+sorting and filtering work without JavaScript; the scripts redraw the table in place when it is available.
+CRM IDs and binding sites link to the UCSC Genome Browser (hg38, mm10, dm3, ce10, and TAIR10 through
+the GenArk assembly `GCF_000001735.3`).
 
 ## Security note
 

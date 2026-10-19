@@ -1,9 +1,21 @@
 <?php
 
+// Genomes, keyed by the database genome ID. 'ucsc' maps each genome to the
+// UCSC Genome Browser assembly PCRMs uses; 'chromosomes' there lists only the
+// names that differ from the PCRMs database (ce10 uses roman numerals and the
+// TAIR10 GenArk assembly uses RefSeq accessions).
 $PCRMS_GENOMES = [
     1 => [
+        'key' => 'hs',
         'name' => 'Homo sapiens',
+        'short' => 'H. sapiens',
+        'common' => 'Human',
         'assembly' => 'GRCh38 / hg38',
+        'assembly_short' => 'hg38',
+        'version' => 2,
+        'gene_example' => 'e.g. RUNX1 or ENSG00000159216',
+        'tf_example' => 'e.g. RUNX1 or CTCF',
+        'ucsc' => ['db' => 'hg38', 'chromosomes' => []],
         'chromosomes' => [
             'chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8',
             'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15',
@@ -12,27 +24,64 @@ $PCRMS_GENOMES = [
         ],
     ],
     2 => [
+        'key' => 'mm',
         'name' => 'Mus musculus',
+        'short' => 'M. musculus',
+        'common' => 'Mouse',
         'assembly' => 'GRCm38 / mm10',
+        'assembly_short' => 'mm10',
+        'version' => 2,
+        'gene_example' => 'e.g. Runx1',
+        'tf_example' => 'e.g. Ctcf',
+        'ucsc' => ['db' => 'mm10', 'chromosomes' => []],
         'chromosomes' => [
             'chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chr6', 'chr7', 'chr8',
             'chr9', 'chr10', 'chr11', 'chr12', 'chr13', 'chr14', 'chr15',
-            'chr16', 'chr17', 'chr18', 'chr19', 'chr20', 'chrX', 'chrY',
+            'chr16', 'chr17', 'chr18', 'chr19', 'chrX', 'chrY',
         ],
     ],
     3 => [
+        'key' => 'ce',
         'name' => 'Caenorhabditis elegans',
+        'short' => 'C. elegans',
+        'common' => 'Worm',
         'assembly' => 'ce10',
+        'assembly_short' => 'ce10',
+        'version' => 1,
+        'gene_example' => 'e.g. unc-54',
+        'tf_example' => 'e.g. pha-4',
+        'ucsc' => ['db' => 'ce10', 'chromosomes' => [
+            'chr1' => 'chrI', 'chr2' => 'chrII', 'chr3' => 'chrIII', 'chr4' => 'chrIV', 'chr5' => 'chrV',
+        ]],
         'chromosomes' => ['chr1', 'chr2', 'chr3', 'chr4', 'chr5'],
     ],
     4 => [
+        'key' => 'at',
         'name' => 'Arabidopsis thaliana',
+        'short' => 'A. thaliana',
+        'common' => 'Thale cress',
         'assembly' => 'TAIR10',
+        'assembly_short' => 'TAIR10',
+        'version' => 1,
+        'gene_example' => 'e.g. AT1G01010',
+        'tf_example' => 'e.g. LFY',
+        'ucsc' => ['db' => 'GCF_000001735.3', 'chromosomes' => [
+            'chr1' => 'NC_003070.9', 'chr2' => 'NC_003071.7', 'chr3' => 'NC_003074.8',
+            'chr4' => 'NC_003075.7', 'chr5' => 'NC_003076.8', 'chrM' => 'NC_001284.2', 'chrC' => 'NC_000932.1',
+        ]],
         'chromosomes' => ['chr1', 'chr2', 'chr3', 'chr4', 'chr5', 'chrM', 'chrC'],
     ],
     5 => [
+        'key' => 'dm',
         'name' => 'Drosophila melanogaster',
+        'short' => 'D. melanogaster',
+        'common' => 'Fruit fly',
         'assembly' => 'dm3',
+        'assembly_short' => 'dm3',
+        'version' => 1,
+        'gene_example' => 'e.g. eve',
+        'tf_example' => 'e.g. bcd',
+        'ucsc' => ['db' => 'dm3', 'chromosomes' => []],
         'chromosomes' => [
             'chr2L', 'chr2LHet', 'chr2R', 'chr2RHet', 'chr3L', 'chr3LHet',
             'chr3R', 'chr3RHet', 'chr4', 'chrU', 'chrUextra', 'chrX',
@@ -41,9 +90,21 @@ $PCRMS_GENOMES = [
     ],
 ];
 
+// Display order used across the site: human, mouse, fly, worm, thale cress.
+$PCRMS_GENOME_ORDER = [1, 2, 5, 3, 4];
+
 $PCRMS_P_VALUES = ['0.05', '0.01', '0.000005', '0.000001'];
+$PCRMS_P_VALUE_LABELS = [
+    '0.05' => '0.05',
+    '0.01' => '0.01',
+    '0.000005' => '5 × 10⁻⁶',
+    '0.000001' => '1 × 10⁻⁶',
+];
 $PCRMS_LOCATIONS = ['upstream', 'downstream', 'both'];
+$PCRMS_LOCATION_LABELS = ['upstream' => 'Upstream', 'downstream' => 'Downstream', 'both' => 'Both sides'];
+// Stored distance values are in units of 10 kb, as used by the genes_ranges columns.
 $PCRMS_DISTANCES = ['50', '100', '200'];
+$PCRMS_DISTANCE_LABELS = ['50' => '0.5 Mb', '100' => '1 Mb', '200' => '2 Mb'];
 
 if (!function_exists('pcrms_h')) {
     function pcrms_h($value)
@@ -185,22 +246,133 @@ if (!function_exists('pcrms_store_query_state')) {
     }
 }
 
+if (!function_exists('pcrms_message_page')) {
+    // Renders a complete page with a single message panel and stops.
+    function pcrms_message_page($status, $title, $heading, $message, $actions)
+    {
+        require_once __DIR__ . '/layout.php';
+        if (!headers_sent()) {
+            http_response_code($status);
+        }
+
+        pcrms_page_start(['title' => $title, 'active' => '']);
+        echo '<main id="main-content" class="message-page"><div class="shell">';
+        echo '<section class="message-panel" aria-labelledby="message-title">';
+        echo '<h1 id="message-title">' . pcrms_h($heading) . '</h1>';
+        echo '<p>' . pcrms_h($message) . '</p><div class="button-row">';
+        foreach ($actions as $index => $action) {
+            $class = $index === 0 ? 'btn btn-primary' : 'btn btn-outline';
+            echo '<a class="' . $class . '" href="' . pcrms_h(pcrms_url($action[1])) . '">' . pcrms_h($action[0]) . '</a>';
+        }
+        echo '</div></section></div></main>';
+        pcrms_page_end();
+        exit;
+    }
+}
+
 if (!function_exists('pcrms_invalid_request')) {
     function pcrms_invalid_request($message)
     {
-        http_response_code(400);
-        $safeMessage = pcrms_h($message);
+        pcrms_message_page(400, 'Search problem', 'We could not run that search', $message, [
+            ['Browse the CRM maps', 'browse_dataset.php'],
+            ['Functional analysis', 'detailed_search.php'],
+        ]);
+    }
+}
 
-        echo '<!DOCTYPE html><html lang="en"><head><meta charset="utf-8">';
-        echo '<meta name="viewport" content="width=device-width, initial-scale=1">';
-        echo '<title>Invalid request — PCRMs</title><link rel="stylesheet" href="css/modern.css"></head>';
-        echo '<body><main class="site-main"><section class="section"><div class="shell">';
-        echo '<div class="panel" style="max-width:42rem;margin:auto"><p class="eyebrow">Request error</p>';
-        echo '<h1 class="section-title">We could not run that search.</h1><p class="lede">' . $safeMessage . '</p>';
-        echo '<div class="button-row"><a class="button button--primary" href="detailed_search.php">Return to analysis tools</a>';
-        echo '<a class="button button--secondary" href="browse_dataset.php">Browse datasets</a></div>';
-        echo '</div></div></section></main></body></html>';
-        exit;
+if (!function_exists('pcrms_service_unavailable')) {
+    // Shown when the database cannot be reached or a query fails.
+    function pcrms_service_unavailable($exception = null)
+    {
+        if ($exception instanceof Throwable) {
+            error_log('PCRMs page failed: ' . $exception->getMessage());
+        }
+        if (!headers_sent()) {
+            header('Retry-After: 300');
+        }
+        pcrms_message_page(503, 'Temporarily unavailable', 'The database is temporarily unavailable',
+            'PCRMs could not reach its database just now. Please try again in a few minutes; the genome-wide files on the download page are still available.', [
+                ['Try again', isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : 'index.php'],
+                ['Go to downloads', 'download_data.php'],
+            ]);
+    }
+}
+
+if (!function_exists('pcrms_genome_key')) {
+    function pcrms_genome_key($genomeId)
+    {
+        global $PCRMS_GENOMES;
+        return isset($PCRMS_GENOMES[$genomeId]) ? $PCRMS_GENOMES[$genomeId]['key'] : '';
+    }
+}
+
+if (!function_exists('pcrms_chromosome_label')) {
+    // "chr1, chr2" for a few chromosomes, a count for many, "all chromosomes" for all.
+    function pcrms_chromosome_label($genomeId, $chromosomes)
+    {
+        global $PCRMS_GENOMES;
+        $all = $PCRMS_GENOMES[$genomeId]['chromosomes'];
+        $ordered = array_values(array_intersect($all, $chromosomes));
+        if (count($ordered) === count($all)) {
+            return 'all chromosomes';
+        }
+        if (count($ordered) > 6) {
+            return count($ordered) . ' chromosomes';
+        }
+        return implode(', ', $ordered);
+    }
+}
+
+if (!function_exists('pcrms_ucsc_config')) {
+    // Assembly and chromosome-name mapping for UCSC links, for use in JavaScript.
+    function pcrms_ucsc_config()
+    {
+        global $PCRMS_GENOMES;
+        $config = [];
+        foreach ($PCRMS_GENOMES as $genomeId => $genome) {
+            $config[$genomeId] = $genome['ucsc'];
+        }
+        return $config;
+    }
+}
+
+if (!function_exists('pcrms_ucsc_url')) {
+    // Opens the UCSC Genome Browser on a region with flanking sequence and the
+    // region itself highlighted.
+    function pcrms_ucsc_url($genomeId, $chromosome, $start, $end)
+    {
+        global $PCRMS_GENOMES;
+        if (!isset($PCRMS_GENOMES[$genomeId])) {
+            return '';
+        }
+        $ucsc = $PCRMS_GENOMES[$genomeId]['ucsc'];
+        $chrom = isset($ucsc['chromosomes'][$chromosome]) ? $ucsc['chromosomes'][$chromosome] : $chromosome;
+        $start = (int) $start;
+        $end = (int) $end;
+        $pad = max(2000, $end - $start);
+        $view = $chrom . ':' . max(1, $start - $pad) . '-' . ($end + $pad);
+        $mark = $ucsc['db'] . '.' . $chrom . ':' . $start . '-' . $end . '#B6DB4C';
+
+        return 'https://genome.ucsc.edu/cgi-bin/hgTracks?' . http_build_query([
+            'db' => $ucsc['db'],
+            'position' => $view,
+            'highlight' => $mark,
+        ], '', '&', PHP_QUERY_RFC3986);
+    }
+}
+
+if (!function_exists('pcrms_format_p_value')) {
+    // 0.03, 0.005, 3.0 × 10⁻⁶ — the same format the results tables use.
+    function pcrms_format_p_value($value)
+    {
+        $p = (float) $value;
+        if ($p >= 0.001) {
+            return rtrim(rtrim(number_format($p, 4, '.', ''), '0'), '.');
+        }
+        $parts = explode('e', sprintf('%.1e', $p));
+        $exponent = (string) (int) $parts[1];
+        $superscripts = ['-' => '⁻', '0' => '⁰', '1' => '¹', '2' => '²', '3' => '³', '4' => '⁴', '5' => '⁵', '6' => '⁶', '7' => '⁷', '8' => '⁸', '9' => '⁹'];
+        return $parts[0] . ' × 10' . strtr($exponent, $superscripts);
     }
 }
 
