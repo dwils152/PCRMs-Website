@@ -1,18 +1,40 @@
+# ---- Secrets and private configuration -------------------------------------
+# The real database credentials. Only config/database.example.php is tracked.
 /config/database.php
-/.mysql-test/
-/.env
-/.DS_Store
-*.log
-
-# Release archives (large data files; kept on disk, not in version control)
-/www/data/*.tar.gz
-
-# Preliminary data handed over for loading (not for version control)
-/data-incoming/
-/.venv/
-# Download files (large; copied to the server separately)
-/www/data/*.gz
-
-# Private server notes (the real values behind the placeholders in UPDATING.md)
+/config/*.local.php
+# Environment files in any form (.env, .env.local, .env.production ...)
+.env
+.env.*
+# Private notes with the real server host, paths and account names
 /UPDATING-server.md
 *.private.md
+# Keys and certificates, wherever they appear
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*.ppk
+
+# ---- Local development -----------------------------------------------------
+/.mysql-test/
+/.venv/
+*.log
+*.bak
+*.orig
+*.swp
+
+# ---- Data (large; copied to the server separately, never in git) -----------
+# Release archives and download files
+/www/data/*.tar.gz
+/www/data/*.gz
+# Preliminary data handed over for loading
+/data-incoming/
+# Database dumps
+*.sql.gz
+*.dump
+
+# ---- Operating system and editor noise -------------------------------------
+.DS_Store
+Thumbs.db
