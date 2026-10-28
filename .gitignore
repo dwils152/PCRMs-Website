@@ -12,3 +12,7 @@
 /.venv/
 # Download files (large; copied to the server separately)
 /www/data/*.gz
+
+# Private server notes (the real values behind the placeholders in UPDATING.md)
+/UPDATING-server.md
+*.private.md

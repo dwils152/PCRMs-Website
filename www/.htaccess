@@ -4,8 +4,12 @@
 
 ErrorDocument 404 /404.php
 
-# No directory listings (data/, motifs_version/ and so on).
-Options -Indexes
+# No directory listings (data/, motifs_version/ and so on). data/ may be a
+# link to the download files on another disk, so follow links whose owner
+# matches their target (this also lets the rewrite rules below run). The
+# server configuration must allow this with
+# AllowOverride ... Options=Indexes,SymLinksIfOwnerMatch (see DEPLOYMENT.md).
+Options -Indexes +SymLinksIfOwnerMatch
 
 # Never serve dotfiles such as this one.
 <FilesMatch "^\.">

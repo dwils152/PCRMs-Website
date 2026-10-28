@@ -2,9 +2,12 @@
 --
 -- Run from the folder that holds the .tsv files:
 --
---   mysql --local-infile=1 --show-warnings PCRMSV7 < /path/to/database/load.sql
+--   mysql --local-infile=1 --show-warnings --init-command="SET sql_log_bin = 0" \
+--       PCRMSV7 < /path/to/database/load.sql
 --
 -- The server needs local_infile=ON while loading; turn it off afterwards.
+-- sql_log_bin = 0 keeps the 5.5 GB binding-site load out of the binary log
+-- (see database/README.md).
 -- LOAD DATA LOCAL skips rows it cannot store (a duplicate key, a missing
 -- chromosome, text in a number column) with a warning instead of stopping, so
 -- read every warning printed by --show-warnings and compare the counts at the
@@ -111,17 +114,19 @@ INNER JOIN crms AS c ON c.crmID = a.crmID
 INNER JOIN genes AS g ON g.geneID = a.geneID
 WHERE c.Genome <> g.Genome
 UNION ALL
-SELECT 'motif-TF rows naming a motif that does not exist', COUNT(*)
-FROM motif_tf_rows AS r
-LEFT JOIN umotifs AS m ON m.Genome = r.Genome AND m.Dataset = r.Dataset AND m.umID = r.umID
-WHERE m.motifID IS NULL
-UNION ALL
 -- Reads every binding site; takes a few minutes on the full data.
 SELECT 'binding sites whose motif belongs to another dataset', COUNT(*)
 FROM tfbss AS t
 INNER JOIN crms AS c ON c.crmID = t.crmID
 INNER JOIN umotifs AS m ON m.motifID = t.motifID
 WHERE m.Genome <> c.Genome OR m.Dataset <> c.Dataset;
+
+-- Information, not a problem: TF names for motifs that have no binding sites
+-- in the data (motif files can hold motifs no CRM uses) are not loaded.
+SELECT COUNT(*) AS tf_names_for_motifs_without_sites
+FROM motif_tf_rows AS r
+LEFT JOIN umotifs AS m ON m.Genome = r.Genome AND m.Dataset = r.Dataset AND m.umID = r.umID
+WHERE m.motifID IS NULL;
 
 SELECT d.genomeID, g.assembly, d.datasetNo, d.method, d.releaseVersion,
     (SELECT COUNT(*) FROM crms AS c WHERE c.Genome = d.genomeID AND c.Dataset = d.datasetNo) AS crms,

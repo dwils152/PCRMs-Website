@@ -107,8 +107,16 @@ Build the database from one tab-separated file per table:
    ```bash
    mysql PCRMSV7 < database/schema.sql
    cd split/
-   mysql --local-infile=1 --show-warnings PCRMSV7 < ../database/load.sql
+   mysql --local-infile=1 --show-warnings --init-command="SET sql_log_bin = 0" PCRMSV7 < ../database/load.sql
    ```
+
+   `SET sql_log_bin = 0` keeps the load out of the binary log (on by default
+   in MySQL 8). Otherwise the binding sites go into it as one transaction of
+   about 5.5 GB, which MySQL first writes to its temporary folder (`tmpdir`,
+   usually `/tmp`): the load stops with "No space left on device" if either
+   location lacks the room. It needs an account with the
+   `SYSTEM_VARIABLES_ADMIN` privilege, such as root. Leave it out if replicas
+   copy this server, since they would miss the data.
 
    `LOAD DATA LOCAL` skips bad rows with a warning instead of stopping, so any
    warning means rows are missing. `load.sql` ends with integrity checks, which

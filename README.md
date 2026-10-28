@@ -4,7 +4,7 @@ PCRMs is a server-rendered PHP/MySQL portal for browsing predicted cis-regulator
 
 ## Local requirements
 
-- PHP 8.x with `mysqli` and `mysqlnd`
+- PHP 7.4 or later with `mysqli` and `mysqlnd`; match the version the live server runs
 - MySQL or MariaDB containing the PCRMs schema and data
 - A web server whose document root is `www/`
 
@@ -69,7 +69,8 @@ sorting and filtering work without JavaScript; the scripts redraw the table in p
 CRM IDs and binding sites link to the UCSC Genome Browser (hg38, mm10, dm3, ce10, and TAIR10 through
 the GenArk assembly `GCF_000001735.3`).
 
-See [`DEPLOYMENT.md`](DEPLOYMENT.md) before putting the site online.
+See [`DEPLOYMENT.md`](DEPLOYMENT.md) before putting the site online, and
+[`UPDATING.md`](UPDATING.md) for changing it once it is live.
 
 ## Security note
 

@@ -28,6 +28,21 @@ if (!function_exists('pcrms_security_headers')) {
         header('X-Content-Type-Options: nosniff');
         header('Referrer-Policy: strict-origin-when-cross-origin');
         header('Permissions-Policy: camera=(), microphone=(), geolocation=()');
+        header('Cross-Origin-Opener-Policy: same-origin');
+        // Tell browsers to use HTTPS for a year. Only sent over HTTPS, so the
+        // local HTTP dev servers are unaffected. The Apache config may send
+        // this too, to cover static pages and downloads (see DEPLOYMENT.md).
+        if (pcrms_is_https()) {
+            header('Strict-Transport-Security: max-age=31536000');
+        }
+    }
+}
+
+if (!function_exists('pcrms_is_https')) {
+    function pcrms_is_https()
+    {
+        return (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '' && $_SERVER['HTTPS'] !== 'off')
+            || (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
     }
 }
 
@@ -38,8 +53,7 @@ if (!function_exists('pcrms_session_start')) {
         if (session_status() === PHP_SESSION_ACTIVE) {
             return;
         }
-        $https = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== '' && $_SERVER['HTTPS'] !== 'off')
-            || (isset($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443);
+        $https = pcrms_is_https();
         ini_set('session.use_strict_mode', '1');
         ini_set('session.use_only_cookies', '1');
         ini_set('session.gc_maxlifetime', '21600');

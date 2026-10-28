@@ -1,6 +1,7 @@
 # Putting PCRMs online
 
-A checklist for whoever deploys the site. The code already sends security
+A checklist for whoever deploys the site. Once it is live, see
+[`UPDATING.md`](UPDATING.md) for changing it. The code already sends security
 headers (a strict Content-Security-Policy, `X-Frame-Options`, `nosniff`,
 `Referrer-Policy`), hides PHP errors from visitors, hardens the session
 cookie, limits each database query to 15 seconds and keeps every included
@@ -35,7 +36,9 @@ PHP file outside the web root.
   the data as described in [`database/README.md`](database/README.md). The
   binding-site table holds about 290 million rows for human and mouse: the
   database takes about 16 GB, plus 11 GB for the split files during the load,
-  which took about 30 minutes on a laptop.
+  which took about 30 minutes on a laptop. Load with binary logging off for
+  the session, as shown there, or MySQL needs another 5.5 GB in its temporary
+  folder and again in the binary log.
 - Give MySQL enough memory for the indexes the searches use, ideally
   `innodb_buffer_pool_size = 8G` or more (the binding-site index alone is about
   5 GB). With less, searches that read millions of binding sites slow down.
@@ -61,12 +64,23 @@ server-wide also covers errors that happen before the code runs.
 
 ## 4. Web server
 
-- Serve the site over HTTPS only, redirect HTTP to HTTPS, and once that works
-  add `Strict-Transport-Security: max-age=31536000`.
-- Apache: allow `www/.htaccess` (`AllowOverride FileInfo Options AuthConfig`), or
+- Serve the site over HTTPS only, and redirect HTTP to HTTPS. The app sends
+  `Strict-Transport-Security: max-age=31536000` on every PHP page over HTTPS
+  (`includes/bootstrap.php`). To cover the static under-construction page and
+  the downloads too, also add the header in the Apache vhost:
+  `Header always set Strict-Transport-Security "max-age=31536000"`. Do not add
+  `preload` or `includeSubDomains` without the domain owner's agreement, since
+  those commit the whole `charlotte.edu` name space.
+- Harden Apache: `ServerTokens Prod` and `ServerSignature Off` (hide the exact
+  version), and `TraceEnable Off` (disable the HTTP TRACE method). The app
+  already removes the `X-Powered-By` header.
+- Apache: allow `www/.htaccess` with
+  `AllowOverride FileInfo AuthConfig Options=Indexes,SymLinksIfOwnerMatch`, or
   copy its rules (404 page, no directory listings, no dotfiles) into the server
-  configuration. If the site lives in a subfolder rather than at the domain
-  root, change `ErrorDocument 404 /404.php` to include the folder.
+  configuration. Plain `AllowOverride Options` does not cover
+  `SymLinksIfOwnerMatch`, and every page then fails with error 500. If the
+  site lives in a subfolder rather than at the domain root, change
+  `ErrorDocument 404 /404.php` to include the folder.
 - Rate-limit the search and download endpoints (`get_*.php`,
   `server_side_*.php`, `export.php`), for example with `mod_evasive`,
   `mod_qos` or the campus proxy, so one client cannot run expensive searches
@@ -77,8 +91,10 @@ server-wide also covers errors that happen before the code runs.
 
 ## 5. After deploying
 
-- Open each page and run one search of each kind.
-- Check the response headers include `Content-Security-Policy` and that
+- Open each page and run one search of each kind, or run
+  `scripts/smoke_test.sh https://<site>` to do it in one go.
+- Check the response headers include `Content-Security-Policy`,
+  `Strict-Transport-Security` and `Cross-Origin-Opener-Policy`, and that
   `https://<site>/includes/catalog.php`, `/.htaccess` and `/data/` return
   404 or 403.
 - Check the PHP error log stays empty.
