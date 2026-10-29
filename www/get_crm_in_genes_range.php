@@ -75,7 +75,11 @@ try {
             array_merge([$genomeId, PCRMS_DEPCRM2_DATASET, $g['Chromosome']], $bounds, [(float) $pValue])
         )->get_result();
         while ($row = $records->fetch_assoc()) {
-            $rows[$row['crmID']] = pcrms_crm_row($row, $genomeId);
+            $distance = pcrms_tss_distance($g, (int) $row['Start_Pos'], (int) $row['End_Pos']);
+            // A CRM in the windows of two genes with the same symbol keeps the nearer TSS.
+            if (!isset($rows[$row['crmID']]) || abs($distance) < abs($rows[$row['crmID']]['distance'])) {
+                $rows[$row['crmID']] = pcrms_crm_row($row, $genomeId) + ['distance' => $distance];
+            }
         }
     }
     ksort($rows);
@@ -88,7 +92,7 @@ $result = pcrms_results_local($rows, $PCRMS_RESULT_COLUMNS['gene-crms'], $state)
 if (isset($_GET['format']) && $_GET['format'] === 'csv') {
     pcrms_results_csv('pcrms_' . pcrms_genome_key($genomeId) . '_crms_around_' . $geneId . '.csv', [
         'crm_id' => ['id', true], 'chromosome' => ['chrom', true], 'start' => ['start', false], 'end' => ['end', false],
-        'score' => ['score', false], 'p_value' => ['p', false],
+        'tss_distance_bp' => ['distance', false], 'score' => ['score', false], 'p_value' => ['p', false],
     ], $result['all']);
 }
 

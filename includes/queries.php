@@ -358,6 +358,27 @@ if (!function_exists('pcrms_crm_url')) {
     }
 }
 
+if (!function_exists('pcrms_tss_distance')) {
+    /**
+     * Signed distance in bp from a gene's transcription start site to a CRM:
+     * 0 when the TSS lies inside the CRM, negative when the CRM is upstream
+     * of the gene and positive when downstream, whichever strand the gene is
+     * on. Adjacent bases are 1 bp apart. Coordinates are BED style, as the
+     * genes and crms tables store them, so the TSS of a - strand gene is
+     * End_Pos - 1 and a CRM covers Start_Pos to End_Pos - 1.
+     */
+    function pcrms_tss_distance($gene, $start, $end)
+    {
+        $plus = $gene['Strand'] === '+';
+        $tss = $plus ? (int) $gene['Start_Pos'] : (int) $gene['End_Pos'] - 1;
+        if ($tss >= $start && $tss < $end) {
+            return 0;
+        }
+        $offset = $tss < $start ? $start - $tss : -($tss - ($end - 1));
+        return $plus ? $offset : -$offset;
+    }
+}
+
 if (!function_exists('pcrms_crm_row')) {
     // A CRM row as the results tables expect it.
     function pcrms_crm_row($row, $genomeId)

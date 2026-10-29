@@ -57,6 +57,15 @@
         }).join('');
     }
 
+    // Matches pcrms_format_distance()
+    function formatDistance(value) {
+        var distance = Number(value);
+        if (distance === 0) {
+            return 'Spans TSS';
+        }
+        return commas(Math.abs(distance)) + ' bp ' + (distance < 0 ? 'upstream' : 'downstream');
+    }
+
     function locationText(row) {
         return row.chrom + ':' + commas(row.start) + '–' + commas(row.end);
     }
@@ -110,6 +119,8 @@
             return document.createTextNode(formatScore(value));
         case 'p':
             return document.createTextNode(formatP(value));
+        case 'distance':
+            return document.createTextNode(formatDistance(value));
         case 'logo':
             if (!value) {
                 return muted('No logo');
@@ -130,6 +141,9 @@
     function cellClass(type) {
         if (type === 'score' || type === 'p') {
             return 'num';
+        }
+        if (type === 'distance') {
+            return 'num nowrap';
         }
         return type === 'location' || type === 'site' ? 'nowrap' : '';
     }
@@ -196,6 +210,8 @@
                 order = byLocation(a, b);
             } else if (type === 'score' || type === 'p') {
                 order = a[state.sort] - b[state.sort];
+            } else if (type === 'distance') {
+                order = Math.abs(a[state.sort]) - Math.abs(b[state.sort]);
             } else {
                 order = String(a[state.sort]).localeCompare(String(b[state.sort]), 'en', { numeric: true, sensitivity: 'base' });
             }

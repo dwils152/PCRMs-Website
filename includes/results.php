@@ -32,6 +32,7 @@ $PCRMS_RESULT_COLUMNS = [
     'gene-crms' => [
         ['key' => 'id', 'label' => 'CRM ID', 'type' => 'ucsc', 'sort' => true, 'search' => true],
         ['key' => 'location', 'label' => 'Location', 'type' => 'location', 'sort' => true],
+        ['key' => 'distance', 'label' => 'Distance to TSS', 'type' => 'distance', 'sort' => true],
         ['key' => 'score', 'label' => 'Score', 'type' => 'score', 'sort' => true],
         ['key' => 'p', 'label' => 'p-value', 'type' => 'p', 'sort' => true],
         ['key' => 'record', 'label' => 'Binding sites', 'type' => 'details'],
@@ -56,7 +57,7 @@ $PCRMS_RESULT_COLUMNS = [
 // Default sort and page size for each table.
 $PCRMS_RESULT_DEFAULTS = [
     'crms' => ['sort' => 'location', 'dir' => 'asc', 'size' => 25],
-    'gene-crms' => ['sort' => 'location', 'dir' => 'asc', 'size' => 25],
+    'gene-crms' => ['sort' => 'distance', 'dir' => 'asc', 'size' => 25],
     'tf-sites' => ['sort' => 'site', 'dir' => 'asc', 'size' => 25],
     'crm-sites' => ['sort' => 'site', 'dir' => 'asc', 'size' => 25],
 ];
@@ -158,6 +159,9 @@ if (!function_exists('pcrms_results_local')) {
                 $order = $byLocation($a, $b);
             } elseif ($type === 'score' || $type === 'p') {
                 $order = $a[$key] <=> $b[$key];
+            } elseif ($type === 'distance') {
+                // Nearest the TSS first, whichever side of it the CRM lies on.
+                $order = abs($a[$key]) <=> abs($b[$key]);
             } else {
                 $order = strnatcasecmp($a[$key], $b[$key]);
             }
@@ -201,6 +205,8 @@ if (!function_exists('pcrms_results_cell')) {
                 return number_format((float) $value, 2);
             case 'p':
                 return pcrms_h(pcrms_format_p_value($value));
+            case 'distance':
+                return pcrms_h(pcrms_format_distance($value));
             case 'logo':
                 return $value === ''
                     ? '<span class="motif-missing">No logo</span>'
@@ -217,7 +223,22 @@ if (!function_exists('pcrms_results_cell_class')) {
         if ($type === 'score' || $type === 'p') {
             return 'num';
         }
+        if ($type === 'distance') {
+            return 'num nowrap';
+        }
         return $type === 'location' || $type === 'site' ? 'nowrap' : '';
+    }
+}
+
+if (!function_exists('pcrms_format_distance')) {
+    // A signed TSS distance (pcrms_tss_distance) as "12,345 bp upstream".
+    function pcrms_format_distance($value)
+    {
+        $value = (int) $value;
+        if ($value === 0) {
+            return 'Spans TSS';
+        }
+        return number_format(abs($value)) . ' bp ' . ($value < 0 ? 'upstream' : 'downstream');
     }
 }
 

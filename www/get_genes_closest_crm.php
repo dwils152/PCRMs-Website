@@ -32,13 +32,20 @@ session_write_close();
 
 try {
     require_once dirname(__DIR__) . '/includes/connection.php';
-    // The gene first (any case, symbol or Ensembl ID), then its CRMs by ID.
-    $geneIds = array_column(pcrms_execute_statement(
+    // The gene first (any case, symbol or Ensembl ID), then its CRMs by ID. A
+    // symbol can name more than one gene; each CRM's distance is to the gene
+    // it is linked to.
+    $genes = [];
+    foreach (pcrms_execute_statement(
         $mysqli,
-        'SELECT geneID FROM genes WHERE Genome = ? AND (LOWER(geneID) = LOWER(?) OR LOWER(Symbol) = LOWER(?))',
+        'SELECT geneID, Start_Pos, End_Pos, Strand FROM genes
+         WHERE Genome = ? AND (LOWER(geneID) = LOWER(?) OR LOWER(Symbol) = LOWER(?))',
         'iss',
         [$genomeId, $geneId, $geneId]
-    )->get_result()->fetch_all(), 0);
+    )->get_result()->fetch_all(MYSQLI_ASSOC) as $g) {
+        $genes[$g['geneID']] = $g;
+    }
+    $geneIds = array_keys($genes);
     $gene = (bool) $geneIds;
 
     $rows = [];
@@ -46,7 +53,7 @@ try {
         $placeholders = implode(', ', array_fill(0, count($geneIds), '?'));
         $records = pcrms_execute_statement(
             $mysqli,
-            "SELECT DISTINCT c.crmID, c.Chromosome, c.Start_Pos, c.End_Pos, c.Score, c.P_value
+            "SELECT DISTINCT a.geneID, c.crmID, c.Chromosome, c.Start_Pos, c.End_Pos, c.Score, c.P_value
              FROM crms_genes_association a
              INNER JOIN crms c ON c.crmID = a.crmID
              WHERE a.geneID IN ({$placeholders}) AND c.Dataset = ? AND c.P_value <= ?",
@@ -54,8 +61,12 @@ try {
             array_merge($geneIds, [PCRMS_DEPCRM2_DATASET, (float) $pValue])
         )->get_result();
         while ($row = $records->fetch_assoc()) {
-            $rows[] = pcrms_crm_row($row, $genomeId);
+            $distance = pcrms_tss_distance($genes[$row['geneID']], (int) $row['Start_Pos'], (int) $row['End_Pos']);
+            if (!isset($rows[$row['crmID']]) || abs($distance) < abs($rows[$row['crmID']]['distance'])) {
+                $rows[$row['crmID']] = pcrms_crm_row($row, $genomeId) + ['distance' => $distance];
+            }
         }
+        $rows = array_values($rows);
     }
 } catch (Throwable $exception) {
     pcrms_service_unavailable($exception);
@@ -65,7 +76,7 @@ $result = pcrms_results_local($rows, $PCRMS_RESULT_COLUMNS['gene-crms'], $state)
 if (isset($_GET['format']) && $_GET['format'] === 'csv') {
     pcrms_results_csv('pcrms_' . pcrms_genome_key($genomeId) . '_crms_closest_to_' . $geneId . '.csv', [
         'crm_id' => ['id', true], 'chromosome' => ['chrom', true], 'start' => ['start', false], 'end' => ['end', false],
-        'score' => ['score', false], 'p_value' => ['p', false],
+        'tss_distance_bp' => ['distance', false], 'score' => ['score', false], 'p_value' => ['p', false],
     ], $result['all']);
 }
 
