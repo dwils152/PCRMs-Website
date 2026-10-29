@@ -1,11 +1,13 @@
 # PCRMs website
 
-PCRMs is a server-rendered PHP/MySQL portal for browsing predicted cis-regulatory modules (CRMs), searching by gene or transcription factor, inspecting CRM/TFBS records, and downloading genome-wide releases.
+PCRMs is a web portal for browsing predicted cis-regulatory modules (CRMs), searching by gene or transcription factor, and downloading genome-wide releases.
+
+Check it out [here](https://cci-bioinfo.uncc.edu/index.php)!
 
 ## Local requirements
 
-- PHP 7.4 or later with `mysqli` and `mysqlnd`; match the version the live server runs
-- MySQL or MariaDB containing the PCRMs schema and data
+- PHP 8.4 or later with `mysqli` and `mysqlnd`; match the version the live server runs
+- MySQL containing the PCRMs schema and data
 - A web server whose document root is `www/`
 
 No JavaScript build step is required. The modern interface is implemented with PHP templates, `www/css/modern.css`, and small browser scripts.
@@ -23,9 +25,7 @@ Credentials must not be stored under `www/`. Configure the deployment with eithe
 
 The tables are defined in [`database/schema.sql`](database/schema.sql). For
 development, [`database/synthetic_fixture.sql`](database/synthetic_fixture.sql)
-fills them with a small synthetic data set that exercises pagination, every
-search workflow, detail pages, both gene strands, all P-value thresholds, and
-present/missing motif-logo states.
+fills them with a small synthetic dataset
 
 See [`database/README.md`](database/README.md) for loading the synthetic set
 or the real data, and a test-case matrix.
@@ -46,7 +46,7 @@ Open `http://127.0.0.1:8000/`. PHP errors are hidden from the page; run with `PC
 - `www/browse_dataset.php` → `www/get_crms.php` — browse CRMs by genome, chromosome and p-value
 - `www/detailed_search.php` — functional analysis, three tabs (`?tool=closest|range|tf`) that post to
   `get_genes_closest_crm.php`, `get_crm_in_genes_range.php` and `get_tf.php`
-- `www/crm.php` — CRM record with its binding sites (`tfbs.php` and the old `DS_*.php` pages redirect)
+- `www/crm.php` — CRM record with its binding sites (`tfbs.php`)
 - `www/download_data.php` — release archives in `www/data/`
 - `www/server_side_process.php`, `www/server_side_tf.php` — JSON pages of the large result tables
 - `www/export.php` — CSV export of browse and TF results (up to 250,000 rows)
@@ -71,9 +71,3 @@ the GenArk assembly `GCF_000001735.3`).
 
 See [`DEPLOYMENT.md`](DEPLOYMENT.md) before putting the site online, and
 [`UPDATING.md`](UPDATING.md) for changing it once it is live.
-
-## Security note
-
-Earlier source files contained plaintext database credentials. Those values have been removed, but both exposed database accounts must be rotated in MySQL before this site is redeployed. Query handlers now validate request values and use prepared statements. The broad CRM and TF result tables use database-backed pagination so they do not materialize complete result sets in PHP or the browser.
-
-See `DATA_NEEDED.md` for the data and content required to finish database-backed validation and release metadata.
